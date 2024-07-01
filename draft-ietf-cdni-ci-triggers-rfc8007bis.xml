@@ -689,6 +689,12 @@
    triggered activity has changed.</t>
 
 	<t>
+   dCDNs MAY implement separate CI/T interfaces per <xref target="trigger-subject"/>,
+   i.e. one CI/T interface for trigger operations on metadata and another for operations on content.
+   In this case dCDN MUST advertise separate interface endpoints via <xref target="cit-trigger-endpoints-capability-object"/>.
+
+	</t>
+	<t>
    All dCDNs implementing CI/T MUST support the HTTP GET, HEAD, POST,
    and DELETE methods as defined in <xref target="RFC9110"/>.</t>
 
@@ -1254,7 +1260,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	</t>
 	<t>
    	A CI/T Create Trigger Command is encoded as a JSON object containing the following
-	name/value pairs.
+	name/value pairs:
 	</t>
 
 	<t><list style="empty" hangIndent="3">
@@ -1291,7 +1297,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	</t>
 	<t>
    	A CI/T Modify Trigger Command is encoded as a JSON object containing the following
-   	name/value pairs.</t>
+   	name/value pairs:</t>
 
 	<t><list style="empty" hangIndent="3">
 	<t><list style="hanging" hangIndent="3"><t hangText="Name: specs">
@@ -1325,7 +1331,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	<t>
    A Trigger Status Resource is encoded as a JSON object containing the
-   following name/value pairs.</t>
+   following name/value pairs:</t>
 
 	<t><list style="empty" hangIndent="3">
 	<t><list style="hanging" hangIndent="3"><t hangText="Name: trigger">
@@ -1431,7 +1437,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	<t>
    A Trigger Collection is encoded as a JSON object containing the
-   following name/value pairs.</t>
+   following name/value pairs:</t>
 
 	<t><list style="empty" hangIndent="3">
 	<t><list style="hanging" hangIndent="3">
@@ -1552,7 +1558,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	<section title="Trigger.v2 Specification" anchor="trigger-v2-specification"><t>
    A Trigger.v2 Specification is encoded as a JSON object containing the
-   following name/value pairs.</t>
+   following name/value pairs:</t>
 
 	<t>
    An unrecognized name/value pair in the Trigger Specification object
@@ -1627,7 +1633,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
                <t>Type: String containing the type of the subject matching the 
                   generic-trigger-spec-value property, such as "content" or "metadata" 
-                  as define in <xref target="trigger-subject"/>.</t>  
+                  as defined in <xref target="trigger-subject"/>.</t>  
 
                <t>Mandatory: Yes.</t>
             </list></t>
@@ -3084,49 +3090,86 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
       </t>
 
 
-     <section title="CI/T Objects Versions Capability Object">
+     <section title="CI/T Trigger Endpoint Capability Object" anchor="cit-trigger-endpoints-capability-object">
         <t>
-           The CI/T objects versions capability object is used to indicate support for one or more CI/T objects versions.
-		   Capability type is "FCI.CITObjectsVersion".
-		   For simplicity, it is recommended to minimize the set of supported versions declared by the dCDN. For example, one way to minimize supported versions is to support only objects of version 2.
-           Version 1, as originally defined in <xref target="RFC8007"/>, is the default if this capability is not explicitly declared.
+		The CI/T triger endpoint capability object is used to advertise one or more CI/T interface endpoints 
+		along with CI/T interface versions supported by these endpoints. 
+	   	Capability type is "FCI.CITEndpoints".
+		For simplicity, it is recommended to minimize the set of supported versions declared by the dCDN. 
+		For example, one way to minimize supported versions is to support only objects of version 2.
+           	Version 1, as originally defined in <xref target="RFC8007"/>, is the default if this capability is not explicitly declared.
         </t>
 
-        <t><list style="empty">
-           <t>Property: versions<list style="empty">
+	<t>
+        A CI/T Trigger Endpoints capability object is encoded as an array of JSON objects containing the following
+        name/value pairs:
+	</t>
 
-                 <t>Description: A list of version numbers.</t>
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
 
-                 <t>Type: An array of JSON strings</t>
+		<t hangText="Name: trigger-endpoint-uri">
+		<vspace blankLines="1"/>
+		Description: Trigger endpoint URI 
+		<vspace blankLines="1"/>
+		Value: A URL represented as a JSON string.
+		<vspace blankLines="1"/>
+		Mandatory: Yes.
+		</t>
 
-                 <t>Mandatory: No. The default is version 1. A missing or an empty versions list
-                    means that only version 1 of the interface and objects is supported.</t>
-           </list></t>
+        	<t hangText="Name: trigger-versions">
+		<vspace blankLines="1"/>
+		Description: A list of CI/T versions supported by the trigger endpoint.
+		<vspace blankLines="1"/>
+		Value: An array of JSON strings.
+		<xref target="loop-detection-and-prevention"/>.
+		<vspace blankLines="1"/>
+		Mandatory: No. The default is version 2. 
+		A missing or an empty versions list means that only version 2 of the interface and objects is supported.
+		</t>
+
+		<t hangText="Name: trigger-subject">
+		<vspace blankLines="1"/>
+		Description: Array of trigger subjects supported by the trigger endpoint .
+		<vspace blankLines="1"/>
+		Value: An array of Strings containing the type of the subject matching the generic-trigger-spec-value property, 
+		such as "content" or "metadata" as defined in <xref target="trigger-subject"/>.
+		<vspace blankLines="1"/>
+		Mandatory: No. A missing or an empty trigger subjects lists means that all trigger subjects 
+		are supported by the endpoint.
+		</t>
+
         </list></t>
-        <section anchor="versions-capability-object" title="CI/T Objects Versions Capability Object Serialization">
+        </list></t>
+
+        <section anchor="cit-endpoints-capability-object-serialization" title="CI/T Endpoints Capability Object Serialization">
           <t>
-             The following shows an example of CI/T Objects Versions Capability object serialization for a dCDN that supports
+             The following shows an example of CI/T Endpoints Capability object serialization for a dCDN that supports
              versions 2 and 2.1 of the CI/T interface.
           </t>
 
-          <figure>
-           <artwork><![CDATA[
-
+          <figure><artwork><![CDATA[
 {
- "capabilities": [
-   {
-     "capability-type": "FCI.CITVersion",
-     "capability-value": {
-       "versions": [ "1", "2", "2.1" ]
-     },
-     "footprints": [
-       <Footprint objects>
-     ]
-   }
- ]
+  "capabilities": [
+    {
+      "capability-type": "FCI.CITEndpoints",
+       "capability-value": 
+ 	{ 
+	  "trigger-endpoint-uri": 
+	    "https://dcdn.example.com/configuration/",  
+ 	  "trigger-versions": [ "1" ],
+	  "trigger-subjects”: "metadata"
+	},
+	{ 
+	  "trigger-endpoint-uri": 
+	    "https://dcdn.example.com/cache-management/",
+ 	  "trigger-versions": [ "2", "2.1" ],
+	  "trigger-subjects": "content"
+	}
+     }
+  ]
 }
-        ]]></artwork>
-          </figure>
+	]]></artwork></figure>
         </section>
       </section>
 
@@ -4272,11 +4315,11 @@ RESPONSE:
 
         <section anchor="IANA.CDNI.payload.CIT.Footprint" title="CDNI FCI CI/T Payload Types">
 
-            <section anchor="IANA.CDNI.payload.FCI.TriggersVersions" title="CDNI FCI CI/T Objects Versions Payload Type">
+            <section anchor="IANA.CDNI.payload.FCI.TriggerEndpoints" title="CDNI FCI CI/T Endpoints Payload Type">
                <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for
-                  CI/T Objects Versions objects</t>
+                  CI/T Endpoints objects</t>
                <t>Interface: FCI</t>
-               <t>Encoding: see <xref target="versions-capability-object"/></t>
+               <t>Encoding: see <xref target="cit-trigger-endpoints-capability-object"/></t>
             </section>
 
             <section anchor="IANA.CDNI.payload.FCI.TriggerScope" title="CDNI FCI CI/T Trigger Scope Payload Type">
