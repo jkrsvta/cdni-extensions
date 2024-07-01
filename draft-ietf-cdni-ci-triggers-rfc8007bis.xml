@@ -3137,6 +3137,10 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 		<vspace blankLines="1"/>
 		Mandatory: No. A missing or an empty trigger subjects lists means that all trigger subjects 
 		are supported by the endpoint.
+		dCDN SHOULD advertise only one endpoint for every trigger subject and CI/T interface version pair. 
+		If more than one interface endpoint supports same trigger subject and CI/T interface version 
+		(e.g. CI/T version 2 interface for content objects), uCDN SHOULD be able to use any of the advertised 
+		CI/T interface endpoints interchangeably.
 		</t>
 
         </list></t>
