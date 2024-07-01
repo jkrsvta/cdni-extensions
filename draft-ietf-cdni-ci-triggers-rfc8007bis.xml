@@ -209,10 +209,10 @@
    requests originating from the uCDN.</t>
 
 	<t>
-   There are two types of CI/T Commands: CI/T Trigger Commands and CI/T
-   Cancel Commands.  The CI/T Cancel Command can be used to request
-   cancellation of an earlier CI/T Trigger Command. </t>
-   <t>A CI/T Trigger Action is of one of the following:</t>
+	Two of CI/T Commands exist: CI/T Create Trigger Command and CI/T Modify Trigger Command.
+	The CI/T Modify Command can be used to request cancellation and/or modification of an earlier CI/T Trigger Command. </t>
+
+   	<t>A CI/T Trigger Action is of one of the following:</t>
 
 	<t><list style="symbols"><t>preposition - used to instruct the dCDN to fetch metadata from the
       uCDN or content from any origin including the uCDN.</t>
@@ -791,10 +791,20 @@
 
 	<section title="Modifying Triggers" anchor="modifying-triggers">
 	<t>
-   	The uCDN can request modification of an existing trigger by issuing 
-	CI/T Modify Trigger Command and updating the “specs” field.
-	The dCDN MAY accept the request in case of Trigger Status Resource 
-	being in status “pending”, i.e. the trigger has not been acted upon yet. 
+   	The uCDN can request modification of an existing Trigger Command by issuing 
+	CI/T Modify Trigger Command. Allowed modifications include an update of the 
+	Trigger Command specification and change of state. 
+	</t>
+	<t>
+	dCDN MAY accept the request to update specification when the trigger has
+	"pending" status, i.e. the trigger has not been acted upon yet. 
+	</t>
+	<t>
+	dCDN MAY accept the trigger status change request as long as:
+		<list style="symbols">
+		<t>the requested state is "cancelled"</t>
+		<t>the trigger has either "pending" or "active" status prior to the request</t>
+		</list>
 	</t>
 
 	<t>
@@ -804,12 +814,12 @@
 	</t>
 
 	<t>
-	The dCDN MUST respond to the CI/T Cancel Command appropriately.
+	The dCDN MUST respond to the CI/T Modify Trigger Command appropriately.
 	For example, HTTP status code 200 ("OK") should be returned if the 
 	modification has been processed, 202 ("Accepted") if the command has been 
 	accepted but the modification is not fully complete yet, 404 ("Not Found") 
 	when the Trigger Status Resource does not exist, 409 (“Conflict”) when the 
-	Trigger Status Resource is in a state that doesn’t allow modification, 
+	Trigger Status Resource is in a state that doesn’t allow the requested modification, 
 	501 ("Not Implemented") if modification is not supported by the dCDN or 
 	an appropriate 4xx HTTP error code in case of malformed request.
 	</t>
@@ -892,8 +902,8 @@
 	<t>
    If cancellation of a "pending" Trigger Status Resource is accepted by
    the dCDN, the dCDN SHOULD NOT start the processing of that activity.
-   Issuing a CI/T Cancel Command for a "pending" Trigger Status Resource
-   does not, however, guarantee that the corresponding activity will not
+   Requesting cancellation of a trigger using a CI/T Modify Command for a "pending" 
+   Trigger Status Resource does not, however, guarantee that the corresponding activity will not
    be started, because the uCDN cannot control the timing of that
    activity.  Processing could, for example, start after the POST is
    sent by the uCDN but before that request is processed by the dCDN.</t>
@@ -1209,7 +1219,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	</section>
 
 	<section title="CI/T Object Properties and Encoding" anchor="cit-objects-properties-and-encoding"><t>
-   The CI/T Trigger Command, CI/T Cancel Command, Trigger Status Resources, and Trigger Collections,
+   The CI/T Create Trigger Command, CI/T Modify Trigger Command, Trigger Status Resources, and Trigger Collections,
    as well as their properties, are encoded using JSON, as defined in
    Sections <xref target="cit-trigger-create-command"/>, <xref target="cit-trigger-modify-command"/>, <xref target="trigger-status-resources"/>, and <xref target="trigger-collections"/>, respectively.  They MUST use the MIME media type
    "application/cdni", with parameter "ptype" values as defined below
@@ -1306,8 +1316,6 @@ uCDN-A                         dCDN-B                         dCDN-C
 	</list></t>
 	</list></t>
 
-	<t>
-    A CI/T Cancel Command is encoded as an empty JSON object.</t>
 	</section>
 
 
@@ -2977,7 +2985,7 @@ https://video.example.com/k/movie1/4/013.ts
 
 		</t>
 		<t>
-		Urgency: Separately from priority, uCDN may wish to indicate that dCDN should process a trigger command without delay. This requirement applies to CI/T Trigger commands only,. dCDN MUST process all CI/T Cancel Commands immediately at all times.  Urgency is separate and additional to priority, which indicates order in which trigger commands should be processed yet doesn’t prescribe how soon each command needs to be executed. 
+		Urgency: Separately from priority, uCDN may wish to indicate that dCDN should process a trigger command without delay. This requirement applies to CI/T Trigger commands only,. dCDN MUST process all CI/T Modify Trigger Commands immediately at all times.  Urgency is separate and additional to priority, which indicates order in which trigger commands should be processed yet doesn’t prescribe how soon each command needs to be executed. 
 dCDN MAY reject such requests for urgent processing using “ereject” error code. This can happen due to dCDN internal business logic (e.g. batch-driven purge and invalidation), or due to dependency on other triggers that could not be completed by dCDN immediately. In such a case uCDN should either modify the request removing prerequisites or cancel such pending triggers before re-trying the request.
 		</t>
 
