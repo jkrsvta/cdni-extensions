@@ -3151,20 +3151,24 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
   "capabilities": [
     {
       "capability-type": "FCI.CITEndpoints",
-       "capability-value": 
- 	{ 
-	  "trigger-endpoint-uri": 
-	    "https://dcdn.example.com/configuration/",  
- 	  "trigger-versions": [ "1" ],
-	  "trigger-subjects”: "metadata"
-	},
-	{ 
+      "capability-value": {		  
+	    "trigger-endpoint-uri": 
+	      "https://dcdn.example.com/configuration/",  
+ 	    "trigger-versions": [ "1" ],
+	    "trigger-subjects”: "metadata"
+        },
+      "footprints": [ <Footprint objects> ]
+    },
+    {
+      "capability-type": "FCI.CITEndpoints",
+      "capability-value": { 
 	  "trigger-endpoint-uri": 
 	    "https://dcdn.example.com/cache-management/",
  	  "trigger-versions": [ "2", "2.1" ],
 	  "trigger-subjects": "content"
-	}
-     }
+	},
+      "footprints": [ <Footprint objects> ]
+    }
   ]
 }
 	]]></artwork></figure>
