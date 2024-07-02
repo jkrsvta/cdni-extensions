@@ -2170,7 +2170,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<ttcol align="left"> Description</ttcol>
 	<ttcol align="left"> Registration</ttcol>
 	<c>emeta</c>
-	<c>The dCDN was unable to acquire metadata required to fulfill the request.</c>
+	<c>The dCDN was unable to acquire and/or is not in possession of metadata required to fulfill the request.</c>
 	<c>RFCthis</c>
 	<c>econtent</c>
 	<c>The dCDN was unable to acquire content (CI/T "preposition" commands only).</c>
@@ -2202,12 +2202,58 @@ uCDN-A                         dCDN-B                         dCDN-C
 	</texttable>
 	</section>
 
+	<section title="URL Type" anchor="url-types">
+	<t>
+	This type is used by uCDN to indicate how to interpret URLs referenced by trigger specs that use URLs, such as 
+		<xref target="urls-spec"/>, <xref target="uri-pattern-match-spec"/>, <xref target="uri-regex-match-spec"/> and <xref target="objectlist-spec"/>.
+	</t>
+	<t>
+	One option for uCDN to use in Trigger Commands is published URLs, that are used by end users.
+	When using this URL type, uCDN MUST provide configuration metadata objects related to these URLs before creating a trigger option referencing these URLs. When this is not the case, dCDN MUST return error code "emeta".
+	dCDN 
+	</t>
+	<t> 
+		When processing published URLs in "preposition" Trigger Action, dCDN MUST invoke processing of metadata objects, it would have involved in content acquisition to satisfy an end user request, e.g. SourceMetaData (see Section 4.2.1 of <xref target="RFC8006"/>.
+	</t>
+
+	<t>
+		Another type of URL in common use is private URL based on cache keys that are dynamically 
+		constructed via lightweight processing of various properties of the HTTP request and/or response. 
+		As an example, an origin might specify a cache key as a value returned in a specific HTTP response header.
+	</t>
+	<t>
+		As an example, uCDN may be interested to use such private URLs in "purge" or "invalidate" 
+		Trigger Action to simplify processing. 
+	</t>
+	<t>	uCDN MUST NOT mix different URL types in same Trigger Command</t>
+	<t>
+		The following URL types are defined by this document and MUST be supported by implementation 
+		of the CI/T interface:
+	</t>
+
+        <texttable style="full">
+        <t>[RFC Editor: Please replace RFCthis with the published RFC number for this document.]</t>
+        <ttcol align="left"> URL Type</ttcol>
+        <ttcol align="left"> Description</ttcol>
+        <ttcol align="left"> Registration</ttcol>
+        <c>published</c>
+	<c>Published URL used by end users to access content</c>
+	<c>RFCthis</c>
+
+        <c>private</c>
+	<c>Private URLs used by dCDN to look up content objects in cache</c>
+        <c>RFCthis</c>
+        </texttable>
+
+	</section>
+
 	<section title="ObjectList" anchor="object-list"><t>
 		ObjectList is a metadata object describing lists of objects that can be used in the context of CI/T v2 trigger spec, trigger status resources and other contexts as required. The ObjectList object can either embed the lists of objects or point to external URL(s) that hold such lists. ObjectList allows specification of an object list type, providing instructions on the interpretation of the object list format.</t>
 
 	<t>
 		ObjectLists MAY be recursive, i.e. including references to secondary manifests, including references to HLS, MPEG-DASH or MSS manifests as well as additional JSON-encoded ObjectLists , etc. The party consuming the object list MUST parse all recursions based on the object list type property. When doing so, the consuming party should also detect potential loops when descendant ObjectList points back to parent ObjectList.
 	</t>
+
 	<t>
 		In case of uCDN accessing ObjectList objects referencing external URLs published by dCDN, both parties should comply with the CI/T interface security requirements (see <xref target="authentication-authorization"/> for details). 
 		When dCDN accesses external URLs referenced by ObjectLists supplied by uCDN, for example as part of Trigger Spec, the dCDN MUST match these URLs with source metadata objects, published by uCDN, such as SourceMetadata objects specified in Section 4.2.1 of <xref target="RFC8006"/>, and use these metadata objects for content acquisition if a match was found.
@@ -2498,17 +2544,30 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
            held by the dCDN based on the objects' URLs.
         </t>
 
-         <t>Spec object specification<list style="empty">
+	<t>URL spec is encoded as a JSON object containing the following name/value pairs:</t>
 
-              <t>Property: urls<list style="empty">
+        <t><list style="empty" hangIndent="3">
+        <t><list style="hanging" hangIndent="3"><t hangText="Name: urls">
+        <vspace blankLines="1"/>
+	Description: An array of URLs over which the trigger MUST be executed.
+        <vspace blankLines="1"/>
+	Value: A JSON array of URLs represented as JSON strings.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-                 <t>Description: An array of URLs over which the trigger MUST be executed.</t>
+        <t hangText="Name: url-type">
+        <vspace blankLines="1"/>
+	Description: Type of URL used 
+        <vspace blankLines="1"/>
+	Value:
+        <vspace blankLines="1"/>
+        Mandatory: No.
+        </t>
 
-                 <t>Value: A JSON array of URLs represented as JSON strings.</t>
+        </list></t>
+        </list></t>
 
-                 <t>Mandatory: Yes.</t>
-              </list></t>
-          </list></t>
 
         <t>Below is an example of a JSON serialized generic trigger spec object, matching the metadata at 
         metadata.example.com/a/b/c.
@@ -4384,7 +4443,7 @@ RESPONSE:
    </section>
 
 
-      <section anchor="IANA.CDNI.ObjectListTypeReg" title="CDNI CI/T Object List Types">
+      <section anchor="IANA.CDNI.ObjectListTypeReg" title="&quot;CDNI CI/T Object List Types&quot; Registry">
 	<t>
 	      The IANA is requested to create a new "CDNI CI/T Object List Types" registry in the "Content Delivery Networks Interconnection (CDNI) Parameters" registry group. The "CDNI CI/T Object List Types" namespace defines the valid object list type values in <xref target="object-list-type"/>, used by the Object List object.</t>
       	<t>
@@ -4426,6 +4485,20 @@ RESPONSE:
    </t>
 
 	</section>
+
+	<section title="&quot;CDNI CI/T URL Types&quot; Registry" anchor="cdni-cit-url-types-registry">
+	<t>
+		The IANA is requested to create a new "CDNI CI/T URL types" registry
+		in the "Content Delivery Networks Interconnection (CDNI) Parameters" registry group. 
+		The "CDNI CI/T URL Types" namespace defines the valid URL type values in <xref target="url-types"/>,
+		used by <xref target="urls-spec"/>, <xref target="uri-pattern-match-spec"/>, <xref target="uri-regex-match-spec"/> and <xref target="objectlist-spec"/>.
+	</t>
+	<t>
+		The initial contents of the "CDNI CI/T Trigger Extensions" registry comprise the names and 
+		descriptions listed in <xref target="url-types"/>, with this document acting as the specification.
+	</t>
+	</section>
+
 
 </section>
 
