@@ -1275,7 +1275,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	Value: A non-empty JSON array of JSON strings, where each string is a CDN PID as defined in 
 	<xref target="loop-detection-and-prevention"/>.
 	<vspace blankLines="1"/>
-	Mandatory: No.
+	Mandatory: No. uCDN SHOULD specify "cdn-path" in those use cases when CDN loop detection is a concern (See <xref target="loop-detection-and-prevention"/> for details).
 	</t>
 
 	</list></t>
