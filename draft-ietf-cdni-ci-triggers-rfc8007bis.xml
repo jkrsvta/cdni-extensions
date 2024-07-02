@@ -2907,7 +2907,15 @@ https://video.example.com/k/movie1/4/013.ts
 
 		<t>
 		Pre-requisite:  In some cases uCDN may wish to indicate what trigger commands should be processed and completed before another trigger command is processed. 
-			For example, uCDN may want to rectify incorrectly published content by purging content objects and then prepositioning them again. In this case, uCDN may want the preposition trigger command to be processed only after the purge trigger command has been processed because concurrent processing of these triggers may cause the new version of these content objects to be purged. Alternatively, uCDN may wish to avoid processing of purge and invalidation triggers in parallel to long-running preposition triggers that could lead to race conditions, and condition execution of such purge or revalidation triggers upon completion or cancellation of the pre-positioning triggers. 
+		For example, uCDN may want to rectify incorrectly published content by purging content objects and then 
+		prepositioning them again. In this case, uCDN may want the preposition trigger command to be processed only 
+		after the purge trigger command has been processed because concurrent processing of these triggers may cause 
+		the new version of these content objects to be purged. 
+
+		Alternatively, uCDN may wish to condition the execution of purge or invalidation triggers upon the completion 
+		or cancellation of long-running preposition triggers to avoid race conditions that would result from processing 
+		these in parallel.
+
 		The prerequisite requirement implies that a previius trigger reaches one of the following states:   
 		<list style="symbols">
 			<t>(i) “complete” or “processed” for successful completion</t>
