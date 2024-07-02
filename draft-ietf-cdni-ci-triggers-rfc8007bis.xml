@@ -2533,15 +2533,18 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
 
     <section anchor="trigger-spec-objects" title="Trigger Spec Objects">
-      <t>The objects defined below are intended to be used in the GenericTriggerSpec
-         object's generic-trigger-spec-value field as defined in Section
-         <xref target="generic-spec-object"/>. As such all these trigger specs are registered in the IANA "CDNI CI/T Trigger Specs" registry (see <xref target="IANA.CDNI.TriggerSpecReg"/>).
-      </t>
+	<t>
+	    	The objects defined below are intended to be used in the GenericTriggerSpec
+         	object's generic-trigger-spec-value field as defined in Section <xref target="generic-spec-object"/>. 
+		As such all these trigger specs are registered in the IANA "CDNI CI/T Trigger Specs" 
+		registry (see <xref target="IANA.CDNI.TriggerSpecReg"/>).
+	</t>
 	  
 
-      <section anchor="urls-spec" title="URLs Spec">
-        <t>The urls spec type allows the uCDN to manage uCDN content or metadata objects
-           held by the dCDN based on the objects' URLs.
+     	<section anchor="urls-spec" title="URLs Spec">
+	<t>
+		The URLs spec type allows the uCDN to manage uCDN content or metadata objects
+		held by the dCDN based on the objects' URLs.
         </t>
 
 	<t>URL spec is encoded as a JSON object containing the following name/value pairs:</t>
@@ -2558,11 +2561,11 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
         <t hangText="Name: url-type">
         <vspace blankLines="1"/>
-	Description: Type of URL used 
+	Description: Type of URL used.
         <vspace blankLines="1"/>
-	Value:
+	Value: URL Type as defined in  <xref target="url-types"/>.
         <vspace blankLines="1"/>
-        Mandatory: No.
+        Mandatory: No. When omitted or empty, "published" URL type is assumed.
         </t>
 
         </list></t>
@@ -2581,7 +2584,8 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
    "generic-trigger-spec-value": {
       "urls": [
          "https://metadata.example.com/a/b/c"
-      ]
+      ],
+      "url-type": "published"
    }
 }
 
@@ -2592,38 +2596,43 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
 
       <section anchor="ccids-spec" title="CCIDs Spec">
-        <t> The content-ccids spec type allows the uCDN to specify the
+        <t> The "content-ccids" spec type allows the uCDN to specify the
         Content Collection IDentifier of content to which the trigger applies.
         The "ccid" is a grouping of content as defined by <xref target="RFC8006"/>.
         The ccid spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
 
         </t>
+	<t>CCIDs spec is encoded as a JSON object containing the following name/value pairs:</t>
 
-         <t>Spec object specification<list style="empty">
+        <t><list style="empty" hangIndent="3">
+        <t><list style="hanging" hangIndent="3"><t hangText="Name: ccids">
+        <vspace blankLines="1"/>
+	Description: An array of Content Collection IDentifiers over which the trigger MUST be executed.
+        <vspace blankLines="1"/>
+	Value: A JSON array of strings, where each string is a Content Collection IDentifier.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-              <t>Property: ccids<list style="empty">
+        </list></t>
+        </list></t>
 
-                 <t>Description: An array of Content Collection IDentifiers over which the trigger MUST be executed.</t>
-
-                 <t>Value: A JSON array of strings, where each string is a Content Collection IDentifier.</t>
-
-                 <t>Mandatory: Yes.</t>
-              </list></t>
-          </list></t>
       </section>
 
-     <section anchor="uri-pattern-match-spec" title="URI Pattern Match Spec">
-        <t>The uri-pattern match spec type allows the uCDN to manage uCDN content or metadata objects
-           held by the dCDN based on the objects' URI pattern. The value is a UriPatternMatch object, 
-		as defined in <xref target="url-pattern-match"/>.</t>
+     	<section anchor="uri-pattern-match-spec" title="URI Pattern Match Spec">
+	<t>
+		The "uri-pattern" match spec type allows the uCDN to manage uCDN content or metadata objects
+		held by the dCDN based on the objects' URI pattern. The value is a UriPatternMatch object, 
+		as defined in <xref target="url-pattern-match"/>.
+	</t>
 
 	<section title="UriPatternMatch" anchor="url-pattern-match"><t>
-   A UriPatternMatch consists of a string pattern to match against a URI,
-   and flags describing the type of match.</t>
+   	A UriPatternMatch consists of a string pattern to match against a URI,
+   	and flags describing the type of match.</t>
+	<t>It is encoded as a JSON object containing the following name/value pairs:</t>
 
-	<t><list style="hanging" hangIndent="3"><t hangText="It is encoded as a JSON object with the following name/value pairs:">
-	<vspace blankLines="1"/>
-	Name: pattern
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3"><t hangText="Name: pattern">
 	<vspace blankLines="1"/>
 	Description: A pattern for URI matching.
 	<vspace blankLines="1"/>
@@ -2636,10 +2645,11 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
          treated as literals.
 	<vspace blankLines="1"/>
 	Mandatory: Yes.
-	<list style="hanging" hangIndent="3"><t hangText="Name: case-sensitive">
+	</t>
+
+	<t hangText="Name: case-sensitive">
 	<vspace blankLines="1"/>
-	Description: Flag indicating whether or not case-sensitive
-         matching should be used.
+	Description: Flag indicating whether or not case-sensitive matching should be used.
 	<vspace blankLines="1"/>
 	Value: One of the JSON values "true" (the matching is case
          sensitive) or "false" (the matching is case insensitive).
@@ -2660,12 +2670,18 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 	Mandatory: No; default is "false".  The query part of the URI
          should be dropped before comparison with the given pattern.
 	</t>
+        <t hangText="Name: url-type">
+        <vspace blankLines="1"/>
+        Description: Type of URLs to match.
+        <vspace blankLines="1"/>
+        Value: URL Type as defined in  <xref target="url-types"/>.
+        <vspace blankLines="1"/>
+        Mandatory: No. When omitted or empty, "published" URL type is assumed.
+        </t>
 
-	</list>
-	</t>
 
-	</list>
-	</t>
+	</list></t>
+	</list></t>
 
 	<t>
    Example of case-sensitive prefix match against
@@ -2693,47 +2709,59 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
              A RegexMatch consists of a regular expression string a URI is matched against,
              and flags describing the type of match. It is encoded as a JSON object with
              following properties:
-          </t>
+	  </t>
 
-          <t><list style="empty">
-            <t>Property: regex<list style="empty">
-
-              <t>Description: A regular expression for URI matching. </t>
-
-              <t>Type: A regular expression to match against the URI, i.e., against the path-absolute
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: regex">
+        <vspace blankLines="1"/>
+	Description: A regular expression for URI matching.
+        <vspace blankLines="1"/>
+        Value: A regular expression to match against the URI, i.e., against the path-absolute
                  and the query string parameters <xref target="RFC3986"/>. The regular expression
                  string MUST be compatible with <xref target="POSIX.1">POSIX</xref> Section 9
                  Extended Regular Expressions.  This regular expression MUST be evaluated in
-                 the POSIX locale (<xref target="POSIX.1">POSIX</xref> Section 7.2).</t>
+                 the POSIX locale (<xref target="POSIX.1">POSIX</xref> Section 7.2).
 
               <t>Note: Because '\' has a special meaning in JSON <xref target="RFC8259"/> as the escape
                  character within JSON strings, the regular expression character '\' MUST be escaped as '\\'.</t>
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-              <t>Mandatory: Yes.</t>
-            </list></t>
-            <t>Property: case-sensitive<list style="empty">
-
-              <t>Description: Flag indicating whether or not case-sensitive matching should be used. </t>
-
-              <t>Type: JSON boolean. Either "true" (the matching is case sensitive) or "false"
-                 (the matching is case insensitive).</t>
-
-              <t>Mandatory: No; default is "false", i.e., a case-insensitive match.</t>
-            </list></t>
-            <t>Property: match-query-string<list style="empty">
-
-              <t>Description: Flag indicating whether to include the query part of the URI when
-                 comparing against the regex.</t>
-
-              <t>Type: JSON boolean. Either "true" (the full URI, including the query part,
+	<t hangText="Name: case-sensitive">
+        <vspace blankLines="1"/>
+	Description: Flag indicating whether or not case-sensitive matching should be used.
+        <vspace blankLines="1"/>
+	Value: JSON boolean. Either "true" (the matching is case sensitive) or "false" 
+	(the matching is case insensitive).
+        <vspace blankLines="1"/>
+	Mandatory: No; default is "false", i.e., a case-insensitive match.
+        </t>
+	<t hangText="Name: match-query-string">
+        <vspace blankLines="1"/>
+	Description: Flag indicating whether to include the query part of the URI when
+                 comparing against the regex.
+        <vspace blankLines="1"/>
+	Value: JSON Boolean. Either "true" (the full URI, including the query part,
                  should be compared against the regex) or "false" (the query part of the URI
-                 should be dropped before comparison with the given regex).</t>
-
-              <t>Mandatory: No; default is "false".  The query part of the URI MUST be dropped
+                 should be dropped before comparison with the given regex).
+        <vspace blankLines="1"/>
+        Mandatory: No; default is "false".  The query part of the URI MUST be dropped
                  before comparison with the given regex. This makes the regular expression simpler
-                 and safer for cases in which the query parameters are not relevant for the match.</t>
-            </list></t>
-          </list></t>
+		and safer for cases in which the query parameters are not relevant for the match.
+	</t>
+
+        <t hangText="Name: url-type">
+        <vspace blankLines="1"/>
+        Description: Type of URLs to match against.
+        <vspace blankLines="1"/>
+        Value: URL Type as defined in  <xref target="url-types"/>.
+        <vspace blankLines="1"/>
+	Mandatory: No. When omitted or empty, "published" URL type is assumed.
+	</t>
+	</list></t> 
+	</list></t>
 
           <t>Example of a case sensitive, no query parameters, regex match against:</t>
           <figure>
@@ -2821,6 +2849,17 @@ https://video.example.com/k/movie1/4/013.ts
         <vspace blankLines="1"/>
         Mandatory: Yes. 
 	</t>
+
+        <t hangText="Name: url-type">
+        <vspace blankLines="1"/>
+        Description: Type of URL used in the ObjectList(s).
+        <vspace blankLines="1"/>
+        Value: URL Type as defined in  <xref target="url-types"/>.
+        <vspace blankLines="1"/>
+        Mandatory: No. When omitted or empty, "published" URL type is assumed.
+        </t>
+
+
 	</list></t>
 	</list></t>
 
