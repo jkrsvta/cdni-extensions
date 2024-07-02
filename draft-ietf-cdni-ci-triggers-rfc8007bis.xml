@@ -3406,7 +3406,7 @@ RESPONSE:
 	</figure>
 	</section>
 
-	<section title="Invalidate" anchor="examples-invalidate2"><t>
+	<section title="Invalidate" anchor="examples-invalidate"><t>
    Below is an example of a CI/T "invalidate" command -- another POST to
    the collection of all Trigger Status Resources.  This instructs the
    dCDN to revalidate the content at "https://www.example.com/a/index.html", as well as any metadata and content whose URLs are
