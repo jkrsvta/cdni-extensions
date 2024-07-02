@@ -2978,7 +2978,7 @@ https://video.example.com/k/movie1/4/013.ts
         <vspace blankLines="1"/>
 	Value: A JSON array of zero or more URLs, represented as JSON strings.
         <vspace blankLines="1"/>
-	Mandatory: No.
+	Mandatory: No. In case of a missing or an empty list, no dependencies are assumed.
         </t>
         </list></t>
 	</list></t>
