@@ -209,7 +209,7 @@
    requests originating from the uCDN.</t>
 
 	<t>
-	Two of CI/T Commands exist: CI/T Create Trigger Command and CI/T Modify Trigger Command.
+	Two CI/T Commands exist: CI/T Create Trigger Command and CI/T Modify Trigger Command.
 	The CI/T Modify Command can be used to request cancellation and/or modification of an earlier CI/T Trigger Command. </t>
 
    	<t>A CI/T Trigger Action is of one of the following:</t>
