@@ -2945,7 +2945,7 @@ https://video.example.com/k/movie1/4/013.ts
 	uCDN may combine multiple options in the same trigger command. dCDN should consider the following when processing such commands:
 	<list style="symbols">
 	<t>(i) dCDN MUST reject triggers that are dependent on other pending triggers with lower priority to prevent deadlocks.</t>
-	<t>(ii) When introducing an urgent trigger uCDN SHOULD indicate priority that is equal to or higher than the highest priority among the pending triggers that belong to the same uCDN. dCDN MUST reject urgent triggers that have lower priority than other pending triggers of the same uCDN.</t>
+	<t>(ii) When introducing an urgent trigger uCDN SHOULD indicate a priority that is equal to or higher than the highest priority among the pending triggers that belong to the same uCDN. dCDN MUST reject urgent triggers that have lower priority than other pending triggers of the same uCDN.</t>
 	<t>(iii) dCDN MUST reject an urgent trigger that has pending triggers as its prerequisite. dCDN MAY reject an urgent trigger that has triggers in “active” or “cancelling” state as its prerequisite, for example when such triggers are deemed to take a long time to complete or to cancel.</t>
 	</list>
 	
