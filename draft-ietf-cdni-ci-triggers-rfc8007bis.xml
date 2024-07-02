@@ -2926,8 +2926,15 @@ https://video.example.com/k/movie1/4/013.ts
 
 		</t>
 		<t>
-		Urgency: Separately from priority, uCDN may wish to indicate that dCDN should process a trigger command without delay. This requirement applies to CI/T Trigger commands only,. dCDN MUST process all CI/T Cancel Commands immediately at all times.  Urgency is separate and additional to priority, which indicates order in which trigger commands should be processed yet doesn’t prescribe how soon each command needs to be executed. 
-dCDN MAY reject such requests for urgent processing using “ereject” error code. This can happen due to dCDN internal business logic (e.g. batch-driven purge and invalidation), or due to dependency on other triggers that could not be completed by dCDN immediately. In such a case uCDN should either modify the request removing prerequisites or cancel such pending triggers before re-trying the request.
+		Urgency: uCDN may wish to indicate that dCDN should process a trigger command without delay. 
+		This requirement is separate and additional to priority, as priority indicates the order in which 
+		triggers should be processed, yet does not prescribe how soon each trigger should be executed. 
+
+		dCDN MAY reject such requests for urgent processing using “ereject” error code. 
+		This can happen due to dCDN internal business logic (e.g. batch-driven purge and invalidation), 
+		or due to dependencies on other triggers that could not be completed by dCDN immediately. 
+		In such a case uCDN should either modify the request by removing prerequisites, or cancel such pending 
+		triggers before re-trying the request.
 		</t>
 
 
