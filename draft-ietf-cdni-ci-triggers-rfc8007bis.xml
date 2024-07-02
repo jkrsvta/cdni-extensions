@@ -3090,9 +3090,9 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
       </t>
 
 
-     <section title="CI/T Trigger Endpoint Capability Object" anchor="cit-trigger-endpoints-capability-object">
+     <section title="CI/T Endpoint Capability Object" anchor="cit-trigger-endpoints-capability-object">
         <t>
-		The CI/T triger endpoint capability object is used to advertise one or more CI/T interface endpoints 
+		The CI/T trigger endpoint capability object is used to advertise one or more CI/T interface endpoints 
 		along with CI/T interface versions supported by these endpoints. 
 	   	Capability type is "FCI.CITEndpoints".
 		For simplicity, it is recommended to minimize the set of supported versions declared by the dCDN. 
@@ -3101,7 +3101,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
         </t>
 
 	<t>
-        A CI/T Trigger Endpoints capability object is encoded as an array of JSON objects containing the following
+        A CI/T Endpoints capability object is encoded as an array of JSON objects containing the following
         name/value pairs:
 	</t>
 
@@ -3110,7 +3110,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 
 		<t hangText="Name: trigger-endpoint-uri">
 		<vspace blankLines="1"/>
-		Description: Trigger endpoint URI 
+		Description: CI/T endpoint URI 
 		<vspace blankLines="1"/>
 		Value: A URL represented as a JSON string.
 		<vspace blankLines="1"/>
@@ -3130,7 +3130,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 
 		<t hangText="Name: trigger-subject">
 		<vspace blankLines="1"/>
-		Description: Array of trigger subjects supported by the trigger endpoint .
+		Description: Array of trigger subjects supported by the trigger endpoint.
 		<vspace blankLines="1"/>
 		Value: An array of Strings containing the type of the subject matching the generic-trigger-spec-value property, 
 		such as "content" or "metadata" as defined in <xref target="trigger-subject"/>.
