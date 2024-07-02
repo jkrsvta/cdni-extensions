@@ -883,7 +883,7 @@
 	<t>
 	The uCDN can request cancellation of a trigger by issuing CI/T Modify 
 	Trigger Command to the specific trigger's Trigger Status Resource URL 
-	and setting the desired-status field to “cancelled”
+	and setting the desired-status field to “cancelled”.
 	</t>
 
 	<t>
