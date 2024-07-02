@@ -1968,7 +1968,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<vspace blankLines="1"/>
 	Value:   An array of <xref target="object-list">ObjectList</xref> objects. dCDN SHOULD provide the list of objects that it failed to process during execution of a Trigger Command with <xref target="objectlist-spec"/>, provided that dCDN advertised <xref target="object-list-type-capability-object">support for ObjectList</xref>.
 	<vspace blankLines="1"/>
-	Mandatory: No. TAn empty array is allowed and is equivalent to omitting "objects" from the Error.v2 Description.
+	Mandatory: No. An empty array is allowed and is equivalent to omitting "objects" from the Error.v2 Description.
 	</t>
 	</list></t>
 	</list></t>
@@ -2793,7 +2793,7 @@ https://video.example.com/k/movie1/4/013.ts
 	<t><list style="empty" hangIndent="3">
         <t><list style="hanging" hangIndent="3"><t hangText="Name: utc-window">
         <vspace blankLines="1"/>
-	Description: A A UTC time window in which the trigger SHOULD be executed.
+	Description: A UTC time window in which the trigger SHOULD be executed.
         <vspace blankLines="1"/>
         Value: UTCWindow object as defined in <xref target="utc-window"/>.
         <vspace blankLines="1"/>
