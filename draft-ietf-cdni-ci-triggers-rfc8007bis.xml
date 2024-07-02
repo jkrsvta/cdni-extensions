@@ -1308,7 +1308,6 @@ uCDN-A                         dCDN-B                         dCDN-C
 	Description: The target status for an existing trigger as defined in <xref target="trigger-status"/>
 	<vspace blankLines="1"/>
 	Value: JSON string. 
-	<xref target="loop-detection-and-prevention"/>.
 	<vspace blankLines="1"/>
 	Mandatory: No, but at least one of "specs" and "desired-status" should be set.
 	</t>
