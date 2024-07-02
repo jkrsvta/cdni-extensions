@@ -1314,7 +1314,6 @@ uCDN-A                         dCDN-B                         dCDN-C
 	Description: The target status for an existing trigger as defined in <xref target="trigger-status"/>
 	<vspace blankLines="1"/>
 	Value: JSON string. 
-	<xref target="loop-detection-and-prevention"/>.
 	<vspace blankLines="1"/>
 	Mandatory: No, but at least one of "specs" and "desired-status" should be set.
 	</t>
@@ -1531,8 +1530,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<vspace blankLines="1"/>
 	Description: The CDN PID of the dCDN.
 	<vspace blankLines="1"/>
-	Value: A JSON string, the dCDN's CDN PID, as defined in
-         <xref target="loop-detection-and-prevention"/>.
+	Value: A JSON string, the dCDN's CDN PID, as defined in <xref target="loop-detection-and-prevention"/>.
 	<vspace blankLines="1"/>
 	Mandatory: Only in the collection of all Trigger Status
          Resources, if the dCDN implements the filtered collections.
@@ -3122,7 +3120,6 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 		Description: A list of CI/T versions supported by the trigger endpoint.
 		<vspace blankLines="1"/>
 		Value: An array of JSON strings.
-		<xref target="loop-detection-and-prevention"/>.
 		<vspace blankLines="1"/>
 		Mandatory: No. The default is version 2. 
 		A missing or an empty versions list means that only version 2 of the interface and objects is supported.
