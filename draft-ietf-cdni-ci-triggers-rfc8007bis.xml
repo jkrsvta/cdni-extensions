@@ -1305,7 +1305,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	<t hangText="Name: desired-status">
 	<vspace blankLines="1"/>
-	Description: The target status for an existing trigger as defined in <xref target="trigger-status"/>
+	Description: The target status for an existing trigger as defined in <xref target="trigger-status"/>.
 	<vspace blankLines="1"/>
 	Value: JSON string. 
 	<vspace blankLines="1"/>
