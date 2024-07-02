@@ -2887,7 +2887,7 @@ https://video.example.com/k/movie1/4/013.ts
           </figure>
         </section>
 	</section>
-	<section anchor="execution-policy" title="Execution Extension">
+	<section anchor="execution-policy" title="ExecutionPolicy Extension">
 	<t>
 		Unless specified otherwise, dCDN is at liberty to decide how to choose trigger commands for execution from all pending commands, whether to process trigger commands sequentially or in parallel, immediately upon acceptance, or with a delay in batches. A uCDN may wish to control trigger processing in more detail, including order of execution, dependencies, and concurrency.
 	</t>
