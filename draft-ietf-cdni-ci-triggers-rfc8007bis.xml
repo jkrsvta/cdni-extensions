@@ -3092,10 +3092,8 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
         <t>
 		The CI/T trigger endpoint capability object is used to advertise one or more CI/T interface endpoints 
 		along with CI/T interface versions supported by these endpoints. 
-	   	Capability type is "FCI.CITEndpoints".
-		For simplicity, it is recommended to minimize the set of supported versions declared by the dCDN. 
-		For example, one way to minimize supported versions is to support only objects of version 2.
-           	Version 1, as originally defined in <xref target="RFC8007"/>, is the default if this capability is not explicitly declared.
+		Capability type is "FCI.CITEndpoints".
+		Version 1, as originally defined in <xref target="RFC8007"/>, is the default if this capability is not explicitly declared.
         </t>
 
 	<t>
@@ -3121,8 +3119,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 		<vspace blankLines="1"/>
 		Value: An array of JSON strings.
 		<vspace blankLines="1"/>
-		Mandatory: No. The default is version 2. 
-		A missing or an empty versions list means that only version 2 of the interface and objects is supported.
+		Mandatory: Yes. 
 		</t>
 
 		<t hangText="Name: trigger-subject">
