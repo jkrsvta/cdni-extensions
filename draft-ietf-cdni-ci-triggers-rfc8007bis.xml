@@ -2951,7 +2951,8 @@ https://video.example.com/k/movie1/4/013.ts
 	
 	</t>
 	<t>
-	Object specification:
+		The ExtensionPolict extension is encoded as a JSON object containing the following name/value pairs:
+	</t>
 
         <t><list style="empty" hangIndent="3">
         <t><list style="hanging" hangIndent="3"><t hangText="Name: priority">
