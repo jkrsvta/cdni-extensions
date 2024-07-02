@@ -259,7 +259,7 @@
    
    <t> Note that the CI/T Command objects POSTed by the uCDN, and CI/T Status Resource objects generated and reported by the dCDN, are matched by their version,  
     i.e., sending a <xref target="RFC8007"/> "ci-trigger-command" object as the command generates a 
-   "ci-trigger-status" structured resource to be reported, while sending a "ci-trigger-command.trigger.v2" object generates a "ci-trigger-status.v2" object.</t>
+   "ci-trigger-status" structured resource to be reported, while sending a "ci-trigger-command.create.v2" object generates a "ci-trigger-status.v2" object.</t>
 
 	<t>
    In addition to the collection of all Trigger Status Resources for the
@@ -2154,7 +2154,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	<t>
    The following Error Codes are defined by this document and MUST be
-   supported by an implementation of the CI/T interface utilizing the ci-trigger-command.trigger.v2 and the ci-trigger-status.v2 objects.</t>
+   supported by an implementation of the CI/T interface utilizing the ci-trigger-command.create.v2, ci-trigger-command.modify.v2 and the ci-trigger-status.v2 objects.</t>
 
 	<texttable style="full">
 	<t>[RFC Editor: Please replace RFCthis with the published RFC
@@ -3328,9 +3328,9 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   Content-Length: 352
-
+  
   {
       "trigger": {
          "action": "preposition",
@@ -3360,7 +3360,7 @@ REQUEST:
       },
       "cdn-path": [ "AS64496:1" ]
   }
-
+  
 RESPONSE:
 
   HTTP/1.1 201 Created
@@ -3369,7 +3369,7 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-status.v2
   Location: https://dcdn.example.com/triggers/0
   Server: example-server/0.1
-
+  
   {
       "ctime": 1462351690,
       "etime": 1462351698,
@@ -3407,12 +3407,12 @@ RESPONSE:
 	</section>
 
 	<section title="Invalidate" anchor="examples-invalidate"><t>
-   Below is an example of a CI/T "invalidate" command -- another POST to
-   the collection of all Trigger Status Resources.  This instructs the
-   dCDN to revalidate the content at "https://www.example.com/a/index.html", as well as any metadata and content whose URLs are
-   prefixed by "https://metadata.example.com/a/b/" using
-   case-insensitive matching, and "https://www.example.com/a/b/" using
-   case-sensitive matching, respectively.</t>
+ Below is an example of a CI/T "invalidate" command -- another POST to
+ the collection of all Trigger Status Resources.  This instructs the
+ dCDN to revalidate the content at "https://www.example.com/a/index.html", as well as any metadata and content whose URLs are
+ prefixed by "https://metadata.example.com/a/b/" using
+ case-insensitive matching, and "https://www.example.com/a/b/" using
+ case-sensitive matching, respectively.</t>
 
 	<figure><artwork><![CDATA[
 REQUEST:
@@ -3421,9 +3421,9 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   Content-Length: 387
-
+  
   {
     "trigger": {
       "action": "invalidate",
@@ -3456,7 +3456,7 @@ REQUEST:
     },
     "cdn-path": [ "AS64496:1" ]
   }
-
+  
 RESPONSE:
 
   HTTP/1.1 201 Created
@@ -3465,7 +3465,7 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-status.v2
   Location: https://dcdn.example.com/triggers/1
   Server: example-server/0.1
-
+  
   {
       "ctime": 1462351691,
       "etime": 1462351699,
@@ -3482,23 +3482,23 @@ RESPONSE:
                }
             },
             {
-               "trigger-subject": "content",
-               "generic-trigger-spec-type": "urls",
-               "generic-trigger-spec-value": {
-                  "urls": [
-                     "https://www.example.com/a/index.html"
-                  ]
-               }
-            },
-            {
-               "trigger-subject": "content",
-               "generic-trigger-spec-type": "uri-pattern-match",
-               "generic-trigger-spec-value": {
-                  "pattern": "https://www.example.com/a/b/*",
-                  "case-sensitive": true
-               }
-            }
-         ]
+                 "trigger-subject": "content",
+                 "generic-trigger-spec-type": "urls",
+                 "generic-trigger-spec-value": {
+                    "urls": [
+                       "https://www.example.com/a/index.html"
+                    ]
+                 }
+              },
+              {
+                 "trigger-subject": "content",
+                 "generic-trigger-spec-type": "uri-pattern-match",
+                 "generic-trigger-spec-value": {
+                    "pattern": "https://www.example.com/a/b/*",
+                    "case-sensitive": true
+                 }
+              }
+           ]
       }
   }
 ]]></artwork>
@@ -3520,7 +3520,7 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: triggers.dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   {
     "trigger": {
       "action": "invalidate",
@@ -3548,7 +3548,7 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-status.v2
   Location: https://triggers.dcdn.example.com/triggers/2
   Server: example-server/0.1
-
+  
   {
     "errors": [
       {
@@ -3594,7 +3594,7 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: triggers.dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   {
     "trigger": {
       "action": "preposition",
@@ -4055,7 +4055,7 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: triggers.dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   {
     "trigger": {
       "action": "preposition",
@@ -4228,9 +4228,9 @@ RESPONSE:
 
 	<texttable style="full"><ttcol align="left"> Payload Type</ttcol>
 	<ttcol align="left"> Specification</ttcol>
-   <c>ci-trigger-command.trigger.v2</c>
+   <c>ci-trigger-command.create.v2</c>
    <c>RFCthis</c>
-   <c>ci-trigger-command.cancel</c>
+   <c>ci-trigger-command.modify.v2</c>
    <c>RFCthis</c>
    <c>ci-trigger-status.v2</c>
    <c>RFCthis</c>
