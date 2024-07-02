@@ -2784,8 +2784,7 @@ https://video.example.com/k/movie1/4/013.ts
         <vspace blankLines="1"/>
         Value: TimeWindow object using UNIX epoch timestamps (see Section 4.2.3.2 of <xref target="RFC8006"/>).
         <vspace blankLines="1"/>
-        Mandatory: No, but exactly one of "unixEpochWindow", "utcWindow"
-                    or "localTimeWindow" MUST be present.
+        Mandatory: No, but exactly one of "unixEpochWindow" or "utcWindow" MUST be present.
         </t>
         </list></t>
         </list></t>
@@ -2798,8 +2797,7 @@ https://video.example.com/k/movie1/4/013.ts
         <vspace blankLines="1"/>
         Value: UTCWindow object as defined in <xref target="utc-window"/>.
         <vspace blankLines="1"/>
-        Mandatory: No, but exactly one of "unixEpochWindow", "utcWindow"
-                    or "localTimeWindow" MUST be present.
+        Mandatory: No, but exactly one of "unixEpochWindow" or "utcWindow" MUST be present.
         </t>
         </list></t>
         </list></t>
