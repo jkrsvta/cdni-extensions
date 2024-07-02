@@ -2895,7 +2895,7 @@ https://video.example.com/k/movie1/4/013.ts
 	Example use cases:
 		<list style="symbols">
 		<t>
-		Priority:  uCDN may have multiple trigger commands in “pending” and/or “active” mode. The trigger commands may potentially take a long time to execute, for example due to policy constraints, large number of content objects affected by it or other dCDN business logic.
+		Priority:  uCDN may have multiple trigger commands in “pending” and/or “active” mode. For example, trigger commands with policy constraints, large number of affected content objects affected, or other dCDN business logic may take a long time to execute.
 		uCDN may wish to prescribe the order in which dCDN picks up its trigger commands for execution from the “pending” queue, by indicating a relative priority of each trigger. The priority would affect selection of trigger commands specific to the requesting uCDN. dCDN may separately prioritize triggers from multiple uCDNs subject to its business logic. 
 
 		Multiple priority-related sub use cases exist: 
