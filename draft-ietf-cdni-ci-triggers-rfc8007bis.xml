@@ -2916,7 +2916,7 @@ https://video.example.com/k/movie1/4/013.ts
 		or cancellation of long-running preposition triggers to avoid race conditions that would result from processing 
 		these in parallel.
 
-		The prerequisite requirement implies that a previius trigger reaches one of the following states:   
+		The prerequisite requirement implies that a previous trigger reaches one of the following states:   
 		<list style="symbols">
 			<t>(i) “complete” or “processed” for successful completion</t>
 			<t>(ii) “failed” for failed processing</t>
