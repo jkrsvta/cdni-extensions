@@ -2960,7 +2960,7 @@ https://video.example.com/k/movie1/4/013.ts
 	</list>
 	</t>
 	<t>
-		The ExtensionPolict extension is encoded as a JSON object containing the following name/value pairs:
+		The ExtensionPolicy extension is encoded as a JSON object containing the following name/value pairs:
 	</t>
 	<t>
         <t><list style="empty" hangIndent="3">
