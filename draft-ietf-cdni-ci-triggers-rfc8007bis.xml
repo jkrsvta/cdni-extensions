@@ -2960,7 +2960,7 @@ https://video.example.com/k/movie1/4/013.ts
 	When picking a trigger for execution from all pending triggers posted by each uCDN, 
 	the dCDN MUST choose the trigger with the highest priority first. 
         <vspace blankLines="1"/>
-	Value: Integer from 0 to 100.
+	Value: Integer from -100 to 100.
         <vspace blankLines="1"/>
 	Mandatory: No. The value defaults to zero if omitted.
         </t>
