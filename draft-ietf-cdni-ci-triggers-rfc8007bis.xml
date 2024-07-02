@@ -1993,7 +1993,6 @@ uCDN-A                         dCDN-B                         dCDN-C
       }
     }
    ],
-
   "objects": {
      "href": "https://dcdn.com/triggers/2a544cd9/objects",
      "type": "json"
