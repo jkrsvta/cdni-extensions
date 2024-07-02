@@ -2900,7 +2900,7 @@ https://video.example.com/k/movie1/4/013.ts
 
 		Multiple priority-related sub use cases exist: 
 		<list style="symbols">
-		<t> (i) uCDN needs to introduce urgent “purge” or “invalidate” trigger into an existing queue of trigger commands to correct wrong versions of content objects published by it</t>
+		<t> (i) uCDN needs to introduce an urgent “purge” or “invalidate” trigger into an existing queue of trigger commands to correct wrong versions of content objects published by it</t>
 		<t> (ii) uCDN needs to indicate which content objects should be prepositioned, purged or invalidated first, for example prepositioning newer released content before prepositioning updates to existing catalog</t>
 		</list>
 		</t>
