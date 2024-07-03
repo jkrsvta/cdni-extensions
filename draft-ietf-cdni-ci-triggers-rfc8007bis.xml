@@ -1556,9 +1556,11 @@ uCDN-A                         dCDN-B                         dCDN-C
    This section defines the values that can appear in the top-level
    objects described in <xref target="cit-objects"/> and their encodings.</t>
 
-	<section title="Trigger.v2 Specification" anchor="trigger-v2-specification"><t>
-   A Trigger.v2 Specification is encoded as a JSON object containing the
-   following name/value pairs:</t>
+	<section title="Trigger.v2 Specification" anchor="trigger-v2-specification">
+	<t>
+   	A Trigger.v2 Specification is encoded as a JSON object containing the
+	following name/value pairs:
+	</t>
 
 	<t>
    An unrecognized name/value pair in the Trigger Specification object
@@ -1570,7 +1572,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<t><list style="empty" hangIndent="3">
 	<t><list style="hanging" hangIndent="3">
    
-   <t hangText="Name: action">
+   	<t hangText="Name: action">
 	<vspace blankLines="1"/>
 	Description: Defines the type of the CI/T Trigger Action.
 	<vspace blankLines="1"/>
@@ -1593,9 +1595,18 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<vspace blankLines="1"/>
 	Description: Array of trigger extensions.
 	<vspace blankLines="1"/>
-	Value:Array of GenericTriggerExtension objects (see <xref target="generic-extension-object"/>).
+	Value: Array of GenericTriggerExtension objects (see <xref target="generic-extension-object"/>).
 	<vspace blankLines="1"/>
 	Mandatory: No. The default is no extensions.
+	</t>
+
+	<t hangText="Name: labels">
+	<vspace blankLines="1"/>
+	Description: Array of trigger labels.
+	<vspace blankLines="1"/>
+	Value: Array of GenericTriggerExtension objects (see <xref target="generic-extension-object"/>).
+	<vspace blankLines="1"/>
+	Mandatory: No. The default is no labels.
 	</t>
 
 	</list>
@@ -2251,17 +2262,20 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	</section>
 
-	<section title="ObjectList" anchor="object-list"><t>
-		ObjectList is a metadata object describing lists of objects that can be used in the context of CI/T v2 trigger spec, trigger status resources and other contexts as required. The ObjectList object can either embed the lists of objects or point to external URL(s) that hold such lists. ObjectList allows specification of an object list type, providing instructions on the interpretation of the object list format.</t>
-
+	<section title="ObjectList" anchor="object-list">
 	<t>
-		ObjectLists MAY be recursive, i.e. including references to secondary manifests, including references to HLS, MPEG-DASH or MSS manifests as well as additional JSON-encoded ObjectLists , etc. The party consuming the object list MUST parse all recursions based on the object list type property. When doing so, the consuming party should also detect potential loops when descendant ObjectList points back to parent ObjectList.
+	ObjectList is a metadata object describing lists of objects that can be used in the context of CI/T v2 trigger spec, trigger status resources and other contexts as required. The ObjectList object can either embed the lists of objects or point to external URL(s) that hold such lists. ObjectList allows specification of an object list type, providing instructions on the interpretation of the object list format.
 	</t>
 
 	<t>
-		In case of uCDN accessing ObjectList objects referencing external URLs published by dCDN, both parties should comply with the CI/T interface security requirements (see <xref target="authentication-authorization"/> for details). 
-		When dCDN accesses external URLs referenced by ObjectLists supplied by uCDN, for example as part of Trigger Spec, the dCDN MUST match these URLs with source metadata objects, published by uCDN, such as SourceMetadata objects specified in Section 4.2.1 of <xref target="RFC8006"/>, and use these metadata objects for content acquisition if a match was found.
+	ObjectLists MAY be recursive, i.e. including references to secondary manifests, including references to HLS, MPEG-DASH or MSS manifests as well as additional JSON-encoded ObjectLists , etc. The party consuming the object list MUST parse all recursions based on the object list type property. When doing so, the consuming party should also detect potential loops when descendant ObjectList points back to parent ObjectList.
 	</t>
+
+	<t>
+	In case of uCDN accessing ObjectList objects referencing external URLs published by dCDN, both parties should comply with the CI/T interface security requirements (see <xref target="authentication-authorization"/> for details). 
+	When dCDN accesses external URLs referenced by ObjectLists supplied by uCDN, for example as part of Trigger Spec, the dCDN MUST match these URLs with source metadata objects, published by uCDN, such as SourceMetadata objects specified in Section 4.2.1 of <xref target="RFC8006"/>, and use these metadata objects for content acquisition if a match was found.
+	</t>
+
 	<t>
 ObjectLists MAY combine regular objects and secondary ObjectLists in the same object.
 		Please note that when embedding non-JSON object lists directly in ObjectList, absolute URLs MUST be provided at all times and the text SHOULD be encoded in accordance with the JSON grammar specification <xref target="ECMA404"/>, including explicit newline encoding. When the uCDN accesses ObjectList metadata resources published by the uCDN, the same interface authentication and authorization requirements would apply, as when accessing the interface itself.
@@ -2357,56 +2371,38 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 ]]></artwork></figure>
 
 	<t>The ObjectList properties are as follows:</t>  
-	<t>
-		<list style="empty" hangIndent="3">
-		<t>
-			<list style="hanging" hangIndent="3">
-				<t hangText="Name: data">
-        			<vspace blankLines="1"/>
-				Description: List of objects in one of the recognized formats.
-				<vspace blankLines="1"/>
-				Value: JSON String.
-        			<vspace blankLines="1"/>
-        			Mandatory: No. Either "data" or "href" MUST be set.
-				</t>
-			</list>
-		</t>
-		</list>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: data">
+        <vspace blankLines="1"/>
+	Description: List of objects in one of the recognized formats.
+	<vspace blankLines="1"/>
+	Value: JSON String.
+        <vspace blankLines="1"/>
+        Mandatory: No. Either "data" or "href" MUST be set.
 	</t>
 
-
-	<t>
-		<list style="empty" hangIndent="3">
-			<t>
-				<list style="hanging" hangIndent="3"><t hangText="Name: href">
-				<vspace blankLines="1"/>
-				Description: URL pointing to an external object list or object in one of the recognized formats.
-				<vspace blankLines="1"/>
-				Value: A URL represented as a JSON String
-        			<vspace blankLines="1"/>
-        			Mandatory: No. Either "data" or "href" MUST be set.
-				</t>
-				</list>
-			</t>
-		</list>
-	</t>
-	<t>
-		<list style="empty" hangIndent="3">
-			<t>
-				<list style="hanging" hangIndent="3"><t hangText="Name: type">
-				<vspace blankLines="1"/>
-				Description: Object list type to be used when parsing and interpreting this object list. By default each record in the list is assumed to represent an object that does not require additional processing.
-				<vspace blankLines="1"/>
-				Value: ObjectListType (see <xref target="object-list"/>)   
-        			<vspace blankLines="1"/>
-        			Mandatory: Yes.
-				</t>
-				</list>
-			</t>
-		</list>
+	<t hangText="Name: href">
+	<vspace blankLines="1"/>
+	Description: URL pointing to an external object list or object in one of the recognized formats.
+	<vspace blankLines="1"/>
+	Value: A URL represented as a JSON String
+        <vspace blankLines="1"/>
+        Mandatory: No. Either "data" or "href" MUST be set.
 	</t>
 
-	</section>
+	<t hangText="Name: type">
+	<vspace blankLines="1"/>
+	Description: Object list type to be used when parsing and interpreting this object list. 
+	By default each record in the list is assumed to represent an object that does not require additional processing.
+	<vspace blankLines="1"/>
+	Value: ObjectListType (see <xref target="object-list"/>).   
+       	<vspace blankLines="1"/>
+	Mandatory: Yes.
+	</t>
+	</list></t>
+	</list></t>
+
 	<section title="ObjectList Type" anchor="object-list-type">
 	<t>
 		ObjectListType objects are used to specify registered type of ObjectList 
@@ -2449,7 +2445,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 		<c><xref target="object-list-type-text">Text</xref></c>
         </texttable>
 	<t>[RFC Editor: Please replace RFCthis with the published RFC number for this document.]</t>
-
+	</section>
 	<section title="JSON Serialized Object List" anchor="object-list-type-json">
 	<t>
 		This ObjectList type specifies a collection of objects encoded in JSON format, each entry being encoded as an <xref target="object-entry"> ObjectEntry</xref> object. The entries in the JSON object list MAY have an object list type specified, allowing for a recursive object list structure.
@@ -2460,7 +2456,6 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 		<t>
 			The text object list type specifies a collection of files in text encoding, each line specifying an object URI. Unlike the <xref target="object-list-type-json">JSON</xref> object list, the text-based object list will not support a recursive object list structure, and every object specified in it SHOULD be downloaded without additional processing.
 		</t>
-		</section>
 	</section>
 
 	<section title="ObjectEntry" anchor="object-entry">
@@ -2481,55 +2476,39 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 	</t>
 
 	<t>The ObjectEntry properties are as follows:</t>
-	<t>
-		<list style="empty" hangIndent="3">
-		<t>
-			<list style="hanging" hangIndent="3">
-				<t hangText="Name: href">
-        			<vspace blankLines="1"/>
-				Description: Object URL
-				<vspace blankLines="1"/>
-				Value: A URL represented as a JSON string.
-        			<vspace blankLines="1"/>
-        			Mandatory: Yes.
-				</t>
-			</list>
-		</t>
-		</list>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: href">
+        <vspace blankLines="1"/>
+	Description: Object URL
+	<vspace blankLines="1"/>
+	Value: A URL represented as a JSON string.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
 	</t>
 
-
-	<t>
-		<list style="empty" hangIndent="3">
-			<t>
-				<list style="hanging" hangIndent="3"><t hangText="Name: type">
-				<vspace blankLines="1"/>
-				Description: ObjectList type to be used when processing this object. By default ObjectEntry object is assumed to represent an object and does not require additional processing.
-				<vspace blankLines="1"/>
-				Value: ObjectListType (see <xref target="object-list-type"/>
-        			<vspace blankLines="1"/>
-        			Mandatory: No.
-				</t>
-				</list>
-			</t>
-		</list>
+	<t hangText="Name: type">
+	<vspace blankLines="1"/>
+	Description: ObjectList type to be used when processing this object. 
+	By default ObjectEntry object is assumed to represent an object and does not require additional processing.
+	<vspace blankLines="1"/>
+	Value: ObjectListType (see <xref target="object-list-type"/>).
+       	<vspace blankLines="1"/>
+       	Mandatory: No.
 	</t>
-	<t>
-		<list style="empty" hangIndent="3">
-			<t>
-				<list style="hanging" hangIndent="3"><t hangText="Name: size">
-				<vspace blankLines="1"/>
-				Description: Object size, in bytes. Can be used to make a decision to download the object based on size. For example, dCDN may ignore objects that are too small or too large.
-				<vspace blankLines="1"/>
-				Value: Integer.
-        			<vspace blankLines="1"/>
-        			Mandatory: No.
-				</t>
-				</list>
-			</t>
-		</list>
+	<t hangText="Name: size">
+	<vspace blankLines="1"/>
+	Description: Object size, in bytes. Can be used to make a decision to download the object based on size. 
+	For example, dCDN may ignore objects that are too small or too large.
+	<vspace blankLines="1"/>
+	Value: Integer.
+       	<vspace blankLines="1"/>
+	Mandatory: No.
 	</t>
+	</list></t>
+	</list></t>
 
+	</section>
 	</section>
 	</section>
 
