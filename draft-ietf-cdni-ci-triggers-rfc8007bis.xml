@@ -3387,26 +3387,27 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
       </section>
 
 
-       
-
-            <section anchor="object-list-type-capability-object" title="CI/T Object List Type Capability Object">
+	<section anchor="object-list-type-capability-object" title="CI/T Object List Type Capability Object">
         <t>
-           Given an object list being supported by the dCDN, the CI/T Object List Type capability object is used to indicate support for one or more
-           Object List types listed in <xref target="IANA.CDNI.ObjectListTypeReg"/> by the type property of the "ObjectList" object. Capability type is  "FCI.TriggerObjectListType".
+		Given an object list being supported by the dCDN, the CI/T Object List Type capability object is used to 
+		indicate support for one or more Object List types listed in <xref target="IANA.CDNI.ObjectListTypeReg"/> 
+		by the type property of the "ObjectList" object. Capability type is  "FCI.TriggerObjectListType".
         </t>
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
 
-        <t><list style="empty">
-           <t>Property: object-list-types<list style="empty">
+		<t hangText="Name: object-list-types">
+		<vspace blankLines="1"/>
+		Description: A list of supported object list types.
+		<vspace blankLines="1"/>
+		Value: An array <xref target="object-list-type"/>.
+		<vspace blankLines="1"/>
+		Mandatory: Yes.
+		</t>
 
-                 <t>Description: A list of object list types.</t>
+	</list></t>
+	</list></t>
 
-		 <t>Type: A list of Object List Type (from the CDNI CI/T Object List types
-                    <xref target="IANA.CDNI.ObjectListTypeReg"/>)</t>
-
-                 <t>Mandatory: No. The default, in case of a missing or an empty list, 
-                    is none supported.</t>
-           </list></t>
-        </list></t>
         <section title="CI/T Object List Type Capability Object Serialization">
           <t>
              The following shows an example of a JSON serialized CI/T Object List Type Capability object serialization
@@ -3421,7 +3422,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
    {
      "capability-type": "FCI.TriggerObjectListType",
      "capability-value": {
-       "object-list-types": ["hls", "dash"]
+       "object-list-types": ["hls", "dash", "json"]
      },
      "footprints": [
        <Footprint objects>
