@@ -1648,46 +1648,47 @@ uCDN-A                         dCDN-B                         dCDN-C
    </t>
 
 
-         <section anchor="generic-spec-object" title="Generic Spec Object">
-         <t>A GenericSpecObject object is a wrapper for managing individual CDNI
-            Trigger specs in an opaque manner.</t>
+	<section anchor="generic-spec-object" title="Generic Spec Object">
+	<t>
+		A GenericSpecObject object is a wrapper for managing individual CDNI
+		Trigger specs in an opaque manner.</t>
+	<t>It is encoded as a JSON object containing the following name/value pairs:</t>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: trigger-subject">
+        <vspace blankLines="1"/>
+        Description: Case-insensitive CDNI Trigger subject.
+        <vspace blankLines="1"/>
+        Value: String containing the type of the subject matching the
+                   generic-trigger-spec-value property, such as "content" or "metadata"
+                   as defined in <xref target="trigger-subject"/>.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-         <t><list style="empty">
-
-            <t>Property: trigger-subject<list style="empty">
-
-               <t>Description: Case-insensitive CDNI Trigger subject.</t>
-
-               <t>Type: String containing the type of the subject matching the 
-                  generic-trigger-spec-value property, such as "content" or "metadata" 
-                  as defined in <xref target="trigger-subject"/>.</t>  
-
-               <t>Mandatory: Yes.</t>
-            </list></t>
-
-            <t>Property: generic-trigger-spec-type<list style="empty">
-
-               <t>Description: Case-insensitive CDNI Trigger spec type.</t>
-
-               <t>Type: String containing the spec type of the object contained
-                  in the generic-trigger-spec-value property (see table in <xref target="trigger-spec"/>).</t>
-
-               <t>Mandatory: Yes.</t>
-            </list></t>
-
-            <t>Property: generic-trigger-spec-value<list style="empty">
-
-               <t>Description:A CDNI Trigger spec object.</t>
-
-               <t>Type: Format/Type is defined by the value of the
-                  generic-trigger-spec-type property.</t>
-
-               <t>Mandatory: Yes.</t>
-            </list></t>
+	<t hangText="Name: generic-trigger-spec-type">
+        <vspace blankLines="1"/>
+        Description: Case-insensitive CDNI Trigger spec type.
+        <vspace blankLines="1"/>
+	Value: String containing the spec type of the object contained
+        in the generic-trigger-spec-value property (see table in <xref target="trigger-spec"/>).
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
 
-         </list></t>
-         <t>The structure of a JSON serialized GenericTriggerSpec object, containing a specific trigger spec is illustrated below:</t>
+	<t hangText="Name: generic-trigger-spec-value">
+        <vspace blankLines="1"/>
+        Description: :A CDNI Trigger spec object.
+        <vspace blankLines="1"/>
+	Value: Defined by the value of the generic-trigger-spec-type property.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
+	</list></t>
+	</list></t>
+
+        <t>The structure of a JSON serialized GenericTriggerSpec object, containing a specific trigger spec is illustrated below:</t>
 
       <figure>
          <artwork><![CDATA[
@@ -1884,69 +1885,68 @@ uCDN-A                         dCDN-B                         dCDN-C
 
           </section>
 
-          <section anchor="generic-extension-object" title="GenericExtensionObject">
-            <t>A GenericTriggerExtension object is a wrapper for managing individual CDNI
-               Trigger extensions in an opaque manner.</t>
+	<section anchor="generic-extension-object" title="GenericExtensionObject">
+	<t>
+		A GenericTriggerExtension object is a wrapper for managing individual CDNI
+		Trigger extensions in an opaque manner.
+	</t>
 
-            <t><list style="empty">
-              <t>Property: generic-trigger-extension-type<list style="empty">
+	<t>It is encoded as a JSON object containing the following name/value pairs:</t>
 
-                 <t>Description: Case-insensitive CDNI Trigger extension object type.</t>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
 
-                 <t>Type: String containing the CDNI Extension Type <xref target="RFC7736"/> of the object contained
-                    in the generic-trigger-extension-value property (see table in <xref target="trigger-extensibility"/>).</t>
+	<t hangText="Name: generic-trigger-extension-type">
+        <vspace blankLines="1"/>
+        Description: Case-insensitive CDNI Trigger extension object type.
+        <vspace blankLines="1"/>
+	Value: String containing the CDNI Extension Type <xref target="RFC7736"/> of the object contained
+        in the "generic-trigger-extension-value" property (see table in <xref target="trigger-extensibility"/>).
+        <vspace blankLines="1"/>
+	Mandatory: Yes.
+	</t>
 
-                 <t>Mandatory: Yes.</t>
-              </list></t>
+	<t hangText="Name: generic-trigger-extension-value">
+        <vspace blankLines="1"/>
+        Description: CDNI Trigger extension object.
+        <vspace blankLines="1"/>
+	Value:  Defined by the value of the "generic-trigger-extension-type" property above.
+        <vspace blankLines="1"/>
+	Mandatory: Yes.
+	</t>
 
-              <t>Property: generic-trigger-extension-value<list style="empty">
+	<t hangText="Name: mandatory-to-enforce">
+        <vspace blankLines="1"/>
+        Description: Flag identifying whether or not the enforcement of this trigger extension is mandatory.
+        <vspace blankLines="1"/>
+	Value: Boolean.
+        <vspace blankLines="1"/>
+	Mandatory: No. Default is to treat the trigger extension as mandatory to enforce (i.e., a value of True)
+	</t>
 
-                 <t>Description: CDNI Trigger extension object.</t>
+	<t hangText="Name: safe-to-redistribute">
+        <vspace blankLines="1"/>
+	Description: Flag identifying whether or not this trigger extension can be safely redistributed 
+	without modification, even if the CDN fails to understand the extension.
+        <vspace blankLines="1"/>
+	Value: Boolean.
+        <vspace blankLines="1"/>
+	Mandatory: No. Default is to allow transparent redistribution (i.e., a value of True).
+	</t>
 
-                 <t>Type: Format/Type is defined by the value of the
-                    generic-trigger-extension-type property above.</t>
+	<t hangText="Name: incomprehensible">
+        <vspace blankLines="1"/>
+	Description: Flag identifying whether or not any CDN in the chain of delegation has failed to understand and/or failed to
+	properly transform this trigger extension object.  Note: This flag only applies to trigger extension objects whose 
+	"safe-to-redistribute" property has a value of False.
+        <vspace blankLines="1"/>
+	Value: Boolean.
+        <vspace blankLines="1"/>
+	Mandatory: No. Default is comprehensible (i.e., a value of False).
+	</t>
+        </list></t>
+	</list></t>
 
-                 <t>Mandatory: Yes.</t>
-              </list></t>
-
-              <t>Property: mandatory-to-enforce<list style="empty">
-
-                 <t>Description: Flag identifying whether or not the enforcement of
-                    this trigger extension is mandatory.</t>
-
-                 <t>Type: Boolean</t>
-
-                 <t>Mandatory: No.  Default is to treat the trigger extension as
-                    mandatory-to-enforce (i.e., a value of True).</t>
-              </list></t>
-
-              <t>Property: safe-to-redistribute<list style="empty">
-
-                 <t>Description: Flag identifying whether or not this trigger extension 
-                    can be safely redistributed without modification, even if 
-                    the CDN fails to understand the extension.</t>
-
-                 <t>Type: Boolean</t>
-
-                 <t>Mandatory: No.  Default is to allow transparent
-                    redistribution (i.e., a value of True).</t>
-              </list></t>
-
-              <t>Property: incomprehensible<list style="empty">
-
-                 <t>Description: Flag identifying whether or not any CDN in the
-                    chain of delegation has failed to understand and/or failed to
-                    properly transform this trigger extension object.  Note: This flag only
-                    applies to trigger extension objects whose safe-to-redistribute property
-                    has a value of False.</t>
-
-                 <t>Type: Boolean</t>
-
-                 <t>Mandatory: No.  Default is comprehensible (i.e., a
-                    value of False).</t>
-              </list></t>
-
-            </list></t>
             <t>The structure of a JSON serialized GenericTriggerExtension object containing a specific trigger extension object is illustrated below:</t>
 
         <figure>
@@ -3004,37 +3004,40 @@ https://video.example.com/k/movie1/4/013.ts
        ]]></artwork>
        </figure>
 
-        <section anchor="utc-window" title="UTCWindow">
-          <t>
-             A UTCWindow object describes a time range in UTC or UTC and a zone offset that can
-             be applied by a TimePolicy.
-          </t>
-          <t><list style="empty">
-            <t>Property: start<list style="empty">
+	<section anchor="utc-window" title="UTCWindow">
+        <t>
+        	A UTCWindow object describes a time range in UTC or UTC and a zone offset that can
+             	be applied by a TimePolicy.
+	</t>
+	<t>It is encoded as a JSON object containing the following name/value pairs:</t>
 
-              <t>Description: The start time of the window.</t>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: start">
+        <vspace blankLines="1"/>
+	Description: The start time of the window.
+        <vspace blankLines="1"/>
+	Value: Internet date and time as defined in <xref target="RFC3339"/>.
+        <vspace blankLines="1"/>
+        Mandatory: No. but at least one of "start" or "end" MUST be present and non-empty.
+        </t>
 
-              <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
+        <t hangText="Name: end">
+        <vspace blankLines="1"/>
+        Description: The end time of the window.
+        <vspace blankLines="1"/>
+        Value: Internet date and time as defined in <xref target="RFC3339"/>.
+        <vspace blankLines="1"/>
+        Mandatory: No. but at least one of "start" or "end" MUST be present and non-empty.
+        </t>
 
-              <t>Mandatory: No, but at least one of "start" or "end"
-                 MUST be present and non-empty.</t>
+       	</list></t>
+        </list></t>
 
-            </list></t>
-            <t>Property: end<list style="empty">
-
-              <t>Description: The end time of the window.</t>
-
-              <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
-
-              <t>Mandatory: No, but at least one of "start" or "end"
-                 MUST be present and non-empty.</t>
-            </list></t>   
-         </list></t>      
-         
-         <t>
+        <t>
            Example JSON serialized UTCWindow object that describes a time window from 02:30
            01/01/2000 UTC to 04:30 01/01/2000 UTC:
-         </t>
+        </t>
 
          <figure>
             <artwork><![CDATA[
@@ -3288,67 +3291,59 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
            selecting the targets the triggers are applied on, along with the supported Trigger Generic Extension types.
         </t>
 
-        <t>The trigger-scope-capability object matching the "FCI.CITScope" capability type, is defined as follows:</t>
+	<t>	The "trigger-scope-capability" object matching the "FCI.CITScope" capability type, 
+		is encoded as a JSON object containing the following name/value pairs:
+	</t>
 
-        <t><list style="empty">
-            <t>Property: trigger-action <list style="empty">
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: trigger-action">
+        <vspace blankLines="1"/>
+	Description: The supported CDNI CI/T Trigger Action.
+        <vspace blankLines="1"/>
+	Value: A string corresponding to an entry from the "CDNI CI/T Trigger Types" registry
+	<xref target="IANA.CDNI.TriggerTypeReg"/>, that corresponds to a CDNI CI/T Trigger Action.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-                 <t>Description: The supported CDNI CI/T Trigger Action.</t>
+	<t hangText="Name: trigger-subject">
+        <vspace blankLines="1"/>
+	Description: The supported CDNI CI/T Trigger Subject.
+        <vspace blankLines="1"/>
+	Value: A string corresponding to an entry from the "CDNI CI/T Trigger Subjects" registry
+	<xref target="IANA.CDNI.TriggerSubjectReg"/> that corresponds to a CDNI CI/T Trigger Subject.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+	</t>	
 
-                 <t>Type: A string corresponding to an entry from the "CDNI CI/T Trigger Types" registry
-                    <xref target="IANA.CDNI.TriggerTypeReg"/>, that corresponds to a CDNI
-                    CI/T Trigger Action.
-                 </t>
+	<t hangText="Name: trigger-specs">
+        <vspace blankLines="1"/>
+	Description: A list of supported CDNI CI/T GenericSpecObject types for Trigger Action and Subject.
+        <vspace blankLines="1"/>
+	Value: List of strings corresponding to entries from the "CDNI CI/T Trigger Specs" registry
+	<xref target="IANA.CDNI.TriggerSpecReg"/>, that corresponds to a CDNI CI/T GenericSpecObject objects.
+        <vspace blankLines="1"/>
+        Mandatory: No.
+	The default, in case of a missing or an empty list, MUST be interpreted as "no GenericExtensionObject types 
+	are supported". A non-empty list MUST be interpreted as containing "the only GenericExtensionObject types that are supported".
+	</t>	
 
-                 <t>Mandatory: Yes.
-                 </t>
-           </list></t>
-            <t>Property: trigger-subject <list style="empty">
+	<t hangText="Name: trigger-extensions">
+        <vspace blankLines="1"/>
+	Description: A list of supported CDNI CI/T GenericExtensionObject types for Trigger Action and Subject.
+        <vspace blankLines="1"/>
+	Value: List of strings corresponding to entries from the "CDNI CI/T Trigger Extension" registry
+	<xref target="IANA.CDNI.TriggerExtensionReg"/>, that corresponds to a CDNI CI/T GenericExtensionObject objects.
+        <vspace blankLines="1"/>
+        Mandatory: No.
+	The default, in case of a missing or an empty list, MUST be interpreted as "no GenericExtensionObject types are supported". 
+	A non-empty list MUST be interpreted as containing "the only GenericExtensionObject types that are supported".
+	</t>	
 
-                 <t>Description: The supported CDNI CI/T Trigger Subject.</t>
-
-                 <t>Type: A string corresponding to an entry from the "CDNI CI/T Trigger Subjects" registry
-                    <xref target="IANA.CDNI.TriggerSubjectReg"/> that corresponds to a CDNI
-                    CI/T Trigger Subject.
-                 </t>
-
-                 <t>Mandatory: Yes.
-                 </t>
-           </list></t>
-
-            <t>Property: trigger-specs<list style="empty">
-
-                 <t>Description: A list of supported CDNI CI/T GenericSpecObject types for
-                 the Trigger Action and Subject.</t>
-
-                 <t>Type: List of strings corresponding to entries from the "CDNI CI/T Trigger Specs" registry
-                    <xref target="IANA.CDNI.TriggerSpecReg"/>, that corresponds to a CDNI
-                    CI/T GenericSpecObject objects.
-                 </t>
-
-                 <t>Mandatory: No. The default, in case of a missing or an empty list, MUST be 
-                    interpreted as "no GenericExtensionObject types are supported". A non-empty list MUST be 
-                    interpreted as containing "the only GenericExtensionObject types that are supported".
-                 </t>
-           </list></t>
-
-            <t>Property: trigger-extensions<list style="empty">
-
-                 <t>Description: A list of supported CDNI CI/T GenericExtensionObject types for
-                 the Trigger Action and Subject.</t>
-
-                 <t>Type: List of strings corresponding to entries from the "CDNI CI/T Trigger Extension" registry
-                    <xref target="IANA.CDNI.TriggerExtensionReg"/>, that corresponds to a CDNI
-                    CI/T GenericExtensionObject objects.
-                 </t>
-
-                 <t>Mandatory: No. The default, in case of a missing or an empty list, MUST be 
-                    interpreted as "no GenericExtensionObject types are supported". A non-empty list MUST be 
-                    interpreted as containing "the only GenericExtensionObject types that are supported".
-                 </t>
-           </list></t>
-           
+	</list></t>
         </list></t>
+
 
         	<section anchor="trigger-scope-capability-object" title="CI/T Trigger Scope Capability Object Serialization">
           	<t>
