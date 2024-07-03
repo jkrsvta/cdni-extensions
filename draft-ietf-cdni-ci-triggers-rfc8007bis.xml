@@ -229,33 +229,38 @@
    <t>
    Note that additional CI/T Trigger Actions can be defined and registered in the future. 
    </t>
-	<t>
+
+   <t>
    The CI/T interface is a web service offered by the dCDN.  It allows
    CI/T Commands to be issued and allows triggered activity to be
    tracked.  The CI/T interface builds on top of HTTP/1.1 <xref target="RFC9112"/>.
    References to URL in this document relate to HTTP/HTTPS URIs, as
-   defined in Section 4.2 of <xref target="RFC9110"/>.</t>
+   defined in Section 4.2 of <xref target="RFC9110"/>.
+   </t>
 
-	<t>
+   <t>
    When the dCDN accepts a CI/T Command, it creates a resource
    describing the status of the triggered activity -- a Trigger Status
    Resource.  The uCDN can poll Trigger Status Resources to monitor
-   progress.</t>
+   progress.
+   </t>
 
    <t>
    The dCDN maintains at least one collection of Trigger Status
    Resources for each uCDN.  Each uCDN only has access to its own
    collections, the locations of which are shared when CDNI is
-   established.</t>
+   established.
+   </t>
 
-	<t>
+   <t>
    To trigger activity in the dCDN, the uCDN POSTs a CI/T Command to the
    collection of Trigger Status Resources.  If the dCDN accepts the CI/T
    Command, it creates a new Trigger Status Resource and returns its
    location to the uCDN.  To monitor progress, the uCDN can GET the
    Trigger Status Resource.  To request cancellation of a CI/T Trigger
    Command, the uCDN can POST to the collection of Trigger Status
-   Resources or simply DELETE the Trigger Status Resource.</t>
+   Resources or simply DELETE the Trigger Status Resource.
+   </t>
    
    <t> Note that the CI/T Command objects POSTed by the uCDN, and CI/T Status Resource objects generated and reported by the dCDN, are matched by their version,  
     i.e., sending a <xref target="RFC8007"/> "ci-trigger-command" object as the command generates a 
@@ -265,9 +270,10 @@
    In addition to the collection of all Trigger Status Resources for the
    uCDN, the dCDN can maintain filtered views of that collection.  These
    filtered views are defined in <xref target="collections-of-trigger-status-resources"/> and include collections of
-   Trigger Status Resources corresponding to active and completed CI/T
-   Trigger Commands.  These collections provide a mechanism for polling
-   the status of multiple jobs.</t>
+   Trigger Status Resources filtered by Trigger Status or Trigger Label.
+   These collections provide a mechanism for polling the status of multiple jobs.</t>
+
+
 
 	<t>
    Figure 1 is an example showing the basic message flow used by the
@@ -851,9 +857,11 @@
    frequency at which it recommends that the uCDN should poll for
    change.</t>
 
-	<section title="Polling Trigger Status Resource Collections" anchor="polling-collections"><t>
+   <section title="Polling Trigger Status Resource Collections" anchor="polling-collections">
+   <t>
    The uCDN can fetch the collection of its Trigger Status Resources or
-   filtered views of that collection.</t>
+   filtered views of that collection.
+   </t>
 
 	<t>
    This makes it possible to poll the status of all CI/T Trigger
@@ -866,7 +874,22 @@
    for change, rather than repeatedly fetching the whole collection.  An
    example of this is given in <xref target="examples-polling-status-changes"/>.</t>
 
+   	<section title="Extended View Trigger Status Resource Collections" anchor="polling-collections-extended">
+	<t>
+		If dCDN advertises support for extended status, uCDN MAY request to provide extended 
+		Trigger Collection, that embeds all Trigger Status resources in the collection in the collection itsef, 
+		in addition to a list of Trigger Status resource URLs. This support includes all types of 
+	   	Trigger Status Resources Collections, including filtered collections.
+	</t>	
+	<t>
+		uCDN SHOULD request the extended Trigger Collection view by passing query string parameter 
+		“status=extended” when requesting a Trigger Status Resource Collection.
+		dCDN SHOULD appropriately respond to the request for extended status – with HTTP Status 200 (“OK”) 
+		when such request can be satisfied, with error code 501 (“Not Implemented”) if the capability 
+		has not been implemented or advertised, and 400 (“Bad Request”) in case of unrecognized query parameters.
+	</t>
 	</section>
+   </section>
 
 	<section title="Polling Trigger Status Resources" anchor="polling-trigger-resources"><t>
    The uCDN has a URI provided by the dCDN for each Trigger Status
@@ -1490,6 +1513,18 @@ uCDN-A                         dCDN-B                         dCDN-C
          implements the filtered collections.  Otherwise, optional.
 	</t>
 
+	<t hangText="Name: all-triggers">
+	<vspace blankLines="1"/>
+	Description: Array of all Trigger Status objects in the collection.
+	Should be returned only when extended trigger collection view is requested as described in 
+	<xref target="polling-collections-extended"/>.
+	<vspace blankLines="1"/>
+	Value: An array of JSON-encoded Trigger Status objects.
+	<vspace blankLines="1"/>
+	Mandatory: No, only if dCDN supports and advertises the appropriate extended 
+	status for trigger collections.
+	</t>
+
 	<t hangText="Name: cdn-id">
 	<vspace blankLines="1"/>
 	Description: The CDN PID of the dCDN.
@@ -2065,7 +2100,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<vspace blankLines="1"/>
 	Value:   An array of <xref target="object-list">ObjectList</xref> objects. dCDN SHOULD provide the list of objects that it failed to process during execution of a Trigger Command with <xref target="objectlist-spec"/>, provided that dCDN advertised <xref target="object-list-type-capability-object">support for ObjectList</xref>.
 	<vspace blankLines="1"/>
-	Mandatory: No. TAn empty array is allowed and is equivalent to omitting "objects" from the Error.v2 Description.
+	Mandatory: No. An empty array is allowed and is equivalent to omitting "objects" from the Error.v2 Description.
 	</t>
 	</list></t>
 	</list></t>
@@ -3473,6 +3508,61 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
         	</section>
 	</section>
 
+	<section anchor="extended-status-capability-object" title="CI/T Extended Status Capability Object">
+	<t>
+		CI/T Extended Trigger Status Capability object is used to indicate support for extended trigger status. 
+		The extended trigger status is returned upon uCDN request and includes:
+	</t>
+	<t>
+		<list style="symbols">
+		<t>"objects" attribute in Trigger Status object</t>	
+		<t>"objects" attribute in Error.v2 Description object</t>	
+		<t>"all-triggers" attribute in Trigger Collections object</t>	
+		</list>
+		The capability type is  "FCI.CITExtendedStatus".
+        </t>
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+
+		<t hangText="Name: extended-status-objects">
+		<vspace blankLines="1"/>
+		Description: List of CI/T objects that support extended attributes.
+		<vspace blankLines="1"/>
+		Value: An array of JSON strings listing CI/T objects.
+		<vspace blankLines="1"/>
+		Mandatory: No.  By default, in case of a missing or an empty list, no 
+		extended attribute objects are supported.
+		</t>
+
+	</list></t>
+	</list></t>
+
+        	<section title="CI/T Private URL Type Capability Object Serialization">
+		<t>
+             	The following shows an example of a JSON serialized CI/T Extended Status Type Capability object serialization
+		for a dCDN that supports extended status in Trigger Status, Error.v2 Description and Trigger Collections objects.
+          	</t>
+
+          	<figure><artwork><![CDATA[
+
+{
+ "capabilities": [
+   {
+     "capability-type": "FCI.CITExtendedStatus",
+     "capability-value": {
+       “extended-status-objects”: [
+         “trigger-status”,
+         “error-v2-description”,
+         “trigger-collection”
+       ]
+     },
+     "footprints": [ <Footprint objects> ]
+   }
+ ]
+}
+        ]]></artwork></figure>
+        	</section>
+	</section>
     </section>
 
 
