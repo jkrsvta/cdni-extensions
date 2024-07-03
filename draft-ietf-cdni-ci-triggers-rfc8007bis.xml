@@ -2224,7 +2224,12 @@ uCDN-A                         dCDN-B                         dCDN-C
 		As an example, uCDN may prefer to use such private URLs in "purge" or "invalidate" 
 		Trigger Actions to simplify processing. 
 	</t>
-	<t>	uCDN MUST NOT mix different URL types in the same Trigger Command.</t>
+	<t>	dCDNs implementing CI/T Interface MUST support the "published" URL type.
+		dCDN MAY support the additional "private" URL type. In this case dCDN SHOULD advertise the private URL type support
+		via FCI using <xref target="private-url-capability-object"/>.
+		If the private URL is not supported by dCDN, it SHOULD reject Trigger Command using "eunsupported" Error Code.
+		If both URL types are supported by dCDN, uCDN MUST use only one URL type in each Trigger Command.
+	</t>
 	<t>
 		The following URL types are defined by this document and MUST be supported by implementation 
 		of the CI/T interface:
@@ -3189,7 +3194,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
         <t>
 		The CI/T triger endpoint capability object is used to advertise one or more CI/T interface endpoints 
 		along with CI/T interface versions supported by these endpoints. 
-	   	Capability type is "FCI.CITEndpoints".
+	   	The capability type is "FCI.CITEndpoints".
 		For simplicity, it is recommended to minimize the set of supported versions declared by the dCDN. 
 		For example, one way to minimize supported versions is to support only objects of version 2.
            	Version 1, as originally defined in <xref target="RFC8007"/>, is the default if this capability is not explicitly declared.
@@ -3283,7 +3288,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
            selecting the targets the triggers are applied on, along with the supported Trigger Generic Extension types.
         </t>
 
-        <t>The trigger-scope-capability object matching the "FCI.TriggerScope" capability type, is defined as follows:</t>
+        <t>The trigger-scope-capability object matching the "FCI.CITScope" capability type, is defined as follows:</t>
 
         <t><list style="empty">
             <t>Property: trigger-action <list style="empty">
@@ -3345,21 +3350,20 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
            
         </list></t>
 
-        <section anchor="trigger-scope-capability-object" title="CI/T Trigger Scope Capability Object Serialization">
-          <t>
-             The following shows an example of a JSON serialized CI/T Trigger Scope Capability object serialization for
-             a dCDN that supports the preposition and invalidation of content, using "urls" and "ccids" 
-             Generic Spec types, with "time-policy" but only for the "preposition" action. Note that in this example, purge 
-             is not supported neigher any operation on metadata.
-          </t>
+        	<section anchor="trigger-scope-capability-object" title="CI/T Trigger Scope Capability Object Serialization">
+          	<t>
+             	The following shows an example of a JSON serialized CI/T Trigger Scope Capability object serialization for
+		a dCDN that supports the preposition and invalidation of content, using "urls" and "ccids" 
+             	Generic Spec types, with "time-policy" but only for the "preposition" action. Note that in this example, purge 
+             	is not supported neigher any operation on metadata.
+          	</t>
 
-          <figure>
-           <artwork><![CDATA[
+          	<figure><artwork><![CDATA[
 
 {
  "capabilities": [
    {
-     "capability-type": "FCI.TriggerScope",
+     "capability-type": "FCI.CITScope",
      "capability-value": {
        "trigger-scope-capabilities": [
          {
@@ -3381,17 +3385,16 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
    }
  ]
 }
-        ]]></artwork>
-          </figure>
-        </section>
-      </section>
+        ]]></artwork></figure>
+        	</section>
+      	</section>
 
 
 	<section anchor="object-list-type-capability-object" title="CI/T Object List Type Capability Object">
         <t>
 		Given an object list being supported by the dCDN, the CI/T Object List Type capability object is used to 
 		indicate support for one or more Object List types listed in <xref target="IANA.CDNI.ObjectListTypeReg"/> 
-		by the type property of the "ObjectList" object. Capability type is  "FCI.TriggerObjectListType".
+		by the type property of the "ObjectList" object. The capability type is "FCI.CITObjectListType".
         </t>
         <t><list style="empty" hangIndent="3">
 	<t><list style="hanging" hangIndent="3">
@@ -3408,32 +3411,72 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 	</list></t>
 	</list></t>
 
-        <section title="CI/T Object List Type Capability Object Serialization">
-          <t>
-             The following shows an example of a JSON serialized CI/T Object List Type Capability object serialization
-             for a dCDN that supports "hls" and "dash".
-          </t>
+        	<section title="CI/T Object List Type Capability Object Serialization">
+		<t>
+             	The following shows an example of a JSON serialized CI/T Object List Type Capability object serialization
+		for a dCDN that supports "hls" and "dash".
+          	</t>
 
-          <figure>
-           <artwork><![CDATA[
+          	<figure><artwork><![CDATA[
 
 {
  "capabilities": [
    {
-     "capability-type": "FCI.TriggerObjectListType",
+     "capability-type": "FCI.CITObjectListType",
      "capability-value": {
        "object-list-types": ["hls", "dash", "json"]
      },
-     "footprints": [
-       <Footprint objects>
-     ]
+     "footprints": [ <Footprint objects> ]
    }
  ]
 }
-        ]]></artwork>
-          </figure>
-        </section>
-      </section>
+        ]]></artwork></figure>
+        	</section>
+      	</section>
+
+	<section anchor="private-url-capability-object" title="CI/T Private URL Capability Object">
+        <t>
+		The CI/T Private URL capability object is used to indicate support for operations on private URLs 
+		(see <xref target="url-types"/> for details). 
+		The capability type is  "FCI.CITPrivateUrlType".
+        </t>
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+
+		<t hangText="Name: private-url-type-support">
+		<vspace blankLines="1"/>
+		Description: Indicate whether private URL type is supported by dCDN.
+		<vspace blankLines="1"/>
+		Value: Boolean. 
+		<vspace blankLines="1"/>
+		Mandatory: Yes.
+		</t>
+
+	</list></t>
+	</list></t>
+
+        	<section title="CI/T Private URL Type Capability Object Serialization">
+		<t>
+             	The following shows an example of a JSON serialized CI/T Private URL Type Capability object serialization
+		for a dCDN that supports the private URL type in URL-based trigger spec types.
+          	</t>
+
+          	<figure><artwork><![CDATA[
+
+{
+ "capabilities": [
+   {
+     "capability-type": "FCI.CITPrivateUrlType",
+     "capability-value": {
+       "private-url-type-support": true
+     },
+     "footprints": [ <Footprint objects> ]
+   }
+ ]
+}
+        ]]></artwork></figure>
+        	</section>
+	</section>
 
     </section>
 
@@ -4382,10 +4425,10 @@ RESPONSE:
    <c>FCI.CITObjectsVersion</c>
    <c>RFCthis</c>
 
-   <c>FCI.TriggerScope</c>
+   <c>FCI.CITScope</c>
    <c>RFCthis</c>
 
-   <c>FCI.TriggerObjectListType</c>
+   <c>FCI.CITObjectListType</c>
    <c>RFCthis</c>
 
 	</texttable>
@@ -4415,21 +4458,21 @@ RESPONSE:
 
         <section anchor="IANA.CDNI.payload.CIT.Footprint" title="CDNI FCI CI/T Payload Types">
 
-            <section anchor="IANA.CDNI.payload.FCI.TriggerEndpoints" title="CDNI FCI CI/T Endpoints Payload Type">
+            <section anchor="IANA.CDNI.payload.FCI.CITEndpoints" title="CDNI FCI CI/T Endpoints Payload Type">
                <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for
                   CI/T Endpoints objects</t>
                <t>Interface: FCI</t>
                <t>Encoding: see <xref target="cit-trigger-endpoints-capability-object"/></t>
             </section>
 
-            <section anchor="IANA.CDNI.payload.FCI.TriggerScope" title="CDNI FCI CI/T Trigger Scope Payload Type">
+            <section anchor="IANA.CDNI.payload.FCI.CITScope" title="CDNI FCI CI/T Trigger Scope Payload Type">
                <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for
                   CI/T Trigger Scope</t>
                <t>Interface: FCI</t>
                <t>Encoding: see <xref target="trigger-scope-capability-object"/></t>
             </section>
 
-             <section anchor="IANA.CDNI.payload.FCI.TriggerObjectListType" title="CDNI FCI CI/T Object List Type Payload Type">
+             <section anchor="IANA.CDNI.payload.FCI.CITObjectListType" title="CDNI FCI CI/T Object List Type Payload Type">
                <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for
                   CI/T Object List Type objects</t>
                <t>Interface: FCI</t>
