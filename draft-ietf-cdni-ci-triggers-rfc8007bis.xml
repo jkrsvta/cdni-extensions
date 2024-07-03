@@ -2542,7 +2542,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
      	<section anchor="urls-spec" title="URLs Spec">
 	<t>
-		The URLs spec type allows the uCDN to manage uCDN content or metadata objects
+		The "urls" spec type allows the uCDN to manage uCDN content or metadata objects
 		held by the dCDN based on the objects' URLs.
         </t>
 
@@ -2595,10 +2595,10 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
 
       <section anchor="ccids-spec" title="CCIDs Spec">
-        <t> The "content-ccids" spec type allows the uCDN to specify the
-        Content Collection IDentifier of content to which the trigger applies.
-        The "ccid" is a grouping of content as defined by <xref target="RFC8006"/>.
-        The ccid spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
+        <t> The "ccids" spec type allows the uCDN to specify the
+        Content Collection IDentifier (CCID) of content to which the trigger applies.
+        The CCID is a grouping of content as defined by <xref target="RFC8006"/>.
+        The "ccids" spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
 
         </t>
 	<t>CCIDs spec is encoded as a JSON object containing the following name/value pairs:</t>
@@ -2620,7 +2620,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
      	<section anchor="uri-pattern-match-spec" title="URI Pattern Match Spec">
 	<t>
-		The "uri-pattern" match spec type allows the uCDN to manage uCDN content or metadata objects
+		The "uri-pattern-match" spec type allows the uCDN to manage uCDN content or metadata objects
 		held by the dCDN based on the objects' URI pattern. The value is a UriPatternMatch object, 
 		as defined in <xref target="url-pattern-match"/>.
 	</t>
@@ -2697,7 +2697,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
 
      <section anchor="uri-regex-match-spec" title="URI Regex Match Spec">
-        <t>The content-uri-regexes spec type allows the uCDN to manage content or metadata objects
+        <t>The "uri-regex-match" spec type allows the uCDN to manage content or metadata objects
            held by the dCDN based on the objects' URI regex.
         </t>
 
@@ -2796,8 +2796,8 @@ https://video.example.com/k/movie1/4/013.ts
 
    	<section anchor="objectlist-spec" title="Object List Spec">
 	<t>
-		The objectlist spec type allows the uCDN to manage content held by the dCDN based on structured object lists. 
-           	The objectlist spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
+		The "objectlist" spec type allows the uCDN to manage content held by the dCDN based on structured object lists. 
+           	The Object List spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
         </t>
 	<t>An object list is encoded as <xref target="object-list">ObjectList</xref> object.</t> 
 
