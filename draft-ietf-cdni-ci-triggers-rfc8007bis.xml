@@ -2212,7 +2212,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	When using this URL type, uCDN MUST provide configuration metadata objects related to these URLs before creating a trigger option referencing these URLs. When this is not the case, dCDN MUST return error code "emeta".
 	</t>
 	<t> 
-		When processing published URLs in "preposition" Trigger Action, dCDN MUST invoke processing of metadata objects, it would have involved in content acquisition to satisfy an end user request, e.g. SourceMetaData (see Section 4.2.1 of <xref target="RFC8006"/>.
+		When processing published URLs in "preposition" Trigger Action, dCDN MUST invoke processing of metadata objects it would have involved in content acquisition to satisfy an end user request, e.g. SourceMetadata (see Section 4.2.1 of <xref target="RFC8006"/>.
 	</t>
 
 	<t>
