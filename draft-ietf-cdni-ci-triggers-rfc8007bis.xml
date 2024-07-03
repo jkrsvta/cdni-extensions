@@ -2562,7 +2562,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
         <vspace blankLines="1"/>
 	Description: Type of URL used.
         <vspace blankLines="1"/>
-	Value: URL Type as defined in  <xref target="url-types"/>.
+	Value: URL Type as defined in <xref target="url-types"/>.
         <vspace blankLines="1"/>
         Mandatory: No. When omitted or empty, "published" URL type is assumed.
         </t>
@@ -2673,7 +2673,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
         <vspace blankLines="1"/>
         Description: Type of URLs to match.
         <vspace blankLines="1"/>
-        Value: URL Type as defined in  <xref target="url-types"/>.
+        Value: URL Type as defined in <xref target="url-types"/>.
         <vspace blankLines="1"/>
         Mandatory: No. When omitted or empty, "published" URL type is assumed.
         </t>
@@ -2753,7 +2753,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
         <vspace blankLines="1"/>
         Description: Type of URLs to match against.
         <vspace blankLines="1"/>
-        Value: URL Type as defined in  <xref target="url-types"/>.
+        Value: URL Type as defined in <xref target="url-types"/>.
         <vspace blankLines="1"/>
 	Mandatory: No. When omitted or empty, "published" URL type is assumed.
 	</t>
@@ -2851,7 +2851,7 @@ https://video.example.com/k/movie1/4/013.ts
         <vspace blankLines="1"/>
         Description: Type of URL used in the ObjectList(s).
         <vspace blankLines="1"/>
-        Value: URL Type as defined in  <xref target="url-types"/>.
+        Value: URL Type as defined in <xref target="url-types"/>.
         <vspace blankLines="1"/>
         Mandatory: No. When omitted or empty, "published" URL type is assumed.
         </t>
