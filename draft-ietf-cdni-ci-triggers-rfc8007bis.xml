@@ -2208,7 +2208,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 		<xref target="urls-spec"/>, <xref target="uri-pattern-match-spec"/>, <xref target="uri-regex-match-spec"/> and <xref target="objectlist-spec"/>.
 	</t>
 	<t>
-	One option for uCDN to use in Trigger Commands is published URLs, that are used by end users.
+	One option for uCDN to use in Trigger Commands is published URLs, which are used by end users.
 	When using this URL type, uCDN MUST provide configuration metadata objects related to these URLs before creating a trigger option referencing these URLs. When this is not the case, dCDN MUST return error code "emeta".
 	dCDN 
 	</t>
