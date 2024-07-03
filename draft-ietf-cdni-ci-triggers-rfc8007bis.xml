@@ -1604,7 +1604,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<vspace blankLines="1"/>
 	Description: Array of trigger labels.
 	<vspace blankLines="1"/>
-	Value: Array of GenericTriggerExtension objects (see <xref target="generic-extension-object"/>).
+	Value: Array of Trigger Labels (see <xref target="trigger-label"/>).
 	<vspace blankLines="1"/>
 	Mandatory: No. The default is no labels.
 	</t>
@@ -2509,6 +2509,11 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 	</list></t>
 
 	</section>
+	</section>
+	<section anchor="trigger-label" title="Trigger Label">
+	<t>
+	A JSON string. Labels SHOULD be unique per trigger.
+	</t>
 	</section>
 	</section>
 
