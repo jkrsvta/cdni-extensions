@@ -2210,7 +2210,6 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<t>
 	One option for uCDN to use in Trigger Commands is published URLs, which are used by end users.
 	When using this URL type, uCDN MUST provide configuration metadata objects related to these URLs before creating a trigger option referencing these URLs. When this is not the case, dCDN MUST return error code "emeta".
-	dCDN 
 	</t>
 	<t> 
 		When processing published URLs in "preposition" Trigger Action, dCDN MUST invoke processing of metadata objects, it would have involved in content acquisition to satisfy an end user request, e.g. SourceMetaData (see Section 4.2.1 of <xref target="RFC8006"/>.
