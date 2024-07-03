@@ -2216,15 +2216,15 @@ uCDN-A                         dCDN-B                         dCDN-C
 	</t>
 
 	<t>
-		Another type of URL in common use is private URL based on cache keys that are dynamically 
+		Another type of URL in common use is private URL, which is based on cache keys that are dynamically 
 		constructed via lightweight processing of various properties of the HTTP request and/or response. 
 		As an example, an origin might specify a cache key as a value returned in a specific HTTP response header.
 	</t>
 	<t>
-		As an example, uCDN may be interested to use such private URLs in "purge" or "invalidate" 
-		Trigger Action to simplify processing. 
+		As an example, uCDN may prefer to use such private URLs in "purge" or "invalidate" 
+		Trigger Actions to simplify processing. 
 	</t>
-	<t>	uCDN MUST NOT mix different URL types in same Trigger Command</t>
+	<t>	uCDN MUST NOT mix different URL types in the same Trigger Command.</t>
 	<t>
 		The following URL types are defined by this document and MUST be supported by implementation 
 		of the CI/T interface:
@@ -2546,7 +2546,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 		held by the dCDN based on the objects' URLs.
         </t>
 
-	<t>URL spec is encoded as a JSON object containing the following name/value pairs:</t>
+	<t>The URLs spec is encoded as a JSON object containing the following name/value pairs:</t>
 
         <t><list style="empty" hangIndent="3">
         <t><list style="hanging" hangIndent="3"><t hangText="Name: urls">
@@ -2571,7 +2571,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
         </list></t>
 
 
-        <t>Below is an example of a JSON serialized generic trigger spec object, matching the metadata at 
+        <t>Below is an example of a JSON serialized URLs spec object, matching the metadata at 
         metadata.example.com/a/b/c.
         </t>
 
@@ -2682,9 +2682,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 	</list></t>
 	</list></t>
 
-	<t>
-   Example of case-sensitive prefix match against
-   "https://www.example.com/trailers/":</t>
+	<t>Example of case-sensitive prefix match against "https://www.example.com/trailers/":</t>
 
 	<figure><artwork><![CDATA[
 {
