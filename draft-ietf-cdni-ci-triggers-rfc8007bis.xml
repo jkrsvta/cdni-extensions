@@ -655,24 +655,25 @@
    filtered views of the collection of all Trigger Status Resources.
    These filtered collections are "optional-to-implement", but if they
    are implemented, the dCDN MUST include links to them in the
-   collection of all Trigger Status Resources.  The filtered
-   collections are:</t>
-
-	<t><list style="symbols"><t>Pending - Trigger Status Resources for CI/T Trigger Commands that
-      have been accepted but not yet acted upon.</t>
-
-	<t>Active - Trigger Status Resources for CI/T Trigger Commands that
-      are currently being processed in the dCDN.</t>
-
-	<t>Complete - Trigger Status Resources representing activity that
-      completed successfully, and "processed" CI/T Trigger Commands for
-      which no further status updates will be made by the dCDN.</t>
-
-	<t>Failed - Trigger Status Resources representing CI/T Commands that
-      failed or were cancelled by the uCDN.</t>
-
-	</list>
+   collection of all Trigger Status Resources.  
 	</t>
+
+
+	<section title="Filtered Collections by Trigger Status" anchor="filtered-collections-by-status">
+	<t>
+	dCDN MAY provide filtered collections per <xref target="trigger-status">Trigger Status</xref>.
+	If implemented, dCDN SHOULD provide a separate filtered collection for every Trigger Status, and
+	advertise these collections in the collection of all Trigger Resources.
+	</t>
+	</section>
+	<section title="Filtered Collections by Trigger Label" anchor="filtered-collections-by-labels">
+	<t>
+	dCDN MAY provide filtered collections per <xref target="trigger-label">Trigger Label</xref>, 
+	as specified by uCDN in <xref target="trigger-v2-specification"/>.
+	If implemented, dCDN SHOULD provide a separate filtered collection for every unique Trigger Labels, and
+	advertise these collections in the collection of all Trigger Resources.
+	</t>
+	</section>
 
 	</section>
 
@@ -1253,7 +1254,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    The encoding of values used by these objects is described in
    <xref target="cit-objects-properties"/>.</t>
 
-	<section title="CI/T Trigger Command" anchor="cit-trigger-create-command">
+	<section title="CI/T Create Command" anchor="cit-trigger-create-command">
 	<t>
 	CI/T Create Trigger Command, which is used to create a new trigger, 
 	MUST use a MIME media type of "application/cdni; ptype=ci-trigger-command.create.v2".
@@ -1436,18 +1437,18 @@ uCDN-A                         dCDN-B                         dCDN-C
    Trigger Collections MUST use a MIME media type of "application/cdni; ptype=ci-trigger-collection".</t>
 
 	<t>
-   A Trigger Collection is encoded as a JSON object containing the
-   following name/value pairs:</t>
+   	A Trigger Collection is encoded as a JSON object containing the
+	following name/value pairs:
+	</t>
 
 	<t><list style="empty" hangIndent="3">
 	<t><list style="hanging" hangIndent="3">
+
 	<t hangText="Name: triggers">
 	<vspace blankLines="1"/>
-	Description: Links to Trigger Status Resources in the
-         collection.
+	Description: Links to Trigger Status Resources in the collection.
 	<vspace blankLines="1"/>
-	Value: A JSON array of zero or more URLs, represented as JSON
-         strings.
+	Value: A JSON array of zero or more URLs, represented as JSON strings.
 	<vspace blankLines="1"/>
 	Mandatory: Yes.
 	</t>
