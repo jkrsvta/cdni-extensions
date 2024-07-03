@@ -1433,12 +1433,13 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	</section>
 
-	<section title="Trigger Collections" anchor="trigger-collections"><t>
-   Trigger Collections MUST use a MIME media type of "application/cdni; ptype=ci-trigger-collection".</t>
+	<section title="Trigger Collections" anchor="trigger-collections">
+	<t>
+	Trigger Collections MUST use a MIME media type of "application/cdni; ptype=ci-trigger-collection".
+	</t>
 
 	<t>
-   	A Trigger Collection is encoded as a JSON object containing the
-	following name/value pairs:
+   	A Trigger Collection is encoded as a JSON object containing the following name/value pairs:
 	</t>
 
 	<t><list style="empty" hangIndent="3">
@@ -1469,62 +1470,23 @@ uCDN-A                         dCDN-B                         dCDN-C
          value as in the collection of all Trigger Status Resources.
 	</t>
 
-	<t hangText="Name: coll-all">
+	<t hangText="Name: coll-state">
 	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing all Trigger Status Resources.
+	Description: Array of all <xref target="filtered-collection-status-link"/> objects.
 	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
+	Value: An array of JSON encoded FilteredCollectionStatusLink objects.
 	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
+	Mandatory: Mandatory in the collection of all Trigger Status Resources, if the dCDN
          implements the filtered collections.  Otherwise, optional.
 	</t>
 
-	<t hangText="Name: coll-pending">
+	<t hangText="Name: coll-label">
 	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing Trigger Status Resources
-         that have been accepted but not yet acted upon.
+	Description: Array of all <xref target="filtered-collection-label-link"/> objects.
 	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
+	Value: An array of JSON encoded FilteredCollectionLabelLink objects.
 	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
-         implements the filtered collections.  Otherwise, optional.
-	</t>
-
-	<t hangText="Name: coll-active">
-	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing Trigger Status Resources
-         that are currently being processed in the dCDN.
-	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
-	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
-         implements the filtered collections.  Otherwise, optional.
-	</t>
-
-	<t hangText="Name: coll-complete">
-	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing Trigger Status Resources
-         that completed successfully.
-	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
-	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
-         implements the filtered collections.  Otherwise, optional.
-	</t>
-
-	<t hangText="Name: coll-failed">
-	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing Trigger Status Resources
-         that failed or were cancelled by the uCDN.
-	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
-	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
+	Mandatory: Mandatory in the collection of all Trigger Status Resources, if the dCDN
          implements the filtered collections.  Otherwise, optional.
 	</t>
 
@@ -1543,14 +1505,67 @@ uCDN-A                         dCDN-B                         dCDN-C
          in its implementation of filtered collections).
 	</t>
 
-	</list>
-	</t>
+	</list></t>
+	</list></t>
 
-	</list>
-	</t>
+		<section title="Filtered Collections by Status Link" anchor="filtered-collection-label-link">
+		<t>
+			The Filtered Collections by Status Link object represents a link to filtered collection
+			per <xref target="trigger-status"/>.
+			It is encoded as a JSON object containing the following name/value pairs:
+		</t>
+     		<t><list style="empty" hangIndent="3">
+		<t><list style="hanging" hangIndent="3"><t hangText="Name: status">
+        	<vspace blankLines="1"/> 
+		Description: Trigger Status matching the filtered collection.
+        	<vspace blankLines="1"/>
+        	Value: A Trigger Status, as defined in <xref target="trigger-status"/>.
+        	<vspace blankLines="1"/>
+		Mandatory: Yes.
+        	</t>
+        
+        	<t hangText="Name: collection">
+        	<vspace blankLines="1"/>
+		Description: Filtered collection URL corresponding to the status.
+        	<vspace blankLines="1"/>
+        	Value: A URL represented as a JSON string.
+        	<vspace blankLines="1"/>
+		Mandatory: Yes.
+        	</t>
+        
+		</list></t>
+        	</list></t> 
 
+		</section>
+
+		<section title="Filtered Collections by Label Link" anchor="filtered-collection-status-link">
+		<t>
+			The Filtered Collections by Label Link object represents a link to filtered collection
+			per <xref target="trigger-label"/>.
+			It is encoded as a JSON object containing the following name/value pairs:
+		</t>
+     		<t><list style="empty" hangIndent="3">
+		<t><list style="hanging" hangIndent="3"><t hangText="Name: label">
+        	<vspace blankLines="1"/> 
+		Description: Trigger Label matching the filtered collection.
+        	<vspace blankLines="1"/>
+        	Value: A Trigger Label, as defined in <xref target="trigger-label"/>.
+        	<vspace blankLines="1"/>
+		Mandatory: Yes.
+        	</t>
+        
+        	<t hangText="Name: collection">
+        	<vspace blankLines="1"/>
+		Description: Filtered collection URL corresponding to the label.
+        	<vspace blankLines="1"/>
+        	Value: A URL represented as a JSON string.
+        	<vspace blankLines="1"/>
+		Mandatory: Yes.
+        	</t>
+		</list></t>
+        	</list></t> 
+		</section>
 	</section>
-
 	</section>
 
 	<section title="Properties of CI/T Objects" anchor="cit-objects-properties"><t>
@@ -3858,13 +3873,22 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-collection
 
   {
-      "cdn-id": "AS64496:0",
-      "coll-active": "/triggers/active",
-      "coll-complete": "/triggers/complete",
-      "coll-failed": "/triggers/failed",
-      "coll-pending": "/triggers/pending",
-      "staleresourcetime": 86400,
-      "triggers": [
+    "cdn-id": "AS64496:0",
+    "coll-status": [ 
+      { "status": "pending", "collection": "/triggers/pending" },
+      { "status": "active", "collection": "/triggers/active" },
+      { "status": "complete", "collection": "/triggers/complete" },
+      { "status": "processed", "collection": "/triggers/processed" },
+      { "status": "failed", "collection": "/triggers/failed" },
+      { "status": "cancelling", "collection": "/triggers/cancelling" },
+      { "status": "cancelled", "collection": "/triggers/cancelled" }
+    ],
+    "coll-label": [ 
+      { "label": "1b1bad0c", "collection": "/triggers/1b1bad0c" },
+      { "label": "fafa9a97", "collection": "/triggers/fafa9a97" }
+    ],
+    "staleresourcetime": 86400,
+    triggers": [
           "https://dcdn.example.com/triggers/0",
           "https://dcdn.example.com/triggers/1"
       ]
