@@ -2955,7 +2955,7 @@ https://video.example.com/k/movie1/4/013.ts
 	<t>
 	When combining ExtensionPolicy with <xref target="time-policy"/>, TimePolicy governs the time window when the trigger can execute, while ExecutionPolicy controls the order of trigger execution within their respective windows.  The following error conditions should be considered by dCDN:
 	<list style="symbols">
-		<t>When a trigger is marked urgent, but its TiimePolicy extension doesn't allow immediate processing, it should be rejected by dCDN.</t>
+		<t>When a trigger is marked urgent, but its TimePolicy extension doesn't allow immediate processing, it should be rejected by dCDN.</t>
 		<t>When a trigger has a TimePolicy extension and is also dependent on another trigger with a TimePolicy extension, that specifies an execution window (directly or via chain of dependency) that doesn't start until after the depending trigger's execution window ends, such trigger should be rejected.</t>
 	</list>
 	</t>
