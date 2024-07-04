@@ -2224,10 +2224,10 @@ uCDN-A                         dCDN-B                         dCDN-C
 		As an example, uCDN may prefer to use such private URLs in "purge" or "invalidate" 
 		Trigger Actions to simplify processing. 
 	</t>
-	<t>	dCDNs implementing CI/T Interface MUST support the "published" URL type.
+	<t>	dCDNs implementing the CI/T Interface MUST support the "published" URL type.
 		dCDN MAY support the additional "private" URL type. In this case dCDN SHOULD advertise the private URL type support
 		via FCI using <xref target="private-url-capability-object"/>.
-		If the private URL is not supported by dCDN, it SHOULD reject Trigger Command using "eunsupported" Error Code.
+		If the private URL is not supported by dCDN, it SHOULD reject the Trigger Command using "eunsupported" Error Code.
 		If both URL types are supported by dCDN, uCDN MUST use only one URL type in each Trigger Command.
 	</t>
 	<t>
@@ -3355,7 +3355,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
              	The following shows an example of a JSON serialized CI/T Trigger Scope Capability object serialization for
 		a dCDN that supports the preposition and invalidation of content, using "urls" and "ccids" 
              	Generic Spec types, with "time-policy" but only for the "preposition" action. Note that in this example, purge 
-             	is not supported neigher any operation on metadata.
+		is not supported, and no actions involving metadata are supported either.
           	</t>
 
           	<figure><artwork><![CDATA[
@@ -3401,11 +3401,11 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 
 		<t hangText="Name: object-list-types">
 		<vspace blankLines="1"/>
-		Description: A list of supported object list types.
+		Description: A list of supported ObjectList types.
 		<vspace blankLines="1"/>
-		Value: An array <xref target="object-list-type"/>.
+		Value: An array of <xref target="object-list-type"/>.
 		<vspace blankLines="1"/>
-		Mandatory: Yes.
+		Mandatory: No. In case of a missing or an empty list, MUST be interpreted as no ObjectList types are supported.
 		</t>
 
 	</list></t>
@@ -3449,7 +3449,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 		<vspace blankLines="1"/>
 		Value: Boolean. 
 		<vspace blankLines="1"/>
-		Mandatory: Yes.
+		Mandatory: No. In case of missing or an empty attribtue, MUST be interpreted as no support for private URLs.
 		</t>
 
 	</list></t>
