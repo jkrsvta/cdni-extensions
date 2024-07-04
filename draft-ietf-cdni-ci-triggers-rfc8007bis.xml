@@ -2167,7 +2167,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<ttcol align="left"> Description</ttcol>
 	<ttcol align="left"> Registration</ttcol>
 	<c>emeta</c>
-	<c>The dCDN was unable to acquire metadata required to fulfill the request.</c>
+	<c>The dCDN was unable to acquire and/or is not in possession of metadata required to fulfill the request.</c>
 	<c>RFCthis</c>
 	<c>econtent</c>
 	<c>The dCDN was unable to acquire content (CI/T "preposition" commands only).</c>
@@ -2199,12 +2199,62 @@ uCDN-A                         dCDN-B                         dCDN-C
 	</texttable>
 	</section>
 
+	<section title="URL Type" anchor="url-types">
+	<t>
+	This type is used by uCDN to indicate how to interpret URLs referenced by trigger specs that use URLs, such as 
+		<xref target="urls-spec"/>, <xref target="uri-pattern-match-spec"/>, <xref target="uri-regex-match-spec"/> and <xref target="objectlist-spec"/>.
+	</t>
+	<t>
+	One option for uCDN to use in Trigger Commands is published URLs, which are used by end users.
+	When using this URL type, uCDN MUST provide configuration metadata objects related to these URLs before creating a trigger option referencing these URLs. When this is not the case, dCDN MUST return error code "emeta".
+	</t>
+	<t> 
+		When processing published URLs in "preposition" Trigger Action, dCDN MUST invoke processing of metadata objects it would have involved in content acquisition to satisfy an end user request, e.g. SourceMetadata (see Section 4.2.1 of <xref target="RFC8006"/>.
+	</t>
+
+	<t>
+		Another type of URL in common use is private URL, which is based on cache keys that are dynamically 
+		constructed via lightweight processing of various properties of the HTTP request and/or response. 
+		As an example, an origin might specify a cache key as a value returned in a specific HTTP response header.
+	</t>
+	<t>
+		As an example, uCDN may prefer to use such private URLs in "purge" or "invalidate" 
+		Trigger Actions to simplify processing. 
+	</t>
+	<t>	dCDNs implementing the CI/T Interface MUST support the "published" URL type.
+		dCDN MAY support the additional "private" URL type. In this case dCDN SHOULD advertise the private URL type support
+		via FCI using <xref target="private-url-capability-object"/>.
+		If the private URL is not supported by dCDN, it SHOULD reject the Trigger Command using "eunsupported" Error Code.
+		If both URL types are supported by dCDN, uCDN MUST use only one URL type in each Trigger Command.
+	</t>
+	<t>
+		The following URL types are defined by this document and MUST be supported by implementation 
+		of the CI/T interface:
+	</t>
+
+        <texttable style="full">
+        <t>[RFC Editor: Please replace RFCthis with the published RFC number for this document.]</t>
+        <ttcol align="left"> URL Type</ttcol>
+        <ttcol align="left"> Description</ttcol>
+        <ttcol align="left"> Registration</ttcol>
+        <c>published</c>
+	<c>Published URL used by end users to access content</c>
+	<c>RFCthis</c>
+
+        <c>private</c>
+	<c>Private URLs used by dCDN to look up content objects in cache</c>
+        <c>RFCthis</c>
+        </texttable>
+
+	</section>
+
 	<section title="ObjectList" anchor="object-list"><t>
 		ObjectList is a metadata object describing lists of objects that can be used in the context of CI/T v2 trigger spec, trigger status resources and other contexts as required. The ObjectList object can either embed the lists of objects or point to external URL(s) that hold such lists. ObjectList allows specification of an object list type, providing instructions on the interpretation of the object list format.</t>
 
 	<t>
 		ObjectLists MAY be recursive, i.e. including references to secondary manifests, including references to HLS, MPEG-DASH or MSS manifests as well as additional JSON-encoded ObjectLists , etc. The party consuming the object list MUST parse all recursions based on the object list type property. When doing so, the consuming party should also detect potential loops when descendant ObjectList points back to parent ObjectList.
 	</t>
+
 	<t>
 		In case of uCDN accessing ObjectList objects referencing external URLs published by dCDN, both parties should comply with the CI/T interface security requirements (see <xref target="authentication-authorization"/> for details). 
 		When dCDN accesses external URLs referenced by ObjectLists supplied by uCDN, for example as part of Trigger Spec, the dCDN MUST match these URLs with source metadata objects, published by uCDN, such as SourceMetadata objects specified in Section 4.2.1 of <xref target="RFC8006"/>, and use these metadata objects for content acquisition if a match was found.
@@ -2484,30 +2534,46 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
 
     <section anchor="trigger-spec-objects" title="Trigger Spec Objects">
-      <t>The objects defined below are intended to be used in the GenericTriggerSpec
-         object's generic-trigger-spec-value field as defined in Section
-         <xref target="generic-spec-object"/>. As such all these trigger specs are registered in the IANA "CDNI CI/T Trigger Specs" registry (see <xref target="IANA.CDNI.TriggerSpecReg"/>).
-      </t>
+	<t>
+	    	The objects defined below are intended to be used in the GenericTriggerSpec
+         	object's generic-trigger-spec-value field as defined in Section <xref target="generic-spec-object"/>. 
+		As such all these trigger specs are registered in the IANA "CDNI CI/T Trigger Specs" 
+		registry (see <xref target="IANA.CDNI.TriggerSpecReg"/>).
+	</t>
 	  
 
-      <section anchor="urls-spec" title="URLs Spec">
-        <t>The urls spec type allows the uCDN to manage uCDN content or metadata objects
-           held by the dCDN based on the objects' URLs.
+     	<section anchor="urls-spec" title="URLs Spec">
+	<t>
+		The "urls" spec type allows the uCDN to manage uCDN content or metadata objects
+		held by the dCDN based on the objects' URLs.
         </t>
 
-         <t>Spec object specification<list style="empty">
+	<t>The URLs spec is encoded as a JSON object containing the following name/value pairs:</t>
 
-              <t>Property: urls<list style="empty">
+        <t><list style="empty" hangIndent="3">
+        <t><list style="hanging" hangIndent="3"><t hangText="Name: urls">
+        <vspace blankLines="1"/>
+	Description: An array of URLs over which the trigger MUST be executed.
+        <vspace blankLines="1"/>
+	Value: A JSON array of URLs represented as JSON strings.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-                 <t>Description: An array of URLs over which the trigger MUST be executed.</t>
+        <t hangText="Name: url-type">
+        <vspace blankLines="1"/>
+	Description: Type of URL used.
+        <vspace blankLines="1"/>
+	Value: URL Type as defined in <xref target="url-types"/>.
+        <vspace blankLines="1"/>
+        Mandatory: No. When omitted or empty, "published" URL type is assumed.
+        </t>
 
-                 <t>Value: A JSON array of URLs represented as JSON strings.</t>
+        </list></t>
+        </list></t>
 
-                 <t>Mandatory: Yes.</t>
-              </list></t>
-          </list></t>
 
-        <t>Below is an example of a JSON serialized generic trigger spec object, matching the metadata at 
+        <t>Below is an example of a JSON serialized URLs spec object, matching the metadata at 
         metadata.example.com/a/b/c.
         </t>
 
@@ -2519,7 +2585,8 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
    "generic-trigger-spec-value": {
       "urls": [
          "https://metadata.example.com/a/b/c"
-      ]
+      ],
+      "url-type": "published"
    }
 }
 
@@ -2530,38 +2597,43 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
 
       <section anchor="ccids-spec" title="CCIDs Spec">
-        <t> The content-ccids spec type allows the uCDN to specify the
-        Content Collection IDentifier of content to which the trigger applies.
-        The "ccid" is a grouping of content as defined by <xref target="RFC8006"/>.
-        The ccid spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
+        <t> The "ccids" spec type allows the uCDN to specify the
+        Content Collection IDentifier (CCID) of content to which the trigger applies.
+        The CCID is a grouping of content as defined by <xref target="RFC8006"/>.
+        The "ccids" spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
 
         </t>
+	<t>CCIDs spec is encoded as a JSON object containing the following name/value pairs:</t>
 
-         <t>Spec object specification<list style="empty">
+        <t><list style="empty" hangIndent="3">
+        <t><list style="hanging" hangIndent="3"><t hangText="Name: ccids">
+        <vspace blankLines="1"/>
+	Description: An array of Content Collection IDentifiers over which the trigger MUST be executed.
+        <vspace blankLines="1"/>
+	Value: A JSON array of strings, where each string is a Content Collection IDentifier.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-              <t>Property: ccids<list style="empty">
+        </list></t>
+        </list></t>
 
-                 <t>Description: An array of Content Collection IDentifiers over which the trigger MUST be executed.</t>
-
-                 <t>Value: A JSON array of strings, where each string is a Content Collection IDentifier.</t>
-
-                 <t>Mandatory: Yes.</t>
-              </list></t>
-          </list></t>
       </section>
 
-     <section anchor="uri-pattern-match-spec" title="URI Pattern Match Spec">
-        <t>The uri-pattern match spec type allows the uCDN to manage uCDN content or metadata objects
-           held by the dCDN based on the objects' URI pattern. The value is a UriPatternMatch object, 
-		as defined in <xref target="url-pattern-match"/>.</t>
+     	<section anchor="uri-pattern-match-spec" title="URI Pattern Match Spec">
+	<t>
+		The "uri-pattern-match" spec type allows the uCDN to manage uCDN content or metadata objects
+		held by the dCDN based on the objects' URI pattern. The value is a UriPatternMatch object, 
+		as defined in <xref target="url-pattern-match"/>.
+	</t>
 
 	<section title="UriPatternMatch" anchor="url-pattern-match"><t>
-   A UriPatternMatch consists of a string pattern to match against a URI,
-   and flags describing the type of match.</t>
+   	A UriPatternMatch consists of a string pattern to match against a URI,
+   	and flags describing the type of match.</t>
+	<t>It is encoded as a JSON object containing the following name/value pairs:</t>
 
-	<t><list style="hanging" hangIndent="3"><t hangText="It is encoded as a JSON object with the following name/value pairs:">
-	<vspace blankLines="1"/>
-	Name: pattern
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3"><t hangText="Name: pattern">
 	<vspace blankLines="1"/>
 	Description: A pattern for URI matching.
 	<vspace blankLines="1"/>
@@ -2574,10 +2646,11 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
          treated as literals.
 	<vspace blankLines="1"/>
 	Mandatory: Yes.
-	<list style="hanging" hangIndent="3"><t hangText="Name: case-sensitive">
+	</t>
+
+	<t hangText="Name: case-sensitive">
 	<vspace blankLines="1"/>
-	Description: Flag indicating whether or not case-sensitive
-         matching should be used.
+	Description: Flag indicating whether or not case-sensitive matching should be used.
 	<vspace blankLines="1"/>
 	Value: One of the JSON values "true" (the matching is case
          sensitive) or "false" (the matching is case insensitive).
@@ -2598,16 +2671,20 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 	Mandatory: No; default is "false".  The query part of the URI
          should be dropped before comparison with the given pattern.
 	</t>
+        <t hangText="Name: url-type">
+        <vspace blankLines="1"/>
+        Description: Type of URLs to match.
+        <vspace blankLines="1"/>
+        Value: URL Type as defined in <xref target="url-types"/>.
+        <vspace blankLines="1"/>
+        Mandatory: No. When omitted or empty, "published" URL type is assumed.
+        </t>
 
-	</list>
-	</t>
 
-	</list>
-	</t>
+	</list></t>
+	</list></t>
 
-	<t>
-   Example of case-sensitive prefix match against
-   "https://www.example.com/trailers/":</t>
+	<t>Example of case-sensitive prefix match against "https://www.example.com/trailers/":</t>
 
 	<figure><artwork><![CDATA[
 {
@@ -2622,7 +2699,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
 
      <section anchor="uri-regex-match-spec" title="URI Regex Match Spec">
-        <t>The content-uri-regexes spec type allows the uCDN to manage content or metadata objects
+        <t>The "uri-regex-match" spec type allows the uCDN to manage content or metadata objects
            held by the dCDN based on the objects' URI regex.
         </t>
 
@@ -2631,47 +2708,59 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
              A RegexMatch consists of a regular expression string a URI is matched against,
              and flags describing the type of match. It is encoded as a JSON object with
              following properties:
-          </t>
+	  </t>
 
-          <t><list style="empty">
-            <t>Property: regex<list style="empty">
-
-              <t>Description: A regular expression for URI matching. </t>
-
-              <t>Type: A regular expression to match against the URI, i.e., against the path-absolute
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: regex">
+        <vspace blankLines="1"/>
+	Description: A regular expression for URI matching.
+        <vspace blankLines="1"/>
+        Value: A regular expression to match against the URI, i.e., against the path-absolute
                  and the query string parameters <xref target="RFC3986"/>. The regular expression
                  string MUST be compatible with <xref target="POSIX.1">POSIX</xref> Section 9
                  Extended Regular Expressions.  This regular expression MUST be evaluated in
-                 the POSIX locale (<xref target="POSIX.1">POSIX</xref> Section 7.2).</t>
+                 the POSIX locale (<xref target="POSIX.1">POSIX</xref> Section 7.2).
 
               <t>Note: Because '\' has a special meaning in JSON <xref target="RFC8259"/> as the escape
                  character within JSON strings, the regular expression character '\' MUST be escaped as '\\'.</t>
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-              <t>Mandatory: Yes.</t>
-            </list></t>
-            <t>Property: case-sensitive<list style="empty">
-
-              <t>Description: Flag indicating whether or not case-sensitive matching should be used. </t>
-
-              <t>Type: JSON boolean. Either "true" (the matching is case sensitive) or "false"
-                 (the matching is case insensitive).</t>
-
-              <t>Mandatory: No; default is "false", i.e., a case-insensitive match.</t>
-            </list></t>
-            <t>Property: match-query-string<list style="empty">
-
-              <t>Description: Flag indicating whether to include the query part of the URI when
-                 comparing against the regex.</t>
-
-              <t>Type: JSON boolean. Either "true" (the full URI, including the query part,
+	<t hangText="Name: case-sensitive">
+        <vspace blankLines="1"/>
+	Description: Flag indicating whether or not case-sensitive matching should be used.
+        <vspace blankLines="1"/>
+	Value: JSON boolean. Either "true" (the matching is case sensitive) or "false" 
+	(the matching is case insensitive).
+        <vspace blankLines="1"/>
+	Mandatory: No; default is "false", i.e., a case-insensitive match.
+        </t>
+	<t hangText="Name: match-query-string">
+        <vspace blankLines="1"/>
+	Description: Flag indicating whether to include the query part of the URI when
+                 comparing against the regex.
+        <vspace blankLines="1"/>
+	Value: JSON Boolean. Either "true" (the full URI, including the query part,
                  should be compared against the regex) or "false" (the query part of the URI
-                 should be dropped before comparison with the given regex).</t>
-
-              <t>Mandatory: No; default is "false".  The query part of the URI MUST be dropped
+                 should be dropped before comparison with the given regex).
+        <vspace blankLines="1"/>
+        Mandatory: No; default is "false".  The query part of the URI MUST be dropped
                  before comparison with the given regex. This makes the regular expression simpler
-                 and safer for cases in which the query parameters are not relevant for the match.</t>
-            </list></t>
-          </list></t>
+		and safer for cases in which the query parameters are not relevant for the match.
+	</t>
+
+        <t hangText="Name: url-type">
+        <vspace blankLines="1"/>
+        Description: Type of URLs to match against.
+        <vspace blankLines="1"/>
+        Value: URL Type as defined in <xref target="url-types"/>.
+        <vspace blankLines="1"/>
+	Mandatory: No. When omitted or empty, "published" URL type is assumed.
+	</t>
+	</list></t> 
+	</list></t>
 
           <t>Example of a case sensitive, no query parameters, regex match against:</t>
           <figure>
@@ -2709,8 +2798,8 @@ https://video.example.com/k/movie1/4/013.ts
 
    	<section anchor="objectlist-spec" title="Object List Spec">
 	<t>
-		The objectlist spec type allows the uCDN to manage content held by the dCDN based on structured object lists. 
-           	The objectlist spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
+		The "objectlist" spec type allows the uCDN to manage content held by the dCDN based on structured object lists. 
+           	The Object List spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
         </t>
 	<t>An object list is encoded as <xref target="object-list">ObjectList</xref> object.</t> 
 
@@ -2759,6 +2848,17 @@ https://video.example.com/k/movie1/4/013.ts
         <vspace blankLines="1"/>
         Mandatory: Yes. 
 	</t>
+
+        <t hangText="Name: url-type">
+        <vspace blankLines="1"/>
+        Description: Type of URL used in the ObjectList(s).
+        <vspace blankLines="1"/>
+        Value: URL Type as defined in <xref target="url-types"/>.
+        <vspace blankLines="1"/>
+        Mandatory: No. When omitted or empty, "published" URL type is assumed.
+        </t>
+
+
 	</list></t>
 	</list></t>
 
@@ -3203,7 +3303,7 @@ https://video.example.com/k/movie1/4/013.ts
            selecting the targets the triggers are applied on, along with the supported Trigger Generic Extension types.
         </t>
 
-        <t>The trigger-scope-capability object matching the "FCI.TriggerScope" capability type, is defined as follows:</t>
+        <t>The trigger-scope-capability object matching the "FCI.CITScope" capability type, is defined as follows:</t>
 
         <t><list style="empty">
             <t>Property: trigger-action <list style="empty">
@@ -3265,21 +3365,20 @@ https://video.example.com/k/movie1/4/013.ts
            
         </list></t>
 
-        <section anchor="trigger-scope-capability-object" title="CI/T Trigger Scope Capability Object Serialization">
-          <t>
-             The following shows an example of a JSON serialized CI/T Trigger Scope Capability object serialization for
-             a dCDN that supports the preposition and invalidation of content, using "urls" and "ccids" 
-             Generic Spec types, with "time-policy" but only for the "preposition" action. Note that in this example, purge 
-             is not supported neigher any operation on metadata.
-          </t>
+        	<section anchor="trigger-scope-capability-object" title="CI/T Trigger Scope Capability Object Serialization">
+          	<t>
+             	The following shows an example of a JSON serialized CI/T Trigger Scope Capability object serialization for
+		a dCDN that supports the preposition and invalidation of content, using "urls" and "ccids" 
+             	Generic Spec types, with "time-policy" but only for the "preposition" action. Note that in this example, purge 
+		is not supported, and no actions involving metadata are supported either.
+          	</t>
 
-          <figure>
-           <artwork><![CDATA[
+          	<figure><artwork><![CDATA[
 
 {
  "capabilities": [
    {
-     "capability-type": "FCI.TriggerScope",
+     "capability-type": "FCI.CITScope",
      "capability-value": {
        "trigger-scope-capabilities": [
          {
@@ -3301,58 +3400,98 @@ https://video.example.com/k/movie1/4/013.ts
    }
  ]
 }
-        ]]></artwork>
-          </figure>
-        </section>
-      </section>
+        ]]></artwork></figure>
+        	</section>
+      	</section>
 
 
-       
-
-            <section anchor="object-list-type-capability-object" title="CI/T Object List Type Capability Object">
+	<section anchor="object-list-type-capability-object" title="CI/T Object List Type Capability Object">
         <t>
-           Given an object list being supported by the dCDN, the CI/T Object List Type capability object is used to indicate support for one or more
-           Object List types listed in <xref target="IANA.CDNI.ObjectListTypeReg"/> by the type property of the "ObjectList" object. Capability type is  "FCI.TriggerObjectListType".
+		Given an object list being supported by the dCDN, the CI/T Object List Type capability object is used to 
+		indicate support for one or more Object List types listed in <xref target="IANA.CDNI.ObjectListTypeReg"/> 
+		by the type property of the "ObjectList" object. The capability type is "FCI.CITObjectListType".
         </t>
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
 
-        <t><list style="empty">
-           <t>Property: object-list-types<list style="empty">
+		<t hangText="Name: object-list-types">
+		<vspace blankLines="1"/>
+		Description: A list of supported ObjectList types.
+		<vspace blankLines="1"/>
+		Value: An array of <xref target="object-list-type"/>.
+		<vspace blankLines="1"/>
+		Mandatory: No. In case of a missing or an empty list, MUST be interpreted as no ObjectList types are supported.
+		</t>
 
-                 <t>Description: A list of object list types.</t>
+	</list></t>
+	</list></t>
 
-		 <t>Type: A list of Object List Type (from the CDNI CI/T Object List types
-                    <xref target="IANA.CDNI.ObjectListTypeReg"/>)</t>
+        	<section title="CI/T Object List Type Capability Object Serialization">
+		<t>
+             	The following shows an example of a JSON serialized CI/T Object List Type Capability object serialization
+		for a dCDN that supports "hls" and "dash".
+          	</t>
 
-                 <t>Mandatory: No. The default, in case of a missing or an empty list, 
-                    is none supported.</t>
-           </list></t>
-        </list></t>
-        <section title="CI/T Object List Type Capability Object Serialization">
-          <t>
-             The following shows an example of a JSON serialized CI/T Object List Type Capability object serialization
-             for a dCDN that supports "hls" and "dash".
-          </t>
-
-          <figure>
-           <artwork><![CDATA[
+          	<figure><artwork><![CDATA[
 
 {
  "capabilities": [
    {
-     "capability-type": "FCI.TriggerObjectListType",
+     "capability-type": "FCI.CITObjectListType",
      "capability-value": {
-       "object-list-types": ["hls", "dash"]
+       "object-list-types": ["hls", "dash", "json"]
      },
-     "footprints": [
-       <Footprint objects>
-     ]
+     "footprints": [ <Footprint objects> ]
    }
  ]
 }
-        ]]></artwork>
-          </figure>
-        </section>
-      </section>
+        ]]></artwork></figure>
+        	</section>
+      	</section>
+
+	<section anchor="private-url-capability-object" title="CI/T Private URL Capability Object">
+        <t>
+		The CI/T Private URL capability object is used to indicate support for operations on private URLs 
+		(see <xref target="url-types"/> for details). 
+		The capability type is  "FCI.CITPrivateUrlType".
+        </t>
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+
+		<t hangText="Name: private-url-type-support">
+		<vspace blankLines="1"/>
+		Description: Indicate whether private URL type is supported by dCDN.
+		<vspace blankLines="1"/>
+		Value: Boolean. 
+		<vspace blankLines="1"/>
+		Mandatory: No. In case of missing or an empty attribtue, MUST be interpreted as no support for private URLs.
+		</t>
+
+	</list></t>
+	</list></t>
+
+        	<section title="CI/T Private URL Type Capability Object Serialization">
+		<t>
+             	The following shows an example of a JSON serialized CI/T Private URL Type Capability object serialization
+		for a dCDN that supports the private URL type in URL-based trigger spec types.
+          	</t>
+
+          	<figure><artwork><![CDATA[
+
+{
+ "capabilities": [
+   {
+     "capability-type": "FCI.CITPrivateUrlType",
+     "capability-value": {
+       "private-url-type-support": true
+     },
+     "footprints": [ <Footprint objects> ]
+   }
+ ]
+}
+        ]]></artwork></figure>
+        	</section>
+	</section>
 
     </section>
 
@@ -4301,10 +4440,10 @@ RESPONSE:
    <c>FCI.CITObjectsVersion</c>
    <c>RFCthis</c>
 
-   <c>FCI.TriggerScope</c>
+   <c>FCI.CITScope</c>
    <c>RFCthis</c>
 
-   <c>FCI.TriggerObjectListType</c>
+   <c>FCI.CITObjectListType</c>
    <c>RFCthis</c>
 
 	</texttable>
@@ -4334,21 +4473,21 @@ RESPONSE:
 
         <section anchor="IANA.CDNI.payload.CIT.Footprint" title="CDNI FCI CI/T Payload Types">
 
-            <section anchor="IANA.CDNI.payload.FCI.TriggerEndpoints" title="CDNI FCI CI/T Endpoints Payload Type">
+            <section anchor="IANA.CDNI.payload.FCI.CITEndpoints" title="CDNI FCI CI/T Endpoints Payload Type">
                <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for
                   CI/T Endpoints objects</t>
                <t>Interface: FCI</t>
                <t>Encoding: see <xref target="cit-trigger-endpoints-capability-object"/></t>
             </section>
 
-            <section anchor="IANA.CDNI.payload.FCI.TriggerScope" title="CDNI FCI CI/T Trigger Scope Payload Type">
+            <section anchor="IANA.CDNI.payload.FCI.CITScope" title="CDNI FCI CI/T Trigger Scope Payload Type">
                <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for
                   CI/T Trigger Scope</t>
                <t>Interface: FCI</t>
                <t>Encoding: see <xref target="trigger-scope-capability-object"/></t>
             </section>
 
-             <section anchor="IANA.CDNI.payload.FCI.TriggerObjectListType" title="CDNI FCI CI/T Object List Type Payload Type">
+             <section anchor="IANA.CDNI.payload.FCI.CITObjectListType" title="CDNI FCI CI/T Object List Type Payload Type">
                <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for
                   CI/T Object List Type objects</t>
                <t>Interface: FCI</t>
@@ -4399,7 +4538,7 @@ RESPONSE:
    </section>
 
 
-      <section anchor="IANA.CDNI.ObjectListTypeReg" title="CDNI CI/T Object List Types">
+      <section anchor="IANA.CDNI.ObjectListTypeReg" title="&quot;CDNI CI/T Object List Types&quot; Registry">
 	<t>
 	      The IANA is requested to create a new "CDNI CI/T Object List Types" registry in the "Content Delivery Networks Interconnection (CDNI) Parameters" registry group. The "CDNI CI/T Object List Types" namespace defines the valid object list type values in <xref target="object-list-type"/>, used by the Object List object.</t>
       	<t>
@@ -4441,6 +4580,20 @@ RESPONSE:
    </t>
 
 	</section>
+
+	<section title="&quot;CDNI CI/T URL Types&quot; Registry" anchor="cdni-cit-url-types-registry">
+	<t>
+		The IANA is requested to create a new "CDNI CI/T URL types" registry
+		in the "Content Delivery Networks Interconnection (CDNI) Parameters" registry group. 
+		The "CDNI CI/T URL Types" namespace defines the valid URL type values in <xref target="url-types"/>,
+		used by <xref target="urls-spec"/>, <xref target="uri-pattern-match-spec"/>, <xref target="uri-regex-match-spec"/> and <xref target="objectlist-spec"/>.
+	</t>
+	<t>
+		The initial contents of the "CDNI CI/T Trigger Extensions" registry comprise the names and 
+		descriptions listed in <xref target="url-types"/>, with this document acting as the specification.
+	</t>
+	</section>
+
 
 </section>
 
