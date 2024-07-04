@@ -876,15 +876,15 @@
 
    	<section title="Extended View Trigger Status Resource Collections" anchor="polling-collections-extended">
 	<t>
-		If dCDN advertises support for extended status, uCDN MAY request to provide extended 
-		Trigger Collection, that embeds all Trigger Status resources in the collection in the collection itsef, 
+		If dCDN advertises support for extended status, uCDN MAY request the extended Trigger Collection,
+		which embeds all Trigger Status resources in the collection itself, 
 		in addition to a list of Trigger Status resource URLs. This support includes all types of 
 	   	Trigger Status Resources Collections, including filtered collections.
 	</t>	
 	<t>
-		uCDN SHOULD request the extended Trigger Collection view by passing query string parameter 
+		uCDN SHOULD request the extended Trigger Collection view by passing the query string parameter 
 		“status=extended” when requesting a Trigger Status Resource Collection.
-		dCDN SHOULD appropriately respond to the request for extended status – with HTTP Status 200 (“OK”) 
+		dCDN SHOULD appropriately respond to the request for extended status with HTTP Status 200 (“OK”) 
 		when such request can be satisfied, with error code 501 (“Not Implemented”) if the capability 
 		has not been implemented or advertised, and 400 (“Bad Request”) in case of unrecognized query parameters.
 	</t>
@@ -1521,8 +1521,8 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<vspace blankLines="1"/>
 	Value: An array of JSON-encoded Trigger Status objects.
 	<vspace blankLines="1"/>
-	Mandatory: No, only if dCDN supports and advertises the appropriate extended 
-	status for trigger collections.
+	Mandatory: No. The "all-triggers" SHOULD only be used by dCDN that supports and advertises 
+	the appropriate extended status for trigger collections (see <xref target="extended-status-capability-object"/> for details).
 	</t>
 
 	<t hangText="Name: cdn-id">
@@ -3519,7 +3519,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 		<t>"objects" attribute in Error.v2 Description object</t>	
 		<t>"all-triggers" attribute in Trigger Collections object</t>	
 		</list>
-		The capability type is  "FCI.CITExtendedStatus".
+		The capability type is "FCI.CITExtendedStatus".
         </t>
         <t><list style="empty" hangIndent="3">
 	<t><list style="hanging" hangIndent="3">
@@ -3530,7 +3530,7 @@ dCDN MAY reject such requests for urgent processing using “ereject” error co
 		<vspace blankLines="1"/>
 		Value: An array of JSON strings listing CI/T objects.
 		<vspace blankLines="1"/>
-		Mandatory: No.  By default, in case of a missing or an empty list, no 
+		Mandatory: No. By default, in case of a missing or an empty list, no 
 		extended attribute objects are supported.
 		</t>
 
