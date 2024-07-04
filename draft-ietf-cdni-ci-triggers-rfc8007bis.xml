@@ -670,7 +670,7 @@
 	<t>
 	dCDN MAY provide filtered collections per <xref target="trigger-label">Trigger Label</xref>, 
 	as specified by uCDN in <xref target="trigger-v2-specification"/>.
-	If implemented, dCDN SHOULD provide a separate filtered collection for every unique Trigger Labels, and
+	If implemented, dCDN SHOULD provide a separate filtered collection for every unique Trigger Label, and
 	advertise these collections in the collection of all Trigger Resources.
 	</t>
 	</section>
@@ -1679,7 +1679,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	<t hangText="Name: generic-trigger-spec-value">
         <vspace blankLines="1"/>
-        Description: :A CDNI Trigger spec object.
+        Description: A CDNI Trigger spec object.
         <vspace blankLines="1"/>
 	Value: Defined by the value of the generic-trigger-spec-type property.
         <vspace blankLines="1"/>
