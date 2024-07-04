@@ -655,24 +655,25 @@
    filtered views of the collection of all Trigger Status Resources.
    These filtered collections are "optional-to-implement", but if they
    are implemented, the dCDN MUST include links to them in the
-   collection of all Trigger Status Resources.  The filtered
-   collections are:</t>
-
-	<t><list style="symbols"><t>Pending - Trigger Status Resources for CI/T Trigger Commands that
-      have been accepted but not yet acted upon.</t>
-
-	<t>Active - Trigger Status Resources for CI/T Trigger Commands that
-      are currently being processed in the dCDN.</t>
-
-	<t>Complete - Trigger Status Resources representing activity that
-      completed successfully, and "processed" CI/T Trigger Commands for
-      which no further status updates will be made by the dCDN.</t>
-
-	<t>Failed - Trigger Status Resources representing CI/T Commands that
-      failed or were cancelled by the uCDN.</t>
-
-	</list>
+   collection of all Trigger Status Resources.  
 	</t>
+
+
+	<section title="Filtered Collections by Trigger Status" anchor="filtered-collections-by-status">
+	<t>
+	dCDN MAY provide filtered collections per <xref target="trigger-status">Trigger Status</xref>.
+	If implemented, dCDN SHOULD provide a separate filtered collection for every Trigger Status, and
+	advertise these collections in the collection of all Trigger Resources.
+	</t>
+	</section>
+	<section title="Filtered Collections by Trigger Label" anchor="filtered-collections-by-labels">
+	<t>
+	dCDN MAY provide filtered collections per <xref target="trigger-label">Trigger Label</xref>, 
+	as specified by uCDN in <xref target="trigger-v2-specification"/>.
+	If implemented, dCDN SHOULD provide a separate filtered collection for every unique Trigger Label, and
+	advertise these collections in the collection of all Trigger Resources.
+	</t>
+	</section>
 
 	</section>
 
@@ -1253,7 +1254,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    The encoding of values used by these objects is described in
    <xref target="cit-objects-properties"/>.</t>
 
-	<section title="CI/T Trigger Command" anchor="cit-trigger-create-command">
+	<section title="CI/T Create Command" anchor="cit-trigger-create-command">
 	<t>
 	CI/T Create Trigger Command, which is used to create a new trigger, 
 	MUST use a MIME media type of "application/cdni; ptype=ci-trigger-command.create.v2".
@@ -1431,22 +1432,23 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	</section>
 
-	<section title="Trigger Collections" anchor="trigger-collections"><t>
-   Trigger Collections MUST use a MIME media type of "application/cdni; ptype=ci-trigger-collection".</t>
+	<section title="Trigger Collections" anchor="trigger-collections">
+	<t>
+	Trigger Collections MUST use a MIME media type of "application/cdni; ptype=ci-trigger-collection".
+	</t>
 
 	<t>
-   A Trigger Collection is encoded as a JSON object containing the
-   following name/value pairs:</t>
+   	A Trigger Collection is encoded as a JSON object containing the following name/value pairs:
+	</t>
 
 	<t><list style="empty" hangIndent="3">
 	<t><list style="hanging" hangIndent="3">
+
 	<t hangText="Name: triggers">
 	<vspace blankLines="1"/>
-	Description: Links to Trigger Status Resources in the
-         collection.
+	Description: Links to Trigger Status Resources in the collection.
 	<vspace blankLines="1"/>
-	Value: A JSON array of zero or more URLs, represented as JSON
-         strings.
+	Value: A JSON array of zero or more URLs, represented as JSON strings.
 	<vspace blankLines="1"/>
 	Mandatory: Yes.
 	</t>
@@ -1467,62 +1469,23 @@ uCDN-A                         dCDN-B                         dCDN-C
          value as in the collection of all Trigger Status Resources.
 	</t>
 
-	<t hangText="Name: coll-all">
+	<t hangText="Name: coll-state">
 	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing all Trigger Status Resources.
+	Description: Array of all <xref target="filtered-collection-status-link"/> objects.
 	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
+	Value: An array of JSON encoded FilteredCollectionStatusLink objects.
 	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
+	Mandatory: Mandatory in the collection of all Trigger Status Resources, if the dCDN
          implements the filtered collections.  Otherwise, optional.
 	</t>
 
-	<t hangText="Name: coll-pending">
+	<t hangText="Name: coll-label">
 	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing Trigger Status Resources
-         that have been accepted but not yet acted upon.
+	Description: Array of all <xref target="filtered-collection-label-link"/> objects.
 	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
+	Value: An array of JSON encoded FilteredCollectionLabelLink objects.
 	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
-         implements the filtered collections.  Otherwise, optional.
-	</t>
-
-	<t hangText="Name: coll-active">
-	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing Trigger Status Resources
-         that are currently being processed in the dCDN.
-	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
-	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
-         implements the filtered collections.  Otherwise, optional.
-	</t>
-
-	<t hangText="Name: coll-complete">
-	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing Trigger Status Resources
-         that completed successfully.
-	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
-	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
-         implements the filtered collections.  Otherwise, optional.
-	</t>
-
-	<t hangText="Name: coll-failed">
-	<vspace blankLines="1"/>
-	Description: Link to a Trigger Collection representing Trigger Status Resources
-         that failed or were cancelled by the uCDN.
-	<vspace blankLines="1"/>
-	Value: A URL represented as a JSON string.
-	<vspace blankLines="1"/>
-	Mandatory: Links to all of the filtered collections are mandatory
-         in the collection of all Trigger Status Resources, if the dCDN
+	Mandatory: Mandatory in the collection of all Trigger Status Resources, if the dCDN
          implements the filtered collections.  Otherwise, optional.
 	</t>
 
@@ -1540,23 +1503,78 @@ uCDN-A                         dCDN-B                         dCDN-C
          in its implementation of filtered collections).
 	</t>
 
-	</list>
-	</t>
+	</list></t>
+	</list></t>
 
-	</list>
-	</t>
+		<section title="Filtered Collections by Status Link" anchor="filtered-collection-label-link">
+		<t>
+			The Filtered Collections by Status Link object represents a link to filtered collection
+			per <xref target="trigger-status"/>.
+			It is encoded as a JSON object containing the following name/value pairs:
+		</t>
+     		<t><list style="empty" hangIndent="3">
+		<t><list style="hanging" hangIndent="3"><t hangText="Name: status">
+        	<vspace blankLines="1"/> 
+		Description: Trigger Status matching the filtered collection.
+        	<vspace blankLines="1"/>
+        	Value: A Trigger Status, as defined in <xref target="trigger-status"/>.
+        	<vspace blankLines="1"/>
+		Mandatory: Yes.
+        	</t>
+        
+        	<t hangText="Name: collection">
+        	<vspace blankLines="1"/>
+		Description: Filtered collection URL corresponding to the status.
+        	<vspace blankLines="1"/>
+        	Value: A URL represented as a JSON string.
+        	<vspace blankLines="1"/>
+		Mandatory: Yes.
+        	</t>
+        
+		</list></t>
+        	</list></t> 
 
+		</section>
+
+		<section title="Filtered Collections by Label Link" anchor="filtered-collection-status-link">
+		<t>
+			The Filtered Collections by Label Link object represents a link to filtered collection
+			per <xref target="trigger-label"/>.
+			It is encoded as a JSON object containing the following name/value pairs:
+		</t>
+     		<t><list style="empty" hangIndent="3">
+		<t><list style="hanging" hangIndent="3"><t hangText="Name: label">
+        	<vspace blankLines="1"/> 
+		Description: Trigger Label matching the filtered collection.
+        	<vspace blankLines="1"/>
+        	Value: A Trigger Label, as defined in <xref target="trigger-label"/>.
+        	<vspace blankLines="1"/>
+		Mandatory: Yes.
+        	</t>
+        
+        	<t hangText="Name: collection">
+        	<vspace blankLines="1"/>
+		Description: Filtered collection URL corresponding to the label.
+        	<vspace blankLines="1"/>
+        	Value: A URL represented as a JSON string.
+        	<vspace blankLines="1"/>
+		Mandatory: Yes.
+        	</t>
+		</list></t>
+        	</list></t> 
+		</section>
 	</section>
-
 	</section>
 
 	<section title="Properties of CI/T Objects" anchor="cit-objects-properties"><t>
    This section defines the values that can appear in the top-level
    objects described in <xref target="cit-objects"/> and their encodings.</t>
 
-	<section title="Trigger.v2 Specification" anchor="trigger-v2-specification"><t>
-   A Trigger.v2 Specification is encoded as a JSON object containing the
-   following name/value pairs:</t>
+	<section title="Trigger.v2 Specification" anchor="trigger-v2-specification">
+	<t>
+   	A Trigger.v2 Specification is encoded as a JSON object containing the
+	following name/value pairs:
+	</t>
 
 	<t>
    An unrecognized name/value pair in the Trigger Specification object
@@ -1568,7 +1586,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<t><list style="empty" hangIndent="3">
 	<t><list style="hanging" hangIndent="3">
    
-   <t hangText="Name: action">
+   	<t hangText="Name: action">
 	<vspace blankLines="1"/>
 	Description: Defines the type of the CI/T Trigger Action.
 	<vspace blankLines="1"/>
@@ -1591,9 +1609,18 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<vspace blankLines="1"/>
 	Description: Array of trigger extensions.
 	<vspace blankLines="1"/>
-	Value:Array of GenericTriggerExtension objects (see <xref target="generic-extension-object"/>).
+	Value: Array of GenericTriggerExtension objects (see <xref target="generic-extension-object"/>).
 	<vspace blankLines="1"/>
 	Mandatory: No. The default is no extensions.
+	</t>
+
+	<t hangText="Name: labels">
+	<vspace blankLines="1"/>
+	Description: Array of trigger labels.
+	<vspace blankLines="1"/>
+	Value: Array of Trigger Labels (see <xref target="trigger-label"/>).
+	<vspace blankLines="1"/>
+	Mandatory: No. The default is no labels.
 	</t>
 
 	</list>
@@ -1619,46 +1646,47 @@ uCDN-A                         dCDN-B                         dCDN-C
    </t>
 
 
-         <section anchor="generic-spec-object" title="Generic Spec Object">
-         <t>A GenericSpecObject object is a wrapper for managing individual CDNI
-            Trigger specs in an opaque manner.</t>
+	<section anchor="generic-spec-object" title="Generic Spec Object">
+	<t>
+		A GenericSpecObject object is a wrapper for managing individual CDNI
+		Trigger specs in an opaque manner.</t>
+	<t>It is encoded as a JSON object containing the following name/value pairs:</t>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: trigger-subject">
+        <vspace blankLines="1"/>
+        Description: Case-insensitive CDNI Trigger subject.
+        <vspace blankLines="1"/>
+        Value: String containing the type of the subject matching the
+                   generic-trigger-spec-value property, such as "content" or "metadata"
+                   as defined in <xref target="trigger-subject"/>.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-         <t><list style="empty">
-
-            <t>Property: trigger-subject<list style="empty">
-
-               <t>Description: Case-insensitive CDNI Trigger subject.</t>
-
-               <t>Type: String containing the type of the subject matching the 
-                  generic-trigger-spec-value property, such as "content" or "metadata" 
-                  as defined in <xref target="trigger-subject"/>.</t>  
-
-               <t>Mandatory: Yes.</t>
-            </list></t>
-
-            <t>Property: generic-trigger-spec-type<list style="empty">
-
-               <t>Description: Case-insensitive CDNI Trigger spec type.</t>
-
-               <t>Type: String containing the spec type of the object contained
-                  in the generic-trigger-spec-value property (see table in <xref target="trigger-spec"/>).</t>
-
-               <t>Mandatory: Yes.</t>
-            </list></t>
-
-            <t>Property: generic-trigger-spec-value<list style="empty">
-
-               <t>Description:A CDNI Trigger spec object.</t>
-
-               <t>Type: Format/Type is defined by the value of the
-                  generic-trigger-spec-type property.</t>
-
-               <t>Mandatory: Yes.</t>
-            </list></t>
+	<t hangText="Name: generic-trigger-spec-type">
+        <vspace blankLines="1"/>
+        Description: Case-insensitive CDNI Trigger spec type.
+        <vspace blankLines="1"/>
+	Value: String containing the spec type of the object contained
+        in the generic-trigger-spec-value property (see table in <xref target="trigger-spec"/>).
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
 
-         </list></t>
-         <t>The structure of a JSON serialized GenericTriggerSpec object, containing a specific trigger spec is illustrated below:</t>
+	<t hangText="Name: generic-trigger-spec-value">
+        <vspace blankLines="1"/>
+        Description: A CDNI Trigger spec object.
+        <vspace blankLines="1"/>
+	Value: Defined by the value of the generic-trigger-spec-type property.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
+	</list></t>
+	</list></t>
+
+        <t>The structure of a JSON serialized GenericTriggerSpec object, containing a specific trigger spec is illustrated below:</t>
 
       <figure>
          <artwork><![CDATA[
@@ -1855,69 +1883,68 @@ uCDN-A                         dCDN-B                         dCDN-C
 
           </section>
 
-          <section anchor="generic-extension-object" title="GenericExtensionObject">
-            <t>A GenericTriggerExtension object is a wrapper for managing individual CDNI
-               Trigger extensions in an opaque manner.</t>
+	<section anchor="generic-extension-object" title="GenericExtensionObject">
+	<t>
+		A GenericTriggerExtension object is a wrapper for managing individual CDNI
+		Trigger extensions in an opaque manner.
+	</t>
 
-            <t><list style="empty">
-              <t>Property: generic-trigger-extension-type<list style="empty">
+	<t>It is encoded as a JSON object containing the following name/value pairs:</t>
 
-                 <t>Description: Case-insensitive CDNI Trigger extension object type.</t>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
 
-                 <t>Type: String containing the CDNI Extension Type <xref target="RFC7736"/> of the object contained
-                    in the generic-trigger-extension-value property (see table in <xref target="trigger-extensibility"/>).</t>
+	<t hangText="Name: generic-trigger-extension-type">
+        <vspace blankLines="1"/>
+        Description: Case-insensitive CDNI Trigger extension object type.
+        <vspace blankLines="1"/>
+	Value: String containing the CDNI Extension Type <xref target="RFC7736"/> of the object contained
+        in the "generic-trigger-extension-value" property (see table in <xref target="trigger-extensibility"/>).
+        <vspace blankLines="1"/>
+	Mandatory: Yes.
+	</t>
 
-                 <t>Mandatory: Yes.</t>
-              </list></t>
+	<t hangText="Name: generic-trigger-extension-value">
+        <vspace blankLines="1"/>
+        Description: CDNI Trigger extension object.
+        <vspace blankLines="1"/>
+	Value:  Defined by the value of the "generic-trigger-extension-type" property above.
+        <vspace blankLines="1"/>
+	Mandatory: Yes.
+	</t>
 
-              <t>Property: generic-trigger-extension-value<list style="empty">
+	<t hangText="Name: mandatory-to-enforce">
+        <vspace blankLines="1"/>
+        Description: Flag identifying whether or not the enforcement of this trigger extension is mandatory.
+        <vspace blankLines="1"/>
+	Value: Boolean.
+        <vspace blankLines="1"/>
+	Mandatory: No. Default is to treat the trigger extension as mandatory to enforce (i.e., a value of True)
+	</t>
 
-                 <t>Description: CDNI Trigger extension object.</t>
+	<t hangText="Name: safe-to-redistribute">
+        <vspace blankLines="1"/>
+	Description: Flag identifying whether or not this trigger extension can be safely redistributed 
+	without modification, even if the CDN fails to understand the extension.
+        <vspace blankLines="1"/>
+	Value: Boolean.
+        <vspace blankLines="1"/>
+	Mandatory: No. Default is to allow transparent redistribution (i.e., a value of True).
+	</t>
 
-                 <t>Type: Format/Type is defined by the value of the
-                    generic-trigger-extension-type property above.</t>
+	<t hangText="Name: incomprehensible">
+        <vspace blankLines="1"/>
+	Description: Flag identifying whether or not any CDN in the chain of delegation has failed to understand and/or failed to
+	properly transform this trigger extension object.  Note: This flag only applies to trigger extension objects whose 
+	"safe-to-redistribute" property has a value of False.
+        <vspace blankLines="1"/>
+	Value: Boolean.
+        <vspace blankLines="1"/>
+	Mandatory: No. Default is comprehensible (i.e., a value of False).
+	</t>
+        </list></t>
+	</list></t>
 
-                 <t>Mandatory: Yes.</t>
-              </list></t>
-
-              <t>Property: mandatory-to-enforce<list style="empty">
-
-                 <t>Description: Flag identifying whether or not the enforcement of
-                    this trigger extension is mandatory.</t>
-
-                 <t>Type: Boolean</t>
-
-                 <t>Mandatory: No.  Default is to treat the trigger extension as
-                    mandatory-to-enforce (i.e., a value of True).</t>
-              </list></t>
-
-              <t>Property: safe-to-redistribute<list style="empty">
-
-                 <t>Description: Flag identifying whether or not this trigger extension 
-                    can be safely redistributed without modification, even if 
-                    the CDN fails to understand the extension.</t>
-
-                 <t>Type: Boolean</t>
-
-                 <t>Mandatory: No.  Default is to allow transparent
-                    redistribution (i.e., a value of True).</t>
-              </list></t>
-
-              <t>Property: incomprehensible<list style="empty">
-
-                 <t>Description: Flag identifying whether or not any CDN in the
-                    chain of delegation has failed to understand and/or failed to
-                    properly transform this trigger extension object.  Note: This flag only
-                    applies to trigger extension objects whose safe-to-redistribute property
-                    has a value of False.</t>
-
-                 <t>Type: Boolean</t>
-
-                 <t>Mandatory: No.  Default is comprehensible (i.e., a
-                    value of False).</t>
-              </list></t>
-
-            </list></t>
             <t>The structure of a JSON serialized GenericTriggerExtension object containing a specific trigger extension object is illustrated below:</t>
 
         <figure>
@@ -2248,17 +2275,20 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	</section>
 
-	<section title="ObjectList" anchor="object-list"><t>
-		ObjectList is a metadata object describing lists of objects that can be used in the context of CI/T v2 trigger spec, trigger status resources and other contexts as required. The ObjectList object can either embed the lists of objects or point to external URL(s) that hold such lists. ObjectList allows specification of an object list type, providing instructions on the interpretation of the object list format.</t>
-
+	<section title="ObjectList" anchor="object-list">
 	<t>
-		ObjectLists MAY be recursive, i.e. including references to secondary manifests, including references to HLS, MPEG-DASH or MSS manifests as well as additional JSON-encoded ObjectLists , etc. The party consuming the object list MUST parse all recursions based on the object list type property. When doing so, the consuming party should also detect potential loops when descendant ObjectList points back to parent ObjectList.
+	ObjectList is a metadata object describing lists of objects that can be used in the context of CI/T v2 trigger spec, trigger status resources and other contexts as required. The ObjectList object can either embed the lists of objects or point to external URL(s) that hold such lists. ObjectList allows specification of an object list type, providing instructions on the interpretation of the object list format.
 	</t>
 
 	<t>
-		In case of uCDN accessing ObjectList objects referencing external URLs published by dCDN, both parties should comply with the CI/T interface security requirements (see <xref target="authentication-authorization"/> for details). 
-		When dCDN accesses external URLs referenced by ObjectLists supplied by uCDN, for example as part of Trigger Spec, the dCDN MUST match these URLs with source metadata objects, published by uCDN, such as SourceMetadata objects specified in Section 4.2.1 of <xref target="RFC8006"/>, and use these metadata objects for content acquisition if a match was found.
+	ObjectLists MAY be recursive, i.e. including references to secondary manifests, including references to HLS, MPEG-DASH or MSS manifests as well as additional JSON-encoded ObjectLists , etc. The party consuming the object list MUST parse all recursions based on the object list type property. When doing so, the consuming party should also detect potential loops when descendant ObjectList points back to parent ObjectList.
 	</t>
+
+	<t>
+	In case of uCDN accessing ObjectList objects referencing external URLs published by dCDN, both parties should comply with the CI/T interface security requirements (see <xref target="authentication-authorization"/> for details). 
+	When dCDN accesses external URLs referenced by ObjectLists supplied by uCDN, for example as part of Trigger Spec, the dCDN MUST match these URLs with source metadata objects, published by uCDN, such as SourceMetadata objects specified in Section 4.2.1 of <xref target="RFC8006"/>, and use these metadata objects for content acquisition if a match was found.
+	</t>
+
 	<t>
 ObjectLists MAY combine regular objects and secondary ObjectLists in the same object.
 		Please note that when embedding non-JSON object lists directly in ObjectList, absolute URLs MUST be provided at all times and the text SHOULD be encoded in accordance with the JSON grammar specification <xref target="ECMA404"/>, including explicit newline encoding. When the uCDN accesses ObjectList metadata resources published by the uCDN, the same interface authentication and authorization requirements would apply, as when accessing the interface itself.
@@ -2354,56 +2384,38 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 ]]></artwork></figure>
 
 	<t>The ObjectList properties are as follows:</t>  
-	<t>
-		<list style="empty" hangIndent="3">
-		<t>
-			<list style="hanging" hangIndent="3">
-				<t hangText="Name: data">
-        			<vspace blankLines="1"/>
-				Description: List of objects in one of the recognized formats.
-				<vspace blankLines="1"/>
-				Value: JSON String.
-        			<vspace blankLines="1"/>
-        			Mandatory: No. Either "data" or "href" MUST be set.
-				</t>
-			</list>
-		</t>
-		</list>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: data">
+        <vspace blankLines="1"/>
+	Description: List of objects in one of the recognized formats.
+	<vspace blankLines="1"/>
+	Value: JSON String.
+        <vspace blankLines="1"/>
+        Mandatory: No. Either "data" or "href" MUST be set.
 	</t>
 
-
-	<t>
-		<list style="empty" hangIndent="3">
-			<t>
-				<list style="hanging" hangIndent="3"><t hangText="Name: href">
-				<vspace blankLines="1"/>
-				Description: URL pointing to an external object list or object in one of the recognized formats.
-				<vspace blankLines="1"/>
-				Value: A URL represented as a JSON String
-        			<vspace blankLines="1"/>
-        			Mandatory: No. Either "data" or "href" MUST be set.
-				</t>
-				</list>
-			</t>
-		</list>
-	</t>
-	<t>
-		<list style="empty" hangIndent="3">
-			<t>
-				<list style="hanging" hangIndent="3"><t hangText="Name: type">
-				<vspace blankLines="1"/>
-				Description: Object list type to be used when parsing and interpreting this object list. By default each record in the list is assumed to represent an object that does not require additional processing.
-				<vspace blankLines="1"/>
-				Value: ObjectListType (see <xref target="object-list"/>)   
-        			<vspace blankLines="1"/>
-        			Mandatory: Yes.
-				</t>
-				</list>
-			</t>
-		</list>
+	<t hangText="Name: href">
+	<vspace blankLines="1"/>
+	Description: URL pointing to an external object list or object in one of the recognized formats.
+	<vspace blankLines="1"/>
+	Value: A URL represented as a JSON String
+        <vspace blankLines="1"/>
+        Mandatory: No. Either "data" or "href" MUST be set.
 	</t>
 
-	</section>
+	<t hangText="Name: type">
+	<vspace blankLines="1"/>
+	Description: Object list type to be used when parsing and interpreting this object list. 
+	By default each record in the list is assumed to represent an object that does not require additional processing.
+	<vspace blankLines="1"/>
+	Value: ObjectListType (see <xref target="object-list"/>).   
+       	<vspace blankLines="1"/>
+	Mandatory: Yes.
+	</t>
+	</list></t>
+	</list></t>
+
 	<section title="ObjectList Type" anchor="object-list-type">
 	<t>
 		ObjectListType objects are used to specify registered type of ObjectList 
@@ -2446,7 +2458,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 		<c><xref target="object-list-type-text">Text</xref></c>
         </texttable>
 	<t>[RFC Editor: Please replace RFCthis with the published RFC number for this document.]</t>
-
+	</section>
 	<section title="JSON Serialized Object List" anchor="object-list-type-json">
 	<t>
 		This ObjectList type specifies a collection of objects encoded in JSON format, each entry being encoded as an <xref target="object-entry"> ObjectEntry</xref> object. The entries in the JSON object list MAY have an object list type specified, allowing for a recursive object list structure.
@@ -2457,7 +2469,6 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 		<t>
 			The text object list type specifies a collection of files in text encoding, each line specifying an object URI. Unlike the <xref target="object-list-type-json">JSON</xref> object list, the text-based object list will not support a recursive object list structure, and every object specified in it SHOULD be downloaded without additional processing.
 		</t>
-		</section>
 	</section>
 
 	<section title="ObjectEntry" anchor="object-entry">
@@ -2478,55 +2489,44 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 	</t>
 
 	<t>The ObjectEntry properties are as follows:</t>
-	<t>
-		<list style="empty" hangIndent="3">
-		<t>
-			<list style="hanging" hangIndent="3">
-				<t hangText="Name: href">
-        			<vspace blankLines="1"/>
-				Description: Object URL
-				<vspace blankLines="1"/>
-				Value: A URL represented as a JSON string.
-        			<vspace blankLines="1"/>
-        			Mandatory: Yes.
-				</t>
-			</list>
-		</t>
-		</list>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: href">
+        <vspace blankLines="1"/>
+	Description: Object URL
+	<vspace blankLines="1"/>
+	Value: A URL represented as a JSON string.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
 	</t>
 
-
-	<t>
-		<list style="empty" hangIndent="3">
-			<t>
-				<list style="hanging" hangIndent="3"><t hangText="Name: type">
-				<vspace blankLines="1"/>
-				Description: ObjectList type to be used when processing this object. By default ObjectEntry object is assumed to represent an object and does not require additional processing.
-				<vspace blankLines="1"/>
-				Value: ObjectListType (see <xref target="object-list-type"/>
-        			<vspace blankLines="1"/>
-        			Mandatory: No.
-				</t>
-				</list>
-			</t>
-		</list>
+	<t hangText="Name: type">
+	<vspace blankLines="1"/>
+	Description: ObjectList type to be used when processing this object. 
+	By default ObjectEntry object is assumed to represent an object and does not require additional processing.
+	<vspace blankLines="1"/>
+	Value: ObjectListType (see <xref target="object-list-type"/>).
+       	<vspace blankLines="1"/>
+       	Mandatory: No.
 	</t>
-	<t>
-		<list style="empty" hangIndent="3">
-			<t>
-				<list style="hanging" hangIndent="3"><t hangText="Name: size">
-				<vspace blankLines="1"/>
-				Description: Object size, in bytes. Can be used to make a decision to download the object based on size. For example, dCDN may ignore objects that are too small or too large.
-				<vspace blankLines="1"/>
-				Value: Integer.
-        			<vspace blankLines="1"/>
-        			Mandatory: No.
-				</t>
-				</list>
-			</t>
-		</list>
+	<t hangText="Name: size">
+	<vspace blankLines="1"/>
+	Description: Object size, in bytes. Can be used to make a decision to download the object based on size. 
+	For example, dCDN may ignore objects that are too small or too large.
+	<vspace blankLines="1"/>
+	Value: Integer.
+       	<vspace blankLines="1"/>
+	Mandatory: No.
 	</t>
+	</list></t>
+	</list></t>
 
+	</section>
+	</section>
+	<section anchor="trigger-label" title="Trigger Label">
+	<t>
+	A JSON string. Labels SHOULD be unique per trigger.
+	</t>
 	</section>
 	</section>
 
@@ -2999,37 +2999,40 @@ https://video.example.com/k/movie1/4/013.ts
        ]]></artwork>
        </figure>
 
-        <section anchor="utc-window" title="UTCWindow">
-          <t>
-             A UTCWindow object describes a time range in UTC or UTC and a zone offset that can
-             be applied by a TimePolicy.
-          </t>
-          <t><list style="empty">
-            <t>Property: start<list style="empty">
+	<section anchor="utc-window" title="UTCWindow">
+        <t>
+        	A UTCWindow object describes a time range in UTC or UTC and a zone offset that can
+             	be applied by a TimePolicy.
+	</t>
+	<t>It is encoded as a JSON object containing the following name/value pairs:</t>
 
-              <t>Description: The start time of the window.</t>
+	<t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: start">
+        <vspace blankLines="1"/>
+	Description: The start time of the window.
+        <vspace blankLines="1"/>
+	Value: Internet date and time as defined in <xref target="RFC3339"/>.
+        <vspace blankLines="1"/>
+        Mandatory: No. but at least one of "start" or "end" MUST be present and non-empty.
+        </t>
 
-              <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
+        <t hangText="Name: end">
+        <vspace blankLines="1"/>
+        Description: The end time of the window.
+        <vspace blankLines="1"/>
+        Value: Internet date and time as defined in <xref target="RFC3339"/>.
+        <vspace blankLines="1"/>
+        Mandatory: No. but at least one of "start" or "end" MUST be present and non-empty.
+        </t>
 
-              <t>Mandatory: No, but at least one of "start" or "end"
-                 MUST be present and non-empty.</t>
+       	</list></t>
+        </list></t>
 
-            </list></t>
-            <t>Property: end<list style="empty">
-
-              <t>Description: The end time of the window.</t>
-
-              <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
-
-              <t>Mandatory: No, but at least one of "start" or "end"
-                 MUST be present and non-empty.</t>
-            </list></t>   
-         </list></t>      
-         
-         <t>
+        <t>
            Example JSON serialized UTCWindow object that describes a time window from 02:30
            01/01/2000 UTC to 04:30 01/01/2000 UTC:
-         </t>
+        </t>
 
          <figure>
             <artwork><![CDATA[
@@ -3303,67 +3306,59 @@ https://video.example.com/k/movie1/4/013.ts
            selecting the targets the triggers are applied on, along with the supported Trigger Generic Extension types.
         </t>
 
-        <t>The trigger-scope-capability object matching the "FCI.CITScope" capability type, is defined as follows:</t>
+	<t>	The "trigger-scope-capability" object matching the "FCI.CITScope" capability type, 
+		is encoded as a JSON object containing the following name/value pairs:
+	</t>
 
-        <t><list style="empty">
-            <t>Property: trigger-action <list style="empty">
+        <t><list style="empty" hangIndent="3">
+	<t><list style="hanging" hangIndent="3">
+	<t hangText="Name: trigger-action">
+        <vspace blankLines="1"/>
+	Description: The supported CDNI CI/T Trigger Action.
+        <vspace blankLines="1"/>
+	Value: A string corresponding to an entry from the "CDNI CI/T Trigger Types" registry
+	<xref target="IANA.CDNI.TriggerTypeReg"/>, that corresponds to a CDNI CI/T Trigger Action.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+        </t>
 
-                 <t>Description: The supported CDNI CI/T Trigger Action.</t>
+	<t hangText="Name: trigger-subject">
+        <vspace blankLines="1"/>
+	Description: The supported CDNI CI/T Trigger Subject.
+        <vspace blankLines="1"/>
+	Value: A string corresponding to an entry from the "CDNI CI/T Trigger Subjects" registry
+	<xref target="IANA.CDNI.TriggerSubjectReg"/> that corresponds to a CDNI CI/T Trigger Subject.
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
+	</t>	
 
-                 <t>Type: A string corresponding to an entry from the "CDNI CI/T Trigger Types" registry
-                    <xref target="IANA.CDNI.TriggerTypeReg"/>, that corresponds to a CDNI
-                    CI/T Trigger Action.
-                 </t>
+	<t hangText="Name: trigger-specs">
+        <vspace blankLines="1"/>
+	Description: A list of supported CDNI CI/T GenericSpecObject types for Trigger Action and Subject.
+        <vspace blankLines="1"/>
+	Value: List of strings corresponding to entries from the "CDNI CI/T Trigger Specs" registry
+	<xref target="IANA.CDNI.TriggerSpecReg"/>, that corresponds to a CDNI CI/T GenericSpecObject objects.
+        <vspace blankLines="1"/>
+        Mandatory: No.
+	The default, in case of a missing or an empty list, MUST be interpreted as "no GenericExtensionObject types 
+	are supported". A non-empty list MUST be interpreted as containing "the only GenericExtensionObject types that are supported".
+	</t>	
 
-                 <t>Mandatory: Yes.
-                 </t>
-           </list></t>
-            <t>Property: trigger-subject <list style="empty">
+	<t hangText="Name: trigger-extensions">
+        <vspace blankLines="1"/>
+	Description: A list of supported CDNI CI/T GenericExtensionObject types for Trigger Action and Subject.
+        <vspace blankLines="1"/>
+	Value: List of strings corresponding to entries from the "CDNI CI/T Trigger Extension" registry
+	<xref target="IANA.CDNI.TriggerExtensionReg"/>, that corresponds to a CDNI CI/T GenericExtensionObject objects.
+        <vspace blankLines="1"/>
+        Mandatory: No.
+	The default, in case of a missing or an empty list, MUST be interpreted as "no GenericExtensionObject types are supported". 
+	A non-empty list MUST be interpreted as containing "the only GenericExtensionObject types that are supported".
+	</t>	
 
-                 <t>Description: The supported CDNI CI/T Trigger Subject.</t>
-
-                 <t>Type: A string corresponding to an entry from the "CDNI CI/T Trigger Subjects" registry
-                    <xref target="IANA.CDNI.TriggerSubjectReg"/> that corresponds to a CDNI
-                    CI/T Trigger Subject.
-                 </t>
-
-                 <t>Mandatory: Yes.
-                 </t>
-           </list></t>
-
-            <t>Property: trigger-specs<list style="empty">
-
-                 <t>Description: A list of supported CDNI CI/T GenericSpecObject types for
-                 the Trigger Action and Subject.</t>
-
-                 <t>Type: List of strings corresponding to entries from the "CDNI CI/T Trigger Specs" registry
-                    <xref target="IANA.CDNI.TriggerSpecReg"/>, that corresponds to a CDNI
-                    CI/T GenericSpecObject objects.
-                 </t>
-
-                 <t>Mandatory: No. The default, in case of a missing or an empty list, MUST be 
-                    interpreted as "no GenericExtensionObject types are supported". A non-empty list MUST be 
-                    interpreted as containing "the only GenericExtensionObject types that are supported".
-                 </t>
-           </list></t>
-
-            <t>Property: trigger-extensions<list style="empty">
-
-                 <t>Description: A list of supported CDNI CI/T GenericExtensionObject types for
-                 the Trigger Action and Subject.</t>
-
-                 <t>Type: List of strings corresponding to entries from the "CDNI CI/T Trigger Extension" registry
-                    <xref target="IANA.CDNI.TriggerExtensionReg"/>, that corresponds to a CDNI
-                    CI/T GenericExtensionObject objects.
-                 </t>
-
-                 <t>Mandatory: No. The default, in case of a missing or an empty list, MUST be 
-                    interpreted as "no GenericExtensionObject types are supported". A non-empty list MUST be 
-                    interpreted as containing "the only GenericExtensionObject types that are supported".
-                 </t>
-           </list></t>
-           
+	</list></t>
         </list></t>
+
 
         	<section anchor="trigger-scope-capability-object" title="CI/T Trigger Scope Capability Object Serialization">
           	<t>
@@ -3888,13 +3883,22 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-collection
 
   {
-      "cdn-id": "AS64496:0",
-      "coll-active": "/triggers/active",
-      "coll-complete": "/triggers/complete",
-      "coll-failed": "/triggers/failed",
-      "coll-pending": "/triggers/pending",
-      "staleresourcetime": 86400,
-      "triggers": [
+    "cdn-id": "AS64496:0",
+    "coll-status": [ 
+      { "status": "pending", "collection": "/triggers/pending" },
+      { "status": "active", "collection": "/triggers/active" },
+      { "status": "complete", "collection": "/triggers/complete" },
+      { "status": "processed", "collection": "/triggers/processed" },
+      { "status": "failed", "collection": "/triggers/failed" },
+      { "status": "cancelling", "collection": "/triggers/cancelling" },
+      { "status": "cancelled", "collection": "/triggers/cancelled" }
+    ],
+    "coll-label": [ 
+      { "label": "1b1bad0c", "collection": "/triggers/1b1bad0c" },
+      { "label": "fafa9a97", "collection": "/triggers/fafa9a97" }
+    ],
+    "staleresourcetime": 86400,
+    triggers": [
           "https://dcdn.example.com/triggers/0",
           "https://dcdn.example.com/triggers/1"
       ]
