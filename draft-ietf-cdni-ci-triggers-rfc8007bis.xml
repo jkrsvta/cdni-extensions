@@ -174,7 +174,15 @@
    <xref target="RFC7337"/> identifies the requirements specific to the CI/T interface;
    requirements applicable to the CI/T interface are CI-1 to CI-6.</t>
    
-   <t>This document is a second edition of the CDNI Control Interface / Triggers, which defines a new version, "v2", of the interface objects. The new objects replace the trigger interface's main objects, the "ci-trigger-command" object and its matching "ci-trigger-status" object, and improve the interface's flexibility and extensibility. The document also provides a Trigger Extension mechanism that MAY be used to provide further instruction on the trigger execution. Additionally, this second edition includes cascaded CDN error propagation for improved trigger execution monitoring. Note that the trigger interface mechanism itself is not changed by this new edition.
+   <t>
+	   This document is a second edition of the CDNI Control Interface / Triggers, which defines a new version, "v2", 
+	   of the interface objects.  
+	   The new objects replace the trigger interface's main objects, the "ci-trigger-command" object and its matching 
+	   "ci-trigger-status" object to support <xref target="REST">RESTful</xref> semantics in a way that improves the 
+	   interface's flexibility, extensibility and interoperability, and allows encoding the interface using OpenAPI. 
+	   The document also provides a Trigger Extension mechanism that MAY be used to provide further instruction 
+	   on the trigger execution. 
+	   Additionally, this second edition includes cascaded CDN error propagation for improved trigger execution monitoring. 
    </t>
 
 	<t><list style="symbols"><t><xref target="model-for-cdni-triggers"/> outlines the model for the CI/T interface at a high
@@ -420,8 +428,8 @@
 
 	<t>
    In all other cases, a dCDN MUST reject CI/T Commands from a uCDN that
-   attempts to act on another uCDN's content by using, for example,
-   responding with an HTTP 403 ("Forbidden").</t>
+   attempts to act on another uCDN's content by responding, for example,
+   with an HTTP 403 ("Forbidden").</t>
 
 	<t>
    Security considerations are discussed further in <xref target="security-considerations"/>.</t>
@@ -634,6 +642,8 @@
 	<c>Allowing the control over the locations in which the trigger is executed.</c>
 	<c>time-policy</c>
 	<c>Allowing the scheduling of a trigger to run in a specific time window.</c>
+	<c>execution-policy</c>
+	<c>Allowing the control over the order and timing in which triggers are executed.</c>
 	</texttable>
 
    <t>Example use cases<list style="symbols">
@@ -1742,9 +1752,8 @@ uCDN-A                         dCDN-B                         dCDN-C
 
         <t>The structure of a JSON serialized GenericTriggerSpec object, containing a specific trigger spec is illustrated below:</t>
 
-      <figure>
-         <artwork><![CDATA[
-
+      <sourcecode type="json" name="GenericTrigger Spec">
+	      <![CDATA[ 
 {
   "generic-trigger-spec-type":
      <Type of this trigger spec>,
@@ -1754,11 +1763,8 @@ uCDN-A                         dCDN-B                         dCDN-C
       },
    "generic-trigger-spec-subject":
      <Category of this trigger spec subject>
-
 }
-
-       ]]></artwork>
-        </figure>
+       ]]></sourcecode>
           </section>
 
 
@@ -2001,9 +2007,8 @@ uCDN-A                         dCDN-B                         dCDN-C
 
             <t>The structure of a JSON serialized GenericTriggerExtension object containing a specific trigger extension object is illustrated below:</t>
 
-        <figure>
-          <artwork><![CDATA[
-
+	    <sourcecode type="json" name="GenericTriggerExtension">
+<![CDATA[
 {
   "generic-trigger-extension-type":
      <Type of this trigger extension object>,
@@ -2015,10 +2020,9 @@ uCDN-A                         dCDN-B                         dCDN-C
   "safe-to-redistribute": <bool>,
   "incomprehensible": <bool>
 }
-
-       ]]></artwork>
-        </figure>
-          </section>
+]]>
+ 	</sourcecode> 
+ 	 </section>
         </section>
 
 	<section title="Absolute Time" anchor="absolute-time"><t>
@@ -2101,7 +2105,7 @@ uCDN-A                         dCDN-B                         dCDN-C
                 by the originating uCDN or by the propagating dCDN in order to distinguish in which CDN the 
                 error occurred.
 	<vspace blankLines="1"/>
-	Value:  A non-empty JSON string, where the string is a CDN PID as defined in Section 
+	Value:  A non-empty JSON string, where the string is a CDN PID as defined in
                  <xref target="loop-detection-and-prevention"/>
 	<vspace blankLines="1"/>
 	Mandatory: Yes. The dCDN may use its own CDN PID if it does not want to expose the CDN PIDs of dCDNs.
@@ -2126,9 +2130,8 @@ uCDN-A                         dCDN-B                         dCDN-C
 
           <t>Example of a JSON serialized Error.v2 Description object reporting a malformed object list :
           </t>
-
-          <figure>
-            <artwork><![CDATA[
+	<sourcecode type="json" name="Error.v2 Description">
+			  <![CDATA[
 {
   "error": "econtent",
   "description": "Failed to parse HLS object list",
@@ -2148,14 +2151,12 @@ uCDN-A                         dCDN-B                         dCDN-C
   }
   "cdn": "AS64500:0"
 }
-         ]]></artwork>
-          </figure>
+]]></sourcecode>
 
           <t>Example of a JSON serialized Error.v2 Description object reporting an unsupported extension object:
           </t>
 
-          <figure>
-            <artwork><![CDATA[
+            <sourcecode type="json" name="Error.v2 Description unsupported extension"><![CDATA[
 {
   "errors": [
     {
@@ -2186,8 +2187,7 @@ uCDN-A                         dCDN-B                         dCDN-C
     }
   ]
 }
-         ]]></artwork>
-          </figure>
+         ]]></sourcecode>
 
 	</section>
 
@@ -2242,8 +2242,6 @@ uCDN-A                         dCDN-B                         dCDN-C
    supported by an implementation of the CI/T interface utilizing the ci-trigger-command.trigger.v2 and the ci-trigger-status.v2 objects.</t>
 
 	<texttable style="full">
-	<t>[RFC Editor: Please replace RFCthis with the published RFC
-        number for this document.]</t>
 	<ttcol align="left"> Error Code</ttcol>
 	<ttcol align="left"> Description</ttcol>
 	<ttcol align="left"> Registration</ttcol>
@@ -2278,6 +2276,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<c>An error occurred while parsing a generic trigger extension, or that the specific extension is not supported by the CDN.</c>
 	<c>RFCthis</c>
 	</texttable>
+	<t>[RFC Editor: Please replace RFCthis with the published RFC number for this document.]</t>
 	</section>
 
 	<section title="URL Type" anchor="url-types">
@@ -2290,7 +2289,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	When using this URL type, uCDN MUST provide configuration metadata objects related to these URLs before creating a trigger option referencing these URLs. When this is not the case, dCDN MUST return the error code "emeta".
 	</t>
 	<t> 
-		When processing published URLs in "preposition" Trigger Action, dCDN MUST invoke processing of metadata objects it would have invoked in content acquisition to satisfy an end-user request, e.g. SourceMetadata (see Section 4.2.1 of <xref target="RFC8006"/>.
+		When processing published URLs in "preposition" Trigger Action, dCDN MUST invoke processing of metadata objects it would have invoked in content acquisition to satisfy an end-user request, e.g. SourceMetadata (see Section 4.2.1 of <xref target="RFC8006"/>).
 	</t>
 
 	<t>
@@ -2314,7 +2313,6 @@ uCDN-A                         dCDN-B                         dCDN-C
 	</t>
 
         <texttable style="full">
-        <t>[RFC Editor: Please replace RFCthis with the published RFC number for this document.]</t>
         <ttcol align="left"> URL Type</ttcol>
         <ttcol align="left"> Description</ttcol>
         <ttcol align="left"> Registration</ttcol>
@@ -2326,6 +2324,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<c>Private URLs used by dCDN to look up content objects in cache</c>
         <c>RFCthis</c>
         </texttable>
+        <t>[RFC Editor: Please replace RFCthis with the published RFC number for this document.]</t>
 
 	</section>
 
@@ -2350,28 +2349,28 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
 
 	<t>ObjectList is encoded as an array of per-object records in JSON format as follows:</t>
 	<t>External HLS manifest:</t>
-<figure><artwork><![CDATA[ 
+	<sourcecode type="json" name="external-hls-manifest"><![CDATA[ 
 [
   { 
     “href”: "https://example.com/hls/a36f764e/index.m3u8",
     "type": "hls" 
   }
 ]
-]]></artwork></figure>
+]]></sourcecode>
 
 	<t>External object list in text format:</t>
-<figure><artwork><![CDATA[ 
+<sourcecode type="json" name="external-object-list"><![CDATA[ 
 [
   { 
     “href”: “https://example.com/hls/35cdc008/assets”,
     "type": “text" 
   }
 ]
-]]></artwork></figure>
+]]></sourcecode>
 
 
 	<t>List of external manifests and objects of mixed types:</t>
-<figure><artwork><![CDATA[ 
+<sourcecode type="json" name="external-manifests-and-objects"><![CDATA[ 
 [
   { 
     “href”: “https://example.com/hls/35cdc008/index.m3u8”, 
@@ -2386,37 +2385,36 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
     “type": “json" 
   }
 ]
-]]></artwork></figure>
+]]></sourcecode>
 
 	<t>Embedded JSON-encoded object list:</t>
-<figure><artwork><![CDATA[ 
+	<sourcecode type="json" name="embedded-json-object-list"><![CDATA[ 
 [
   { 
     “data”: [
-      { 
-	“href”: “https://example.com/hls/35cdc008/index.m3u8”, 
-	“type": “hls" 
-      },
-      { 
-	“href”:“https://example.com/dash/35cdc008/main.mpd”,
-	“type": “dash"
-      },
-      { 
-	“href”: “https://example.com/img/35cdc008/thumb-l.jpg”, 
-	“size”: 10260
-      },
-      { 
-	“href”: “https://example.com/img/35cdc008/thumb-s.jpg”,
-	“size”: 1453
-      }
-    ],
+    { 
+      “href”: “https://example.com/hls/35cdc008/index.m3u8”, 
+      “type": “hls" 
+    },
+    { 
+      “href”:“https://example.com/dash/35cdc008/main.mpd”,
+      “type": “dash"
+    },
+    { 
+      “href”: “https://example.com/img/35cdc008/thumb-l.jpg”, 
+      “size”: 10260
+    },
+    { 
+      “href”: “https://example.com/img/35cdc008/thumb-s.jpg”,
+      “size”: 1453
+    }],
     “type”: “json”
   }
 ]
-]]></artwork></figure>
+]]></sourcecode>
 
 	<t>Embedded HLS manifest:</t>
-<figure><artwork><![CDATA[ 
+	<sourcecode type="json" name="embedded-hls-manifest"><![CDATA[ 
 [
   {  
     "data”: 
@@ -2434,8 +2432,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
     "type": "hls"
   }
 }
-
-]]></artwork></figure>
+]]></sourcecode>
 
 	<t>The ObjectList properties are as follows:</t>  
 	<t><list style="empty" hangIndent="3">
@@ -2521,7 +2518,12 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
 	<section title="Text Object List" anchor="object-list-type-text">
 		<t>
-			The text object list type specifies a collection of files in text encoding, each line specifying an object URI. Unlike the <xref target="object-list-type-json">JSON</xref> object list, the text-based object list will not support a recursive object list structure and every object specified in it SHOULD be downloaded without additional processing.
+			The text object list type specifies a collection of files in text encoding, each line specifying an object URI. 
+		</t>
+		<t>
+			Unlike the <xref target="object-list-type-json">JSON Serialized Object List</xref>, the text-based object list will not 
+			support a recursive object list structure and every object specified in it SHOULD be downloaded without 
+			additional processing.
 		</t>
 	</section>
 
@@ -2531,7 +2533,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 	</t>
 	<t>
 		The following is an example of JSON serialized ObjectEntry objects:
-		<artwork><![CDATA[
+		<sourcecode type="json" name="objectentry-json"><![CDATA[
 [
   { 
     “href”: “https://example.com/hls/35cdc008/index.m3u8”, 
@@ -2550,7 +2552,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
     “size": 14535
   },
 ]
-		]]></artwork>
+		]]></sourcecode>
 	</t>
 
 	<t>The ObjectEntry properties are as follows:</t>
@@ -2601,7 +2603,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
     <section anchor="trigger-spec-objects" title="Trigger Spec Objects">
 	<t>
 	    	The objects defined below are intended to be used in the GenericTriggerSpec
-         	object's generic-trigger-spec-value field as defined in Section <xref target="generic-spec-object"/>. 
+         	object's generic-trigger-spec-value field as defined in <xref target="generic-spec-object"/>. 
 		As such all these trigger specs are registered in the IANA "CDNI CI/T Trigger Specs" 
 		registry (see <xref target="IANA.CDNI.TriggerSpecReg"/>).
 	</t>
@@ -2642,8 +2644,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
         metadata.example.com/a/b/c.
         </t>
 
-        <figure> 
-          <artwork><![CDATA[
+          <sourcecode type="json" name="urls-spec-json"><![CDATA[
 {
    "trigger-subject": "metadata",
    "generic-trigger-spec-type": "urls",
@@ -2654,9 +2655,7 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
       "url-type": "published"
    }
 }
-
-       ]]></artwork>
-       </figure>
+       ]]></sourcecode>
       </section>
 
 
@@ -2751,13 +2750,14 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 
 	<t>Example of case-sensitive prefix match against "https://www.example.com/trailers/":</t>
 
-	<figure><artwork><![CDATA[
+	<sourcecode type="json" name="prefix-match">
+<![CDATA[
 {
     "pattern": "https://www.example.com/trailers/*",
     "case-sensitive": true
 }
-]]></artwork>
-	</figure>
+]]>
+	</sourcecode>
 	</section>
 </section>
 
@@ -2828,35 +2828,28 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n”,
 	</list></t>
 
           <t>Example of a case-sensitive, no query parameters, regex match against:</t>
-          <figure>
-            <artwork><![CDATA[
+            <sourcecode type="json" name="regex-match-no-query-param"><![CDATA[
 "^(https:\/\/video\.example\.com)\/([a-z])\/
  movie1\/([1-7])\/*(index.m3u8|\d{3}.ts)$"
-         ]]></artwork>
-          </figure>
+         ]]></sourcecode>
 
-          <figure>
-            <artwork><![CDATA[
+            <sourcecode type="json" name="regex-match-2"><![CDATA[
 {
   "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\\/movie1\
            \/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
   "case-sensitive": true,
   "match-query-string": false
 }
-
-         ]]></artwork>
-          </figure>
+         ]]></sourcecode>
 
           <t>This regex matches URLs of the domain "video.example.com" where the path structure is
              /(single lower case letter)/(name-of-title)/(single digit between 1 to 7)/(index.m3u8 or a 3 digit number with ts extension).
              For example:</t>
-          <figure>
-            <artwork><![CDATA[
+            <sourcecode type="json" name="regex-match-3"><![CDATA[
 https://video.example.com/d/movie1/5/index.m3u8
 or
 https://video.example.com/k/movie1/4/013.ts
-         ]]></artwork>
-          </figure>
+         ]]></sourcecode>
         </section>
    </section>
 
@@ -2946,8 +2939,7 @@ https://video.example.com/k/movie1/4/013.ts
            object that allows the trigger execution in the US but blocks its execution in Canada:
         </t>
 
-        <figure>
-          <artwork><![CDATA[
+          <sourcecode type="json" name="trigger-extension-json"><![CDATA[
 {
    "generic-trigger-extension-type": "location-policy",
    "generic-trigger-extension-value":
@@ -2977,8 +2969,7 @@ https://video.example.com/k/movie1/4/013.ts
    "safe-to-redistribute": true,
    "incomprehensible": false
 }
-       ]]></artwork>
-        </figure>
+       ]]></sourcecode>
       </section>
 
       <section anchor="time-policy" title="TimePolicy Extension">
@@ -3046,8 +3037,7 @@ https://video.example.com/k/movie1/4/013.ts
            the "unix-time-window" property:
         </t>
 
-        <figure>
-          <artwork><![CDATA[
+          <sourcecode type="json" name="genric-trigger-extension-time-policy"><![CDATA[
 {
    "generic-trigger-extension-type": "time-policy",
    "generic-trigger-extension-value":
@@ -3061,8 +3051,7 @@ https://video.example.com/k/movie1/4/013.ts
    "safe-to-redistribute": true,
    "incomprehensible": false
 }
-       ]]></artwork>
-       </figure>
+       ]]></sourcecode>
 
 	<section anchor="utc-window" title="UTCWindow">
         <t>
@@ -3099,28 +3088,24 @@ https://video.example.com/k/movie1/4/013.ts
            01/01/2000 UTC to 04:30 01/01/2000 UTC:
         </t>
 
-         <figure>
-            <artwork><![CDATA[
+            <sourcecode type="json" name="utcwindow-object"><![CDATA[
 {
   "start": "2000-01-01T02:30:00.00Z",
   "end": "2000-01-01T04:30:00.00Z"
 }
-         ]]></artwork>
-          </figure>
+         ]]></sourcecode>
 
          <t>
            Example JSON serialized UTCWindow object that describes a time window in New York time zone offset
            UTC-05:00 from 02:30 01/01/2000 to 04:30 01/01/2000:
          </t>
 
-         <figure>
-            <artwork><![CDATA[
+            <sourcecode type="json" name="utcwindow-object-2"><![CDATA[
 {
   "start": "2000-01-01T02:30:00.00-05:00",
   "end": "2000-01-01T04:30:00.00-05:00"
 }
-         ]]></artwork>
-          </figure>
+         ]]></sourcecode>
         </section>
 	</section>
 	<section anchor="execution-policy" title="ExecutionPolicy Extension">
@@ -3240,8 +3225,7 @@ https://video.example.com/k/movie1/4/013.ts
 
 	<t>
 		The following is an example of a JSON serialized generic extension trigger object containing an execution policy object that specifies trigger priority of 100, marks Trigger Command as urgent and makes the Trigger Command execution dependent on the completion of the previous Trigger Commands:
-        <figure>
-		<artwork><![CDATA[
+		<sourcecode type="json" name="extension-execution-policy"><![CDATA[
 {
   “generic-trigger-extension-type”: “execution-policy”,
   “generic-trigger-extension-value”:
@@ -3254,8 +3238,7 @@ https://video.example.com/k/movie1/4/013.ts
     “urgent”: true
   }
 }
-       ]]></artwork>
-        </figure>
+       ]]></sourcecode>
 	</t>
 
 
@@ -3331,7 +3314,7 @@ https://video.example.com/k/movie1/4/013.ts
              versions 2 and 2.1 of the CI/T interface.
           </t>
 
-          <figure><artwork><![CDATA[
+          <sourcecode type="json" name="fci-endpoints"><![CDATA[
 {
   "capabilities": [
     {
@@ -3356,7 +3339,7 @@ https://video.example.com/k/movie1/4/013.ts
     }
   ]
 }
-	]]></artwork></figure>
+	      ]]></sourcecode>
         </section>
       </section>
 
@@ -3433,8 +3416,7 @@ https://video.example.com/k/movie1/4/013.ts
 		is not supported, and no actions involving metadata are supported either.
           	</t>
 
-          	<figure><artwork><![CDATA[
-
+          	<sourcecode type="json" name="fci-citscope"><![CDATA[
 {
  "capabilities": [
    {
@@ -3460,7 +3442,7 @@ https://video.example.com/k/movie1/4/013.ts
    }
  ]
 }
-        ]]></artwork></figure>
+      ]]></sourcecode>
         	</section>
       	</section>
 
@@ -3492,8 +3474,7 @@ https://video.example.com/k/movie1/4/013.ts
 		for a dCDN that supports "hls" and "dash".
           	</t>
 
-          	<figure><artwork><![CDATA[
-
+          	<sourcecode type="json" name="cit-object-list-json"><![CDATA[
 {
  "capabilities": [
    {
@@ -3505,7 +3486,7 @@ https://video.example.com/k/movie1/4/013.ts
    }
  ]
 }
-        ]]></artwork></figure>
+        ]]></sourcecode>
         	</section>
       	</section>
 
@@ -3536,8 +3517,7 @@ https://video.example.com/k/movie1/4/013.ts
 		for a dCDN that supports the private URL type in URL-based trigger spec types.
           	</t>
 
-          	<figure><artwork><![CDATA[
-
+          	<sourcecode type="json" name="cit-private-url-json"><![CDATA[
 {
  "capabilities": [
    {
@@ -3549,7 +3529,7 @@ https://video.example.com/k/movie1/4/013.ts
    }
  ]
 }
-        ]]></artwork></figure>
+        ]]></sourcecode>
         	</section>
 	</section>
 
@@ -3588,8 +3568,7 @@ https://video.example.com/k/movie1/4/013.ts
 		for a dCDN that supports extended status in Trigger Status, Error.v2 Description and Trigger Collections objects.
           	</t>
 
-          	<figure><artwork><![CDATA[
-
+          	<sourcecode type="json" name="fci-citextendedstatus"><![CDATA[
 {
  "capabilities": [
    {
@@ -3605,7 +3584,7 @@ https://video.example.com/k/movie1/4/013.ts
    }
  ]
 }
-        ]]></artwork></figure>
+        ]]></sourcecode>
         	</section>
 	</section>
     </section>
@@ -4937,6 +4916,18 @@ RESPONSE:
           <title>ECMA-404 - The JSON data interchange syntax</title>
           <author>
              <organization>ECMA International</organization>
+          </author>
+          <date month="12" year="2017"/>
+        </front>
+        <seriesInfo name="Edition" value="2"/>
+      </reference>
+
+
+      <reference anchor="REST" target="">
+        <front>
+          <title>Representational State Transfer (REST)</title>
+	  <author initials="R.T." surname="Fielding" fullname="R.T.Fielding">
+		<organization/>
           </author>
           <date month="12" year="2017"/>
         </front>
