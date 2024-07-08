@@ -237,7 +237,7 @@
    requests originating from uCDN.</t>
 
 	<t>
-	Two of CI/T Commands exist: CI/T Create Trigger Command and CI/T Modify Trigger Command.
+	There are two types of CI/T Command: CI/T Create Trigger Command and CI/T Modify Trigger Command.
 	The CI/T Modify Command can be used to request cancellation and/or modification of an earlier CI/T Trigger Command. </t>
 
    	<t>A CI/T Trigger Action is of one of the following:</t>
@@ -291,7 +291,7 @@
    </t>
    
    <t> Note that the version of the CI/T Command objects POSTed by uCDN MUST match the version of CI/T Status Resource objects generated and reported by dCDN. Thus, sending a <xref target="RFC8007"/> "ci-trigger-command" object as the command generates a 
-   "ci-trigger-status" structured resource to be reported, while sending a "ci-trigger-command.trigger.v2" object generates a "ci-trigger-status.v2" object.</t>
+   "ci-trigger-status" structured resource to be reported, while sending a "ci-trigger-command.create.v2" object generates a "ci-trigger-status.v2" object.</t>
 
 	<t>
    In addition to the collection of all Trigger Status Resources for the
@@ -2238,7 +2238,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 	<t>
    The following Error Codes are defined by this document and MUST be
-   supported by an implementation of the CI/T interface utilizing the ci-trigger-command.trigger.v2 and the ci-trigger-status.v2 objects.</t>
+			supported by an implementation of the CI/T v2 interface:</t>
 
 	<texttable style="full">
 	<ttcol align="left"> Error Code</ttcol>
@@ -3623,7 +3623,7 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   Content-Length: 352
 
   {
@@ -3716,7 +3716,7 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   Content-Length: 387
 
   {
@@ -3815,7 +3815,7 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: triggers.dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   {
     "trigger": {
       "action": "invalidate",
@@ -3889,7 +3889,7 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: triggers.dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   {
     "trigger": {
       "action": "preposition",
@@ -4359,7 +4359,7 @@ REQUEST:
   User-Agent: example-user-agent/0.1
   Host: triggers.dcdn.example.com
   Accept: */*
-  Content-Type: application/cdni; ptype=ci-trigger-command.trigger.v2
+  Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
   {
     "trigger": {
       "action": "preposition",
@@ -4531,9 +4531,9 @@ RESPONSE:
 
 	<texttable style="full"><ttcol align="left"> Payload Type</ttcol>
 	<ttcol align="left"> Specification</ttcol>
-   <c>ci-trigger-command.trigger.v2</c>
+   <c>ci-trigger-command.create.v2</c>
    <c>RFCthis</c>
-   <c>ci-trigger-command.cancel</c>
+   <c>ci-trigger-command.modify.v2</c>
    <c>RFCthis</c>
    <c>ci-trigger-status.v2</c>
    <c>RFCthis</c>
