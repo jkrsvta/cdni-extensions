@@ -4552,14 +4552,14 @@ RESPONSE:
         number for this document.]</t>
 
          <section anchor="IANA.CDNI.payload.ci-trigger-command.create.v2" title="CDNI ci-trigger-command.create.v2 Payload Type">
-          <t>Purpose: The purpose of this payload type is to distinguish version 2 of the CI/T trigger command object
+          <t>Purpose: The purpose of this payload type is to distinguish of the CI/T v2 create trigger command object
             (and any associated capability advertisement)</t>
           <t>Interface: CI/T</t>
           <t>Encoding: see <xref target="cit-trigger-create-command"/></t>
         </section>
 		
 		<section anchor="IANA.CDNI.payload.ci-trigger-command.modify.v2" title="CDNI ci-trigger-command.modify.v2 Payload Type">
-          <t>Purpose: The purpose of this payload type is to distinguish the CI/T modify command object
+          <t>Purpose: The purpose of this payload type is to distinguish the CI/T v2 modify trigger command object
             (and any associated capability advertisement)</t>
           <t>Interface: CI/T</t>
           <t>Encoding: see <xref target="cit-trigger-modify-command"/></t>
