@@ -315,7 +315,8 @@
    status of that activity. Only successful triggering is shown.
    Examples of the messages are shown in <xref target="examples"/>.</t>
 
-   <figure title="Basic CDNI Message Flow for Triggers" anchor="ure-basic-cdni-message-flow-for-triggers"><artwork><![CDATA[
+   <figure title="Basic CDNI Message Flow for Triggers" anchor="ure-basic-cdni-message-flow-for-triggers">
+   <artwork><![CDATA[
    uCDN                                                   dCDN
     |    (1) POST https://dcdn.example.com/triggers/uCDN    |
    [ ] --------------------------------------------------> [ ]--+
@@ -2146,11 +2147,16 @@ uCDN-A                         dCDN-B                         dCDN-C
     {
       "trigger-subject": "content",
       "generic-trigger-spec-type": "content-objectlist",
-      "generic-trigger-spec-value": 
-	  { "href": "https://www.example.com/hls/title/index.m3u8", "type": "hls" }
+      "generic-trigger-spec-value": {
+        "href": "https://www.example.com/hls/title/index.m3u8",
+        "type": "hls"
+      }
     }
   ],
-  "objects": { "href": "https://dcdn.com/triggers/2a544cd9/objects", "type": "json" },
+  "objects": {
+    "href": "https://dcdn.com/triggers/2a544cd9/objects",
+    "type": "json"
+  },
   "cdn": "AS64500:0"
 }
          ]]></sourcecode>
@@ -2158,7 +2164,7 @@ uCDN-A                         dCDN-B                         dCDN-C
           <t>Example of a JSON serialized Error.v2 Description object reporting an unsupported extension object:
           </t>
 
-	  <sourcecode type="json" name="Error.v2 Description unsupported extension"><![CDATA[
+<sourcecode type="json" name="Error.v2 Description unsupported extension"><![CDATA[
 {
   "errors": [
     {
@@ -2362,21 +2368,40 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
    <t>ObjectList is encoded as an array of per-object records in JSON format as follows:</t>
    <t>External HLS manifest:</t>
    <sourcecode type="json" name="external-hls-manifest"><![CDATA[
-[ { "href": "https://example.com/hls/a36f764e/index.m3u8", "type": "hls" } ]
+[
+  {
+    "href": "https://example.com/hls/a36f764e/index.m3u8",
+    "type": "hls"
+  }
+]
 ]]></sourcecode>
 
    <t>External object list in text format:</t>
    <sourcecode type="json" name="external-object-list"><![CDATA[ 
-[ { "href": "https://example.com/hls/35cdc008/assets", "type": "text" } ]
+[
+  {
+    "href": "https://example.com/hls/35cdc008/assets",
+    "type": "text"
+  }
+]
 ]]></sourcecode>
 
 
    <t>List of external manifests and objects of mixed types:</t>
    <sourcecode type="json" name="external-manifests-and-objects"><![CDATA[
 [
-  { "href": "https://example.com/hls/35cdc008/index.m3u8" , "type": "hls"  },
-  { "href": "https://example.com/dash/35cdc008/main.mpd"  , "type": "dash" },
-  { "href": "https://example.com/dash/35cdc008/files.json", "type": "json" }
+  {
+    "href": "https://example.com/hls/35cdc008/index.m3u8",
+    "type": "hls"
+  },
+  {
+    "href": "https://example.com/dash/35cdc008/main.mpd",
+    "type": "dash"
+  },
+  {
+    "href": "https://example.com/dash/35cdc008/files.json",
+    "type": "json"
+  }
 ]
 ]]></sourcecode>
 
@@ -2385,10 +2410,22 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
 [
   {
     "data": [
-      { "href": "https://example.com/hls/35cdc008/index.m3u8", "type": "hls" },
-      { "href": "https://example.com/dash/35cdc008/main.mpd", "type": "dash" },
-      { "href": "https://example.com/img/35cdc008/thumb-l.jpg", "size": 10260 },
-      { "href": "https://example.com/img/35cdc008/thumb-s.jpg", "size":  1453 }
+      {
+        "href": "https://example.com/hls/35cdc008/index.m3u8",
+        "type": "hls"
+      },
+      {
+        "href": "https://example.com/dash/35cdc008/main.mpd",
+        "type": "dash"
+      },
+      {
+        "href": "https://example.com/img/35cdc008/thumb-l.jpg",
+        "size": 10260
+      },
+      {
+        "href": "https://example.com/img/35cdc008/thumb-s.jpg",
+        "size": 1453
+      }
     ],
     "type": "json"
   }
@@ -2396,11 +2433,27 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
 ]]></sourcecode>
 
    <t>Embedded HLS manifest:</t>
+   <t>Please note that some lines in the example are wrapped for clarity.</t>
    <sourcecode type="json" name="embedded-hls-manifest"><![CDATA[
 [
   {
-    "data": "#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=150000,RESOLUTION=416x234,CODECS=\"avc1.42e00a,mp4a.40.2\"\nhttp://example.com/low/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=240000,RESOLUTION=416x234,CODECS=\"avc1.42e00a,mp4a.40.2\"\nhttp://example.com/lo_mid/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=440000,RESOLUTION=416x234,CODECS=\"avc1.42e00a,mp4a.40.2\"\nhttp://example.com/hi_mid/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=640000,RESOLUTION=640x360,CODECS=\"avc1.42e00a,mp4a.40.2\"\nhttp://example.com/high/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=64000,CODECS=\"mp4a.40.5\"\nhttp://example.com/high/index.m3u8\n",
-    "type": "hls"
+  "data": "#EXTM3U\n
+  #EXT-X-STREAM-INF:BANDWIDTH=150000,RESOLUTION=416x234,
+            CODECS=\"avc1.42e00a,mp4a.40.2\"\n
+  http://example.com/low/index.m3u8\n
+  #EXT-X-STREAM-INF:BANDWIDTH=240000,RESOLUTION=416x234,
+            CODECS=\"avc1.42e00a,mp4a.40.2\"\n
+  http://example.com/lo_mid/index.m3u8\n
+  #EXT-X-STREAM-INF:BANDWIDTH=440000,RESOLUTION=416x234,
+            CODECS=\"avc1.42e00a,mp4a.40.2\"\n
+  http://example.com/hi_mid/index.m3u8\n
+  #EXT-X-STREAM-INF:BANDWIDTH=640000,RESOLUTION=640x360,
+            CODECS=\"avc1.42e00a,mp4a.40.2\"\n
+  http://example.com/high/index.m3u8\n
+  #EXT-X-STREAM-INF:BANDWIDTH=64000,
+            CODECS=\"mp4a.40.5\"\n
+  http://example.com/high/index.m3u8\n",
+  "type": "hls"
   }
 ]
 ]]></sourcecode>
@@ -2501,12 +2554,24 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
    </t>
    <t>
         The following is an example of JSON serialized ObjectEntry objects:
-        <sourcecode type="json" name="objectentry-json"><![CDATA[
+<sourcecode type="json" name="objectentry-json"><![CDATA[
 [
-  { "href": "https://example.com/hls/35cdc008/index.m3u8", "type": "hls" },
-  { "href": "https://example.com/dash/35cdc008/main.mpd", "type": "dash" },
-  { "href": "https://example.com/img/35cdc008/thumb-l.jpg", "size": 102600 },
-  { "href": "https://example.com/img/35cdc008/thumb-s.jpg", "size":  14535 }
+  {
+    "href": "https://example.com/hls/35cdc008/index.m3u8",
+    "type": "hls"
+  },
+  {
+    "href": "https://example.com/dash/35cdc008/main.mpd",
+    "type": "dash"
+  },
+  {
+    "href": "https://example.com/img/35cdc008/thumb-l.jpg",
+    "size": 102600
+  },
+  {
+    "href": "https://example.com/img/35cdc008/thumb-s.jpg",
+    "size": 14535
+  }
 ]
 ]]></sourcecode>
    </t>
@@ -2599,7 +2664,7 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
         <t>Below is an example of a JSON serialized URLs spec object, matching the metadata at 
         metadata.example.com/a/b/c.
         </t>
-	<sourcecode type="json" name="urls-spec-json"><![CDATA[
+<sourcecode type="json" name="urls-spec-json"><![CDATA[
 {
   "trigger-subject": "metadata",
   "generic-trigger-spec-type": "urls",
@@ -2704,7 +2769,10 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
    <t>Example of case-sensitive prefix match against "https://www.example.com/trailers/":</t>
 <sourcecode type="json" name="prefix-match">
 <![CDATA[
-{ "pattern": "https://www.example.com/trailers/*", "case-sensitive": true }
+{
+  "pattern": "https://www.example.com/trailers/*",
+  "case-sensitive": true
+}
 ]]></sourcecode>
    </section>
 </section>
@@ -2886,7 +2954,7 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
         <t>The following is an example of a JSON serialized generic trigger extension object containing a location policy
            object that allows the trigger execution in the US but blocks its execution in Canada:
         </t>
-        <sourcecode type="json" name="trigger-extension-json"><![CDATA[
+<sourcecode type="json" name="trigger-extension-json"><![CDATA[
 {
   "generic-trigger-extension-type": "location-policy",
   "generic-trigger-extension-value": {
@@ -2894,13 +2962,19 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
       {
         "action": "allow",
         "footprints": [
-          { "footprint-type": "countrycode", "footprint-value": [ "us" ] }
+          {
+            "footprint-type": "countrycode",
+            "footprint-value": [ "us" ]
+          }
         ]
       },
       {
         "action": "deny",
         "footprints": [
-          { "footprint-type": "countrycode", "footprint-value": [ "ca" ] }
+          {
+            "footprint-type": "countrycode",
+            "footprint-value": [ "ca" ]
+          }
         ]
       }
     ]
@@ -3251,13 +3325,15 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
              The following shows an example of CI/T Endpoints Capability object serialization for dCDN that supports
              versions 2 and 2.1 of the CI/T interface.
           </t>
-	  <sourcecode type="json" name="fci-endpoints"><![CDATA[
+<sourcecode type="json" name="fci-endpoints"><![CDATA[
+
 {
   "capabilities": [
     {
       "capability-type": "FCI.CITEndpoints",
       "capability-value": {
-        "trigger-endpoint-uri": "https://dcdn.example.com/configuration/",
+        "trigger-endpoint-uri": 
+          "https://dcdn.example.com/configuration/",
         "trigger-versions": [ "1" ],
         "trigger-subjects": "metadata"
       },
@@ -3269,7 +3345,8 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
     {
       "capability-type": "FCI.CITEndpoints",
       "capability-value": {
-        "trigger-endpoint-uri": "https://dcdn.example.com/cache-management/",
+        "trigger-endpoint-uri": 
+          "https://dcdn.example.com/cache-management/",
         "trigger-versions": [ "2", "2.1" ],
         "trigger-subjects": "content"
       },
@@ -3356,7 +3433,7 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
                 Generic Spec types, with "time-policy" but only for the "preposition" action. Note that in this example, purge 
       is not supported, and no actions involving metadata are supported either.
              </t>
-	     <sourcecode type="json" name="fci-citscope"><![CDATA[
+<sourcecode type="json" name="fci-citscope"><![CDATA[
 {
   "capabilities": [
     {
@@ -3414,7 +3491,7 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
                 The following shows an example of a JSON serialized CI/T Object List Type Capability object serialization
       for dCDN that supports "hls" and "dash".
              </t>
-	     <sourcecode type="json" name="cit-object-list-json"><![CDATA[
+<sourcecode type="json" name="cit-object-list-json"><![CDATA[
 {
   "capabilities": [
     {
@@ -3460,7 +3537,7 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
       for dCDN that supports the private URL type in URL-based trigger spec types.
              </t>
 
-	     <sourcecode type="json" name="cit-private-url-json"><![CDATA[
+<sourcecode type="json" name="cit-private-url-json"><![CDATA[
 {
   "capabilities": [
     {
@@ -3512,7 +3589,7 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
       for dCDN that supports extended status in Trigger Status, Error.v2 Description and Trigger Collections objects.
              </t>
 
-	     <sourcecode type="json" name="fci-citextendedstatus"><![CDATA[
+<sourcecode type="json" name="fci-citextendedstatus"><![CDATA[
 {
   "capabilities": [
     {
@@ -3748,7 +3825,7 @@ RESPONSE:
           <t>
             In the following example, a CI/T "invalidate" command uses the Regex property to specify the range of
             content objects for invalidation, the command is rejected by dCDN due to regex complexity, and
-	    an appropriate error is reflected in the status response.
+            an appropriate error is reflected in the status response.
           </t>
           <t>Please note that some lines in the example are wrapped for clarity.</t>
 
@@ -3770,7 +3847,8 @@ REQUEST:
           "trigger-subject": "content",
           "generic-trigger-spec-type": "uri-regex-match",
           "generic-trigger-spec-value": {
-            "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+            "regex": "^(https:\\/\\/video\\.example\\.com)\\/
+              ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
             "case-sensitive": true,
             "match-query-string": false
           }
@@ -3797,7 +3875,8 @@ RESPONSE:
             "trigger-subject": "content",
             "generic-trigger-spec-type": "uri-regex-match",
             "generic-trigger-spec-value": {
-              "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+            "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
+              \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
               "case-sensitive": true,
               "match-query-string": false
             }
@@ -3819,7 +3898,8 @@ RESPONSE:
           "trigger-subject": "content",
           "generic-trigger-spec-type": "uri-regex-match",
           "generic-trigger-spec-value": {
-            "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+            "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
+              \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
             "case-sensitive": true,
             "match-query-string": false
           }
@@ -3946,27 +4026,54 @@ RESPONSE:
   Date: Wed, 04 May 2016 08:48:11 GMT
   Content-Type: application/cdni; ptype=ci-trigger-collection
 
-  {
-    "cdn-id": "AS64496:0",
-    "coll-status": [
-      { "status": "pending"   , "collection": "/triggers/pending"    },
-      { "status": "active"    , "collection": "/triggers/active"     },
-      { "status": "complete"  , "collection": "/triggers/complete"   },
-      { "status": "processed" , "collection": "/triggers/processed"  },
-      { "status": "failed"    , "collection": "/triggers/failed"     },
-      { "status": "cancelling", "collection": "/triggers/cancelling" },
-      { "status": "cancelled" , "collection": "/triggers/cancelled"  }
-    ],
-    "coll-label": [
-      { "label": "1b1bad0c", "collection": "/triggers/1b1bad0c" },
-      { "label": "fafa9a97", "collection": "/triggers/fafa9a97" }
-    ],
-    "staleresourcetime": 86400,
-    "triggers": [
-      "https://dcdn.example.com/triggers/0",
-      "https://dcdn.example.com/triggers/1"
-    ]
-  }
+{
+  "cdn-id": "AS64496:0",
+  "coll-status": [
+    {
+      "status"    : "pending"          ,
+      "collection": "/triggers/pending"
+    },
+    {
+      "status"    : "active"          ,
+      "collection": "/triggers/active"
+    },
+    {
+      "status"    : "complete"          ,
+      "collection": "/triggers/complete"
+    },
+    {
+      "status"    : "processed"          ,
+      "collection": "/triggers/processed"
+    },
+    {
+      "status"    : "failed"          ,
+      "collection": "/triggers/failed"
+    },
+    {
+      "status"    : "cancelling"          ,
+      "collection": "/triggers/cancelling"
+    },
+    {
+      "status"    : "cancelled"          ,
+      "collection": "/triggers/cancelled"
+    }
+  ],
+  "coll-label": [
+    {
+      "label"     : "1b1bad0c"          ,
+      "collection": "/triggers/1b1bad0c"
+    },
+    {
+      "label"     : "fafa9a97"          ,
+      "collection": "/triggers/fafa9a97"
+    }
+  ],
+  "staleresourcetime": 86400,
+  "triggers": [
+    "https://dcdn.example.com/triggers/0",
+    "https://dcdn.example.com/triggers/1"
+  ]
+}
 ]]></artwork>
    </figure>
    </section>
@@ -4109,8 +4216,8 @@ RESPONSE:
   Cache-Control: max-age=60
   Date: Wed, 04 May 2016 08:48:11 GMT
   Content-Type: application/cdni; ptype=ci-trigger-status.v2
-	   
-  {
+  
+  {  
     "ctime": 1462351691,
     "etime": 1462351699,
     "mtime": 1462351691,
@@ -4367,7 +4474,10 @@ REQUEST:
         {
           "generic-trigger-extension-type": "time-policy",
           "generic-trigger-extension-value": {
-            "unix-time-window": { "start": 946717200, "end": 946746000 }
+            "unix-time-window": { 
+              "start": 946717200, 
+              "end": 946746000 
+            }   
           },
           "mandatory-to-enforce": true,
           "safe-to-redistribute": true
@@ -4385,7 +4495,7 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-status.v2
   Location: https://triggers.dcdn.example.com/triggers/0
   Server: example-server/0.1
-  
+
   {
     "errors": [
       {
@@ -4427,7 +4537,10 @@ RESPONSE:
           {
             "generic-trigger-extension-type": "time-policy",
             "generic-trigger-extension-value": {
-              "unix-time-window": { "start": 946717200, "end": 946746000 }
+              "unix-time-window": {
+                "start": 946717200,
+                "end"  : 946746000
+              }
             },
             "mandatory-to-enforce": true,
             "safe-to-redistribute": true
@@ -4485,7 +4598,10 @@ RESPONSE:
         {
           "generic-trigger-extension-type": "time-policy",
           "generic-trigger-extension-value": {
-            "unix-time-window": { "start": 946717200, "end": 946746000 }
+            "unix-time-window": {
+              "start": 946717200,
+              "end"  : 946746000
+            }
           },
           "mandatory-to-enforce": true,
           "safe-to-redistribute": true
