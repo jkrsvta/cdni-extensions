@@ -2184,7 +2184,7 @@ uCDN-A                         dCDN-B                         dCDN-C
       ],
       "extensions": [
         {
-          "generic-trigger-extension-type": "locaton-policy",
+          "generic-trigger-extension-type": "location-policy",
           "generic-trigger-extension-value": {
             "locations": [
               {
