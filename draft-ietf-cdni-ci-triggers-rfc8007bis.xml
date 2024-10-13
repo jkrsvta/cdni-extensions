@@ -4030,41 +4030,41 @@ RESPONSE:
   "cdn-id": "AS64496:0",
   "coll-status": [
     {
-      "status"    : "pending"          ,
+      "status"    : "pending",
       "collection": "/triggers/pending"
     },
     {
-      "status"    : "active"          ,
+      "status"    : "active",
       "collection": "/triggers/active"
     },
     {
-      "status"    : "complete"          ,
+      "status"    : "complete",
       "collection": "/triggers/complete"
     },
     {
-      "status"    : "processed"          ,
+      "status"    : "processed",
       "collection": "/triggers/processed"
     },
     {
-      "status"    : "failed"          ,
+      "status"    : "failed",
       "collection": "/triggers/failed"
     },
     {
-      "status"    : "cancelling"          ,
+      "status"    : "cancelling",
       "collection": "/triggers/cancelling"
     },
     {
-      "status"    : "cancelled"          ,
+      "status"    : "cancelled",
       "collection": "/triggers/cancelled"
     }
   ],
   "coll-label": [
     {
-      "label"     : "1b1bad0c"          ,
+      "label"     : "1b1bad0c", 
       "collection": "/triggers/1b1bad0c"
     },
     {
-      "label"     : "fafa9a97"          ,
+      "label"     : "fafa9a97",
       "collection": "/triggers/fafa9a97"
     }
   ],
@@ -4539,7 +4539,7 @@ RESPONSE:
             "generic-trigger-extension-value": {
               "unix-time-window": {
                 "start": 946717200,
-                "end"  : 946746000
+                "end": 946746000
               }
             },
             "mandatory-to-enforce": true,
@@ -4600,7 +4600,7 @@ RESPONSE:
           "generic-trigger-extension-value": {
             "unix-time-window": {
               "start": 946717200,
-              "end"  : 946746000
+              "end": 946746000
             }
           },
           "mandatory-to-enforce": true,
