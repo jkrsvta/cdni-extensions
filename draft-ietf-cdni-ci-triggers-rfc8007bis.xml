@@ -248,23 +248,22 @@
 	uCDN, in its capacity of a CI/T interface client, makes a request to dCDN to carry out an action ("trigger")
 	related to metadata or content stored by dCDN on behalf of uCDN.  
 	</t>
-	<t>The CI/T interface supports the following types of action::</t>
-
-	<t>
-		<list style="symbols">
-		<t>preposition - used to instruct dCDN to fetch metadata from the uCDN or content from any origin including uCDN.</t>
-   		<t>invalidate - used to instruct dCDN to revalidate specific metadata or content before reusing it.</t>
-		<t>purge - used to instruct dCDN to delete specific metadata or content.</t>
-   		</list>
-   	</t>
-   	<t> Note that additional action types can be defined and registered in the future. </t>
-
 	<t>
 	dCDN, as a CI/T interface server,  governs the triggers as a set of resources, which can be dynamically created 
 	and deleted, and whose state can be retrieved and/or modified by uCDN.  
 	Each such trigger is identified by a unique Uniform Resource Identifier (URI) 
 	is defined in Section 4.2 of <xref target="RFC9110"/>.
 	</t>
+	<t>The CI/T interface supports the following types of action::</t>
+
+	<t>
+		<list style="symbols">
+		<t>"preposition" - used to instruct dCDN to fetch metadata fr om the uCDN or content from any origin including uCDN.</t>
+   		<t>"invalidate" - used to instruct dCDN to revalidate specific metadata or content object(s) before reusing them.</t>
+		<t>"purge" - used to instruct dCDN to delete specific metadata or content object(s).</t>
+   		</list>
+   	</t>
+   	<t> Note that additional action types can be defined and registered in the future. </t>
 
 	<t>
 	Once a trigger is created, uCDN can retrieve its trigger state from dCDN or request its state to be modified by 
@@ -304,15 +303,15 @@
 	</list>
    </section>
 
-   <section title="Trigger Resource" anchor="model-for-cdni-triggers-trigger">
+   <section title="Trigger resource" anchor="model-for-cdni-triggers-trigger">
 	<t>
 		To request that an action be carried by dCDN, uCDN requests to create a trigger resource. 
-		If dCDN accepts the request, it creates a new Trigger Resource and returns its unique URI to uCDN.
-		uCDN MUST use this URI for all requests associated with the created Trigger Resource.
+		If dCDN accepts the request, it creates a new Trigger resource and returns its unique URI to uCDN.
+		uCDN MUST use this URI for all requests associated with the created Trigger resource.
 	</t>
-	<t>	uCDN can only access Trigger Resources it created. </t>
+	<t>	uCDN can only access Trigger resources it created. </t>
    	<t> 
-		Note that the version of the Trigger Resources that uCDN requests to create MUST match the version 
+		Note that the version of the Trigger resources that uCDN requests to create MUST match the version 
 		of CI/T Trigger objects reported as supported by dCDN. 
    	</t>
 
@@ -339,7 +338,7 @@
 		"cancelling", and when the cancellation is complete, the trigger state changes to "cancelled".
 	</t>	
 	<t> 	
-		For full description of the Trigger Resource, please refer to <xref target="trigger-specification"/>.
+		For full description of the Trigger resource, please refer to <xref target="trigger-specification"/>.
 	</t>
 
    </section>
@@ -351,7 +350,7 @@
 
 		dCDN supports retrieval of multiple representation of the trigger collection resource.
 		The supported trigger collection representations are listed in 
-		<xref target="collections-of-trigger-status-resources"/>, and include filtering of Trigger Resourcs by
+		<xref target="collections-of-trigger-status-resources"/>, and include filtering of Trigger resources by
 		Trigger State and Trigger Label attributes.
 		Note that additional trigger collection representations can be defined and registered in the future. 
 	</t>	
@@ -383,7 +382,7 @@
     | (4) GET https://dcdn.example.com/triggers/uCDN/123    |
    [ ] --------------------------------------------------> [ ]
     |                                                      [ ]
-    | (5) HTTP 200 Trigger Status Resource                 [ ]
+    | (5) HTTP 200 Trigger resource representation         [ ]
    [ ] <-------------------------------------------------- [ ]
     |                                                       |
     |                                                       |
@@ -400,31 +399,31 @@
    <t>
    <list style="numbers">
 	<t>	
-		uCDN requests to create a new Trigger Resource by POSTing its representation to
+		uCDN requests to create a new Trigger resource by POSTing its representation to
 		the trigger collection resource with a well-known URI "https://dcdn.example.com/triggers/uCDN". 
        .</t>
    	<t>
-		dCDN authenticates the request, validates the Trigger Resource in it, and if the request is accepted,
-		creates a new Trigger Resource.
+		dCDN authenticates the request, validates the Trigger resource in it, and if the request is accepted,
+		creates a new Trigger resource.
 	</t>
 	<t>
-		dCDN responds to uCDN with an HTTP 201 response status and the location of the Trigger Resource.
-	</t>
-
-	<t>
-		uCDN MAY query, possibly repeatedly, the Trigger Resource in dCDN.
+		dCDN responds to uCDN with an HTTP 201 response status and the location of the Trigger resource.
 	</t>
 
 	<t>
-		dCDN responds to each query with the current Trigger Resource representation, including the trigger state, 
+		uCDN MAY query, possibly repeatedly, the Trigger resource in dCDN.
+	</t>
+
+	<t>
+		dCDN responds to each query with the current Trigger resource representation, including the trigger state, 
 		that reflects the progress of the uCDN request.
 	</t>
 	<t>
 		Once the trigger reaches a terminal state ("complete", "failed" or "cancelled"), uCDN MAY request to delete
-		Trigger Resource. 
+		Trigger resource. 
 	</t>
 	<t>
-		dCDN validates the request and the Trigger Resource state. If successful, the Trigger Status is removed by the server,
+		dCDN validates the request and the Trigger resource state. If successful, the Trigger Status is removed by the server,
 		and subsequent requests for this resource MUST result in 404 (Not Found).
 	</t>
 	<t>
@@ -434,17 +433,18 @@
    </t>
    </section>
 
-   <section title="Timing and Order of Trigger Processing" anchor="timig-of-trigger-processing">
+   <section title="Trigger Processing" anchor="trigger-processing">
+   <section title="Timing and Order" anchor="timing-of-trigger-processing">
    <t>
    	uCDN MAY place limits on timing and order of execution of a trigger through optional 
-	<xref target="time-policy">TimePolicy</xref> and/or <xref target="execution-policy">Execution Policy</xref> extensions. 
+	<xref target="time-policy">TimePolicy</xref> and/or <xref target="execution-policy">ExecutionPolicy</xref> extensions. 
 	If neither of these extensions are present in the trigger resource, the timing and order 
 	of the trigger execution of CI/T Commands is under dCDN's control, including start time, pacing 
 	of the activity in the network and order in which dCDN chooses to process pending triggers.
    </t>	
    <t>
 	The CI/T "invalidate" and "purge" trigger actions MUST be applied to all data acquired before dCDN begins the trigger 
-	processing (i.e. enters "active" state).. 
+	processing (i.e. enters "active" state).
 	dCDN SHOULD NOT apply CI/T "invalidate" and "purge" actions to data acquired after the trigger processing started, 
 	but this may not always be achievable, so uCDN cannot count on that.
    </t>
@@ -466,7 +466,7 @@
 
    </section>
 
-   <section title="Scope of Trigger Processing" anchor="scope-of-trigger-processing">
+   <section title="Scope" anchor="scope-of-trigger-processing">
   	<t>
    		Each trigger can operate on multiple metadata and content elements, 
    		usually referred to by their URLs. These elements are targeted by specifying
@@ -479,7 +479,22 @@
 		Triggers that invalidate or purge metadata or content apply to all resource representations with matching URLs.
 	</t>
 
-	<section title="Multiple Interconnected CDNs" anchor="multiple-interconnected-cdns">
+   </section>
+   <section title="Results" anchor="results-of-trigger-processing">
+	<t>
+		Possible trigger states are defined in <xref target="trigger-status"/>.
+	</t>
+
+	<t> 
+		Trigger state MUST NOT be reported as "complete" until all operations listed in the trigger have been completed successfully. 
+		The reasons for failure, and URLs or patterns affected, SHOULD be mde available in the trigger state representation. 
+		For more details, see <xref target="error-handling"/>.
+	</t>
+   </section>
+   </section>
+
+
+   <section title="Multiple Interconnected CDNs" anchor="multiple-interconnected-cdns">
 	<t>
    		In a network of interconnected CDNs, a single uCDN will originate a
    		given item of metadata and associated content. It would possibly distribute
@@ -520,63 +535,47 @@
 	</t>
 
 	<t><list style="symbols">
-			<t>When uCDN request to create an "invalidate" trigger, dCDN will
-			receive that request from multiple directly connected uCDNs. The
-			dCDN may schedule multiple such triggers separately, and the last
-			scheduled trigger may affect content already revalidated following
-			execution of the "invalidate" trigger that was scheduled first.</t>
 
-			<t>If one of dCDN's directly connected uCDNs loses its rights to
-			distribute content, it may issue a "purge" trigger. That
-			purge may affect content dCDN could retain because it's
-			distributed by another directly connected uCDN. But, that content
-			can be reacquired by dCDN from the remaining uCDN.</t>
+		<t>When uCDN request to create an "invalidate" trigger, dCDN will
+		receive that request from multiple directly connected uCDNs. The
+		dCDN may schedule multiple such triggers separately, and the last
+		scheduled trigger may affect content already revalidated following
+		execution of the "invalidate" trigger that was scheduled first.</t>
 
-   			<t>When uCDN originating an item of content issues a purge
-			followed by a pre-position, two directly connected uCDNs will pass
-			those triggers to dCDN. That dCDN implementation need not merge
-			those operations or notice the repetition, in which case the purge
-			issued by one uCDN will be completed before the other. The first uCDN
-			to finish its purge may then forward the "preposition" trigger,
-			and content pre-positioned as a result might be affected by the
-			still-running purge issued by the other uCDN. However, dCDN
-			will reacquire that content as needed, or when it's asked to
-			pre-position the content by the second uCDN. dCDN
-			implementation could avoid this interaction by knowing which uCDN
-			it acquired the content from, or it could minimize the
-			consequences by recording the time at which the
-			"invalidate"/"purge" trigger was received and not applying it to
-			content acquired after that time.</t>
+		<t>If one of dCDN's directly connected uCDNs loses its rights to
+		distribute content, it may issue a "purge" trigger. That
+		purge may affect content dCDN could retain because it's
+		distributed by another directly connected uCDN. But, that content
+		can be reacquired by dCDN from the remaining uCDN.</t>
+
+   		<t>When uCDN originating an item of content issues a purge
+		followed by a pre-position, two directly connected uCDNs will pass
+		those triggers to dCDN. That dCDN implementation need not merge
+		those operations or notice the repetition, in which case the purge
+		issued by one uCDN will be completed before the other. The first uCDN
+		to finish its purge may then forward the "preposition" trigger,
+		and content pre-positioned as a result might be affected by the
+		still-running purge issued by the other uCDN. However, dCDN
+		will reacquire that content as needed, or when it's asked to
+		pre-position the content by the second uCDN. dCDN
+		implementation could avoid this interaction by knowing which uCDN
+		it acquired the content from, or it could minimize the
+		consequences by recording the time at which the
+		"invalidate"/"purge" trigger was received and not applying it to
+		content acquired after that time.</t>
 
 	</list></t>
-
+   	<t>
+		If dCDN is also acting as uCDN in a cascade, it MUST forward trigger requestis to any dCDNs that may be affected. 
+		The trigger state NOT be reported as "complete" in a CDN until it is "complete" in all of its dCDNs. 
+		If a trigger is reported as "processed" in any dCDN, intermediate CDNs MUST NOT report "complete". 
+		Instead, they MUST also report the trigger as "processed". 
+		Trigger MAY be reported as "failed" as soon as it fails in a CDN or any of its dCDNs. 
+		A cancelled trigger MUST be reported as "cancelling" until it has been reported as "cancelled",
+		"complete", or "failed" by all dCDNs in a cascade.
+	</t>
    </section>
 
-   </section>
-
-   <section title="Trigger Results" anchor="trigger-results"><t>
-   Possible states for a Trigger Status Resource are defined in
-   <xref target="trigger-status"/>.</t>
-
-   <t>
-   The CI/T Trigger Command MUST NOT be reported as "complete" until all
-   operations have been completed successfully. The reasons for failure,
-   and URLs or patterns affected, SHOULD be enumerated in the Trigger
-   Status Resource. For more details, see <xref target="error-handling"/>.</t>
-
-   <t>
-   If dCDN is also acting as uCDN in a cascade, it MUST forward CI/T
-   Commands to any dCDNs that may be affected. The CI/T Trigger Command
-   MUST NOT be reported as "complete" in a CDN until it is "complete" in
-   all of its dCDNs. If a CI/T Trigger Command is reported as
-   "processed" in any dCDN, intermediate CDNs MUST NOT report
-   "complete"; instead, they MUST also report "processed". A CI/T
-   Command MAY be reported as "failed" as soon as it fails in a CDN or
-   any of its dCDNs. A cancelled CI/T Trigger Command MUST be
-   reported as "cancelling" until it has been reported as "cancelled",
-   "complete", or "failed" by all dCDNs in a cascade.</t>
-
-   </section>
 
    </section>
    
@@ -783,7 +782,7 @@
    <t>
    dCDN MAY provide filtered collections per <xref target="trigger-status">Trigger Status</xref>.
    If implemented, dCDN SHOULD provide a separate filtered collection for every Trigger Status, and
-   advertise these collections in the collection of all Trigger Resources.
+   advertise these collections in the collection of all Trigger resources.
    </t>
    </section>
    <section title="Filtered Collections by Trigger Label" anchor="filtered-collections-by-labels">
@@ -791,7 +790,7 @@
    dCDN MAY provide filtered collections per <xref target="trigger-label">Trigger Label</xref>, 
    as specified by uCDN in <xref target="trigger-v2-specification"/>.
    If implemented, dCDN SHOULD provide a separate filtered collection for every unique Trigger Label, and
-   advertise these collections in the collection of all Trigger Resources.
+   advertise these collections in the collection of all Trigger resources.
    </t>
    </section>
 
@@ -1171,7 +1170,7 @@
    SHOULD use the same CDN PID.</t>
 
    </section>
-        
+
    <section title="Error Handling" anchor="error-handling"><t>
    dCDN can signal rejection of a CI/T Command using HTTP status codes
    -- for example, 400 ("Bad Request") if the request is malformed, or
@@ -1219,9 +1218,8 @@
    </list>
    </t>
    
-
-        <section anchor="error-propagation" title="Error propagation">
-          <t>
+	<section anchor="error-propagation" title="Error propagation">
+	<t>
              This subsection explains the mechanism for enabling uCDN to trace an error back to dCDN in which it occurred.
              CDNI triggers may be propagated over a chain of downstream CDNs. For example, an 
              upstream CDN A (uCDN-A) that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
@@ -1298,63 +1296,63 @@ uCDN-A                         dCDN-B                         dCDN-C
  | Trigger Status Resource     [ ]                             |    
 [ ]<---------------------------[ ]                             |    
          ]]></artwork>
-          </figure>
-          <t>
-          The steps in <xref target="error-propagation-seq"/> are as follows:
-          </t>
-               <t>
-                  <list style="numbers">
-                     <t>
-                        uCDN-A triggers an action in dCDN-B by POSTing a CI/T Command to a collection of
-                        Trigger Status Resources "https://dcdn-b.example.com/triggers/uCDN-A". This URL was given to
-                        uCDN-A when the CI/T interface was established.
-                     </t>
-                     <t>
-                        dCDN-B authenticates the request, validates the CI/T Command, and, if it accepts the request, creates a new Trigger Status Resource.
-                     </t>
-                     <t>
-                        dCDN-B responds to uCDN-A with an HTTP 201 response status
-                        and the location of the Trigger Status Resource.
-                     </t>
-                     <t>
-                        dCDN-B triggers the action in dCDN-C by POSTing a CI/T Command to
-                        a collection of Trigger Status Resources
+	</figure>
+       	<t>
+        	The steps in <xref target="error-propagation-seq"/> are as follows:
+	</t>
+	<t><list style="numbers">
+		<t>
+                       	uCDN-A triggers an action in dCDN-B by POSTing a CI/T Command to a collection of
+			Trigger Status Resources "https://dcdn-b.example.com/triggers/uCDN-A". This URL was given to
+			uCDN-A when the CI/T interface was established.
+		</t>
+		<t>
+			dCDN-B authenticates the request, validates the CI/T Command, and, 
+			if it accepts the request, creates a new Trigger Status Resource.
+		</t>
+ 		<t>
+                       	dCDN-B responds to uCDN-A with an HTTP 201 response status
+                       	and the location of the Trigger Status Resource.
+               	</t>
+               	<t>
+		       	dCDN-B triggers the action in dCDN-C by POSTing a CI/T Command to
+		       	a collection of Trigger Status Resources
                         "https://dcdn-c.example.com/triggers/dCDN-B". This URL was given to
                         dCDN-B when the CI/T interface was established.
-                     </t>
-                     <t>
-                        dCDN-C authenticates the request, validates the CI/T Command,
+		</t>
+                <t>
+                       	dCDN-C authenticates the request, validates the CI/T Command,
                         and, if it accepts the request, creates a new Trigger Status Resource.
-                     </t>
-                     <t>
+                </t>
+                <t>
                         dCDN-C responds to dCDN-B with an HTTP 201 response status and
                         the location of the Trigger Status Resource.
-                     </t>
-                     <t>
+                </t>
+                <t>
                         dCDN-C acts upon the CI/T Command. However, the command fails at dCDN-C as,
                         for example, the Trigger Specification contains an "action type" that is not supported by dCDN-C.
                         dCDN-C's action is depicted by 7.2 in the diagram, while 7.1 shows dCDN-B acting on its own
                         command.
-                     </t>
-                     <t>
+                </t>
+                <t>
                         dCDN-B queries, possibly repeatedly, the Trigger Status Resource in dCDN-C.
-                     </t>
-                     <t>
+                </t>
+                <t>
                         dCDN-C responds with the Trigger Status Resource, describing the progress or results
                         of the CI/T Trigger Command. In the described flow, the returned Status is "failed",
                         with an Error.v2 Description Object holding "eunsupported" Error Code reflecting the status response.
-                     </t>
-                     <t>
+                </t>
+                <t>
                         uCDN-A queries, possibly repeatedly, the Trigger Status Resource in dCDN-B.
-                     </t>
-                     <t>
+                </t>
+                <t>
                         dCDN-B responds with the Trigger Status Resource, describing the progress or results of
                         the CI/T Trigger Command. In the flow described above, the returned Status is "failed",
-                        and the "eunsupported" error received in the trigger status resource from dCDN-C is propagated along with dCDN-C PID
-                by adding it to the errors array in dCDN-B's own status resource to be sent back to the originating uCDN-A.
-                     </t>
-                  </list>
-               </t>
+			and the "eunsupported" error received in the trigger status resource from dCDN-C is propagated 
+			along with dCDN-C PID by adding it to the errors array in dCDN-B's own status resource to be sent back 
+			to the originating uCDN-A.
+                </t>
+	</list> </t>
       </section>
 
    </section>
@@ -3672,7 +3670,7 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
       "capability-type": "FCI.CITExtendedStatus",
       "capability-value": {
         "extended-status-objects": [
-          "trigger-status"      ,
+          "trigger-status",
           "error-v2-description",
           "trigger-collection"
         ]
@@ -5047,79 +5045,81 @@ RESPONSE:
    &RFC7975;
    &RFC8216;
 
-      <reference anchor="POSIX.1" target="http://pubs.opengroup.org/onlinepubs/9699919799/">
-        <front>
-          <title>The Open Group Base Specifications Issue 7</title>
-          <author surname="IEEE"/>
-          <date day="31" month="Jan" year="2018"/>
-        </front>
-        <seriesInfo name="IEEE Std" value="1003.1 2018 Edition"/>
-      </reference>
+	<reference anchor="POSIX.1" target="http://pubs.opengroup.org/onlinepubs/9699919799/">
+        	<front>
+			<title>The Open Group Base Specifications Issue 7</title>
+			<author surname="IEEE"/>
+			<date day="31" month="Jan" year="2018"/>
+		</front>
+		<seriesInfo name="IEEE Std" value="1003.1 2018 Edition"/>
+	</reference>
 
-      <reference anchor="MPEG-DASH" target="https://www.iso.org/standard/65274.html">
-        <front>
-          <title>
-              Information technology -- Dynamic adaptive streaming over HTTP (DASH) --
-              Part 1: Media presentation description and segment format
-          </title>
-          <author>
-             <organization>ISO</organization>
-          </author>
-          <date month="05" year="2014"/>
-        </front>
-        <seriesInfo name="ISO/IEC" value="23009-1:2014"/>
-        <seriesInfo name="Edition" value="2"/>
-      </reference>
+	<reference anchor="MPEG-DASH" target="https://www.iso.org/standard/65274.html">
+		<front>
+			<title>
+				Information technology -- Dynamic adaptive streaming over HTTP (DASH) --
+				Part 1: Media presentation description and segment format
+			</title>
+			<author>
+				<organization>ISO</organization>
+			</author>
+			<date month="05" year="2014"/>
+		</front>
+		<seriesInfo name="ISO/IEC" value="23009-1:2014"/>
+		<seriesInfo name="Edition" value="2"/>
+	</reference>
 
-      <reference anchor="MSS" target="https://msdn.microsoft.com/en-us/library/ff469518.aspx">
-        <front>
-          <title>
-              [MS-SSTR]: Smooth Streaming Protocol
-          </title>
-          <author>
-             <organization>Microsoft</organization>
-          </author>
-          <date month="September" year="2017"/>
-        </front>
-        <seriesInfo name="Protocol Revision" value="8.0"/>
-      </reference>
+	<reference anchor="MSS" target="https://msdn.microsoft.com/en-us/library/ff469518.aspx">
+		<front>
+			<title>
+				[MS-SSTR]: Smooth Streaming Protocol
+			</title>
+			<author>
+				<organization>Microsoft</organization>
+			</author>
+			<date month="September" year="2017"/>
+		</front>
+		<seriesInfo name="Protocol Revision" value="8.0"/>
+	</reference>
 
-      <reference anchor="ISO8601" target="https://www.iso.org/standard/40874.html">
-        <front>
-          <title>
-              Data elements and interchange formats -- Information interchange --
-              Representation of dates and times
-          </title>
-          <author>
-             <organization>ISO</organization>
-          </author>
-          <date month="12" year="2004"/>
-        </front>
-        <seriesInfo name="ISO" value="8601:2004"/>
-        <seriesInfo name="Edition" value="3"/>
-      </reference>
+	<reference anchor="ISO8601" target="https://www.iso.org/standard/40874.html">
+		<front>
+			<title>
+				Data elements and interchange formats -- Information interchange --
+				Representation of dates and times
+			</title>
+			<author>
+				<organization>ISO</organization>
+			</author>
+			<date month="12" year="2004"/>
+		</front>
+		<seriesInfo name="ISO" value="8601:2004"/>
+		<seriesInfo name="Edition" value="3"/>
+	</reference>
 
 
-      <reference anchor="ECMA404" target="https://ecma-international.org/publications-and-standards/standards/ecma-404/">
-        <front>
-          <title>ECMA-404 - The JSON data interchange syntax</title>
-          <author>
-             <organization>ECMA International</organization>
-          </author>
-          <date month="12" year="2017"/>
-        </front>
-        <seriesInfo name="Edition" value="2"/>
-</reference>
-       <reference anchor="REST" target="">
-         <front>
-           <title>Representational State Transfer (REST)</title>
-          <author initials="R.T." surname="Fielding" fullname="R.T.Fielding">
-                <organization/>
-           </author>
-           <date month="12" year="2017"/>
-         </front>
-         <seriesInfo name="Edition" value="2"/>
-       </reference>
+	<reference anchor="ECMA404" target="https://ecma-international.org/publications-and-standards/standards/ecma-404/">
+		<front>
+			<title>ECMA-404 - The JSON data interchange syntax</title>
+			<author>
+				<organization>ECMA International</organization>
+			</author>
+			<date month="12" year="2017"/>
+		</front>
+		<seriesInfo name="Edition" value="2"/>
+	</reference>
+
+
+	<reference anchor="REST">
+		<front>
+			<title>Architectural Styles and the Design of Network-based Software Architectures</title>
+			<author initials="R." surname="Fielding">
+				<organization/>
+			</author>
+			<date year="2000"/>
+		</front>
+		<seriesInfo name="Ph.D. Dissertation, University of California, Irvine" value=""/>
+	</reference>
 
 
    </references>
