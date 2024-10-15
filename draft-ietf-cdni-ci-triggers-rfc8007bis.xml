@@ -2148,15 +2148,17 @@ uCDN-A                         dCDN-B                         dCDN-C
       "trigger-subject": "content",
       "generic-trigger-spec-type": "content-objectlist",
       "generic-trigger-spec-value": {
-        "href": "https://www.example.com/hls/title/index.m3u8",
-        "type": "hls"
-      }
-    }
+        "objects": [{
+          "href": "https://www.example.com/hls/title/index.m3u8",
+          "type": "hls"
+        }]
+     }
+   }
   ],
-  "objects": {
-    "href": "https://dcdn.com/triggers/2a544cd9/objects",
-    "type": "json"
-  },
+  "objects": [{ 
+    "href": "https://www.example.com/hls/title/index.m3u8", 
+    "type": "hls"
+  }],
   "cdn": "AS64500:0"
 }
          ]]></sourcecode>
@@ -2871,11 +2873,28 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
 
 
       <section anchor="objectlist-spec" title="Object List Spec">
-   <t>
-      The "objectlist" spec type allows uCDN to manage content held by dCDN based on structured object lists. 
-              The Object List spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
+      <t>
+        The "objectlist" spec type allows uCDN to manage content held by dCDN based on structured object lists. 
+        The Object List spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
+      </t>
+      <t>
+        An object list is encoded as a JSON object with the following properties:
+      </t>
+        <t><list style="empty" hangIndent="3">
+        <t><list style="hanging" hangIndent="3">
+        <t hangText="Name: objects">
+        <vspace blankLines="1"/>
+        Description: An array of objects to be used in the trigger
+        <vspace blankLines="1"/>
+        Value: <xref target="object-list">ObjectList</xref> object
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
         </t>
-   <t>An object list is encoded as an <xref target="object-list">ObjectList</xref> object.</t> 
+
+        </list></t>
+        </list></t>
+
+
 
    </section>
 
@@ -3935,9 +3954,11 @@ REQUEST:
           "trigger-subject": "content",
           "generic-trigger-spec-type": "content-objectlist",
           "generic-trigger-spec-value": {
-            "href": "https://www.example.com/hls/title/index.m3u8",
-            "type": "hls"
-          }
+            "objects": [{
+              "href": "https://www.example.com/hls/title/index.m3u8",
+              "type": "hls"
+            }]  
+           }
         }
       ]
     },
@@ -3961,9 +3982,10 @@ RESPONSE:
             "trigger-subject": "content",
             "generic-trigger-spec-type": "content-objectlist",
             "generic-trigger-spec-value": {
-              "href": "https://www.example.com/hls/title/index.m3u8",
-              "type": "hls"
-            }
+              "objects": [{
+                "href": "https://www.example.com/hls/title/index.m3u8",
+                "type": "hls"
+              }}
           }
         ],
         "description": "dCDN was not able to parse the object list",
@@ -3982,8 +4004,10 @@ RESPONSE:
           "trigger-subject": "content",
           "generic-trigger-spec-type": "content-objectlist",
           "generic-trigger-spec-value": {
-            "href": "https://www.example.com/hls/title/index.m3u8",
-            "type": "hls"
+            "objects": [{
+              "href": "https://www.example.com/hls/title/index.m3u8",
+              "type": "hls"
+            }]
           }
         }
       ]
@@ -4166,7 +4190,6 @@ RESPONSE:
   Cache-Control: max-age=60
   Date: Wed, 04 May 2016 08:48:10 GMT
   Content-Type: application/cdni; ptype=ci-trigger-status.v2
-
 
   {
     "ctime": 1462351690,
@@ -4438,8 +4461,10 @@ REQUEST:
           "trigger-subject": "content",
           "generic-trigger-spec-type": "content-objectlist",
           "generic-trigger-spec-value": {
-            "href": "https://www.example.com/hls/title/index.m3u8",
-            "type": "hls"
+            "objects": [{
+              "href": "https://www.example.com/hls/title/index.m3u8",
+              "type": "hls"
+            }]
           }
         }
       ],
@@ -4562,8 +4587,10 @@ RESPONSE:
           "trigger-subject": "content",
           "generic-trigger-spec-type": "content-objectlist",
           "generic-trigger-spec-value": {
-            "href": "https://www.example.com/hls/title/index.m3u8",
-            "type": "hls"
+            "objects": [{
+              "href": "https://www.example.com/hls/title/index.m3u8",
+              "type": "hls"
+            }]
           }
         }
       ],
