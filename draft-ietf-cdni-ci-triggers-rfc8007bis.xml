@@ -147,7 +147,7 @@
    Interconnection (CDNI) Control interface that allows a CDN to trigger
    activity in an interconnected CDN that is configured to deliver
    content on its behalf. The upstream CDN MAY use this mechanism to
-   request that the downstream CDN pre-position metadata or content as well as 
+   request that the downstream CDN preposition metadata or content as well as 
    request that it invalidate or purge metadata or content. The
    upstream CDN MAY monitor the status of activity that it has triggered
    in the downstream CDN.</t>
@@ -243,7 +243,7 @@
    <section title="REST Architecture" anchor="model-for-cdni-triggers-rest">
 
 	<t>
-	The CI/T interface utilizwes HTTP/1.1 protocol <xref target="RFC9112"/> and follows the principles 
+	The CI/T interface utilizes HTTP/1.1 protocol <xref target="RFC9112"/> and follows the principles 
 	of the Representational State Transfer (REST) architectural style.
 	uCDN, in its capacity of a CI/T interface client, makes a request to dCDN to carry out an action ("trigger")
 	related to metadata or content stored by dCDN on behalf of uCDN.  
@@ -254,22 +254,18 @@
 	Each such trigger is identified by a unique Uniform Resource Identifier (URI) 
 	is defined in Section 4.2 of <xref target="RFC9110"/>.
 	</t>
-	<t>The CI/T interface supports the following types of action::</t>
-
-	<t>
-		<list style="symbols">
-		<t>"preposition" - used to instruct dCDN to fetch metadata fr om the uCDN or content from any origin including uCDN.</t>
-   		<t>"invalidate" - used to instruct dCDN to revalidate specific metadata or content object(s) before reusing them.</t>
-		<t>"purge" - used to instruct dCDN to delete specific metadata or content object(s).</t>
-   		</list>
-   	</t>
-   	<t> Note that additional action types can be defined and registered in the future. </t>
 
 	<t>
 	Once a trigger is created, uCDN can retrieve its trigger state from dCDN or request its state to be modified by 
-	transferring trigger representation to dCDN.
+	transferring an updated representation of the trigger state to dCDN.
 	The CI/T interface supports representation of trigger resources using JSON <xref target="RFC8259"/>.
-	</t>
+        </t>
+	<t>
+	This RESTful data model built around a common "trigger" resource replaces the command-oriented model 
+	of <xref target="RFC8007"/>, wherein uCDN passed commands to dCDN using "ci-trigger-command" objects, 
+	and dCDN generated "ci-trigger-status" objects in response.  
+        </t>
+
 
    </section>
 
@@ -290,7 +286,7 @@
 			POST - used to request that the target resource process the representation enclosed in the request.
 			If a resource has been created on the server as a result of successfully processing a POST request, 
 			the server sends a 201 (Created) response containing a Location header field that contains an identifier
-			for the newly created resource
+			for the newly created resource.
 		</t>
 		<t>	
 			DELETE - used to request the server remove the target resource. 
@@ -348,7 +344,7 @@
 		dCDN maintains one Trigger Collection resource for each uCDN. 
 		Each uCDN only has access to its own collection resource.
 
-		dCDN supports retrieval of multiple representation of the trigger collection resource.
+		dCDN supports retrieval of multiple representations of the trigger collection resource.
 		The supported trigger collection representations are listed in 
 		<xref target="collections-of-trigger-status-resources"/>, and include filtering of Trigger resources by
 		Trigger State and Trigger Label attributes.
@@ -400,7 +396,7 @@
    <list style="numbers">
 	<t>	
 		uCDN requests to create a new Trigger resource by POSTing its representation to
-		the trigger collection resource with a well-known URI "https://dcdn.example.com/triggers/uCDN". 
+		the trigger collection resource with a well-known URI "https://dcdn.example.com/triggers/uCDN".
        .</t>
    	<t>
 		dCDN authenticates the request, validates the Trigger resource in it, and if the request is accepted,
@@ -427,7 +423,7 @@
 		and subsequent requests for this resource MUST result in 404 (Not Found).
 	</t>
 	<t>
-		dCDN responds to the delettion request with 200 (OK) status code.
+		dCDN responds to the deletion request with 200 (OK) status code.
 	</t>
    </list>
    </t>
@@ -450,12 +446,12 @@
    </t>
 
    <t>
-	If uCDN wishes to invalidate or purge content and then immediately pre-position replacement content at the same URLs, 
-	it SHOULD ensure that dCDN has completed the invalidate/purge before initiating the pre-positioning. 
-	Otherwise, there is a risk that the dCDN pre-positions the new content, then immediately invalidates or
+	If uCDN wishes to invalidate or purge content and then immediately preposition replacement content at the same URLs, 
+	it SHOULD ensure that dCDN has completed the invalidate/purge before initiating the prepositioning. 
+	Otherwise, there is a risk that the dCDN prepositions the new content, then immediately invalidates or
 	purges it (as a result of the two uCDN requests running in parallel).
 	
-	uCDN MAY use the <xref target="execution-policy">Execution Policy</xref> extension to condition the start of pre-position 
+	uCDN MAY use the <xref target="execution-policy">Execution Policy</xref> extension to condition the start of preposition 
 	trigger processing on completion of the earlier invalidate/purge trigger(s).
    </t>
 
@@ -497,9 +493,9 @@
    <section title="Multiple Interconnected CDNs" anchor="multiple-interconnected-cdns">
 	<t>
    		In a network of interconnected CDNs, a single uCDN will originate a
-   		given item of metadata and associated content. It would possibly distribute
-   		that metadata and content to more than one dCDN, which in turn
-   		distributes that metadata and content to additional CDNs located further
+   		given item of metadata and associated content. It MAY  distribute
+   		that metadata and content to one or more dCDNs, which in turn
+   		distributes that metadata and content to additional dCDNs located further
 		downstream.
 	</t>
 
@@ -524,19 +520,19 @@
 
    	<t>
    		In all other cases, dCDN MUST reject triggers from uCDN that
-   		attempts to act on another uCDN's content by using, for example,
-		responding with an HTTP 403 ("Forbidden").
+   		attempts to act on another uCDN's content by responding, for example,
+		with an HTTP 403 ("Forbidden").
 	</t>
 
    	<t> 	Security considerations are discussed further in <xref target="security-considerations"/>.</t>
    	<t>
-   `		The diamond configuration may lead to inefficient interactions, but
+   		The diamond configuration may lead to inefficient interactions, but
 		the interactions are otherwise harmless. For example:
 	</t>
 
 	<t><list style="symbols">
 
-		<t>When uCDN request to create an "invalidate" trigger, dCDN will
+		<t>When uCDN requests to create an "invalidate" trigger, dCDN will
 		receive that request from multiple directly connected uCDNs. The
 		dCDN may schedule multiple such triggers separately, and the last
 		scheduled trigger may affect content already revalidated following
@@ -549,15 +545,15 @@
 		can be reacquired by dCDN from the remaining uCDN.</t>
 
    		<t>When uCDN originating an item of content issues a purge
-		followed by a pre-position, two directly connected uCDNs will pass
+		followed by a preposition, two directly connected uCDNs will pass
 		those triggers to dCDN. That dCDN implementation need not merge
 		those operations or notice the repetition, in which case the purge
 		issued by one uCDN will be completed before the other. The first uCDN
 		to finish its purge may then forward the "preposition" trigger,
-		and content pre-positioned as a result might be affected by the
+		and content prepositioned as a result might be affected by the
 		still-running purge issued by the other uCDN. However, dCDN
 		will reacquire that content as needed, or when it's asked to
-		pre-position the content by the second uCDN. dCDN
+		preposition the content by the second uCDN. dCDN
 		implementation could avoid this interaction by knowing which uCDN
 		it acquired the content from, or it could minimize the
 		consequences by recording the time at which the
@@ -566,11 +562,14 @@
 
 	</list></t>
    	<t>
-		If dCDN is also acting as uCDN in a cascade, it MUST forward trigger requestis to any dCDNs that may be affected. 
-		The trigger state NOT be reported as "complete" in a CDN until it is "complete" in all of its dCDNs. 
-		If a trigger is reported as "processed" in any dCDN, intermediate CDNs MUST NOT report "complete". 
-		Instead, they MUST also report the trigger as "processed". 
-		Trigger MAY be reported as "failed" as soon as it fails in a CDN or any of its dCDNs. 
+		If dCDN is also acting as uCDN in a cascade, it MUST forward trigger requestis to any dCDNs 
+		that may be affected. 
+		The trigger state MUST NOT be reported as "complete" by an intermediate CDN until it is "complete" 
+		in all of its dCDNs and in the intermediate CDN itself.
+		If a trigger is reported as "processed" in the intermediate CDN or any one of its dCDNs, intermediate CDNs 
+		MUST report trigger as "processed" as well. 
+		If a trigger is reported as "failed" by the intermediate CDN or any one of its dCDNs, the intermediate
+		CDN must report the trigger as "failed" only after its processing is finished in it and  all of its dCDNs.
 		A cancelled trigger MUST be reported as "cancelling" until it has been reported as "cancelled",
 		"complete", or "failed" by all dCDNs in a cascade.
 	</t>
@@ -887,7 +886,7 @@
    dCDN's collection of complete Trigger Status Resources. dCDN
    SHOULD also provide an estimated completion time for the request by
    using the "etime" property of the Trigger Status Resource. This will
-   allow uCDN to schedule pre-positioning after an earlier delete of
+   allow uCDN to schedule prepositioning after an earlier delete of
    the same URLs is expected to have finished.</t>
 
    <t>
@@ -1892,7 +1891,7 @@ uCDN-A                         dCDN-B                         dCDN-C
              by tCDN. However, for trigger extension that requires translation,
              transparent redistribution of uCDN trigger values might not be
              appropriate. Certain trigger extensions can be safely, though perhaps not
-             optimally, redistributed unmodified. For example, pre-position command might
+             optimally, redistributed unmodified. For example, preposition command might
              be executed in suboptimal times for some geographies if transparently
              redistributed, but it might still work.
            </t>
@@ -2981,11 +2980,11 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
 
         <t>Example use cases:<list style="symbols">
 
-            <t>Pre-position: Certain contracts allow for pre-positioning or availability
+            <t>Pre-position: Certain contracts allow for prepositioning or availability
                of contracts in all regions except for certain excluded regions in the world,
                including caches. For example, some content cannot ever knowingly touch
                servers in a specific country, including cached content. Therefore, these regions
-               MUST be excluded from a pre-positioning operation.</t>
+               MUST be excluded from a prepositioning operation.</t>
 
             <t>Purge: In certain cases, content may have been located on servers in regions
                where the content must not reside. In such cases, a purge operation to
@@ -3708,7 +3707,7 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
 
    <t>
     Note that pattern-based specs like "UriPatternMatch" and "UrisRegexMatch" are not allowed
-   in a pre-position Trigger Specification, where dCDN has to have a clear list of objects to obtain.</t>
+   in a preposition Trigger Specification, where dCDN has to have a clear list of objects to obtain.</t>
 
    <figure><artwork><![CDATA[
 REQUEST:
