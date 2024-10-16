@@ -2968,21 +2968,17 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
     "locations": [
       {
         "action": "allow",
-        "footprints": [
-          {
-            "footprint-type": "countrycode",
-            "footprint-value": [ "us" ]
-          }
-        ]
+        "footprints": [{
+          "footprint-type": "countrycode",
+          "footprint-value": [ "us" ]
+        }]
       },
       {
         "action": "deny",
-        "footprints": [
-          {
-            "footprint-type": "countrycode",
-            "footprint-value": [ "ca" ]
-          }
-        ]
+        "footprints": [{
+          "footprint-type": "countrycode",
+          "footprint-value": [ "ca" ]
+        }]
       }
     ]
   },
