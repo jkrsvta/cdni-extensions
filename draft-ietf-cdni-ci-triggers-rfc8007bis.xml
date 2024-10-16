@@ -2143,17 +2143,15 @@ uCDN-A                         dCDN-B                         dCDN-C
 {
   "error": "econtent",
   "description": "Failed to parse HLS object list",
-  "specs": [
-    {
-      "trigger-subject": "content",
-      "generic-trigger-spec-type": "content-objectlist",
-      "generic-trigger-spec-value": {
-        "objects": [{
-          "href": "https://www.example.com/hls/title/index.m3u8",
-          "type": "hls"
-        }]
-     }
-   }
+  "specs": [{
+    "trigger-subject": "content",
+    "generic-trigger-spec-type": "content-objectlist",
+    "generic-trigger-spec-value": {
+      "objects": [{
+        "href": "https://www.example.com/hls/title/index.m3u8",
+        "type": "hls"
+      }]
+   }}
   ],
   "objects": [{ 
     "href": "https://www.example.com/hls/title/index.m3u8", 
@@ -2168,43 +2166,33 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 <sourcecode type="json" name="Error.v2 Description unsupported extension"><![CDATA[
 {
-  "errors": [
-    {
-      "error": "eextension",
-      "description": "unrecognized extension <type>",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "urls",
-          "generic-trigger-spec-value": {
-            "urls": [
-              "https://www.example.com/a/b/c/1",
-              "https://www.example.com/a/b/c/2"
-            ]
-          }
+  "errors": [{
+    "error": "eextension",
+    "description": "unrecognized extension <type>",
+    "specs": [{
+      "trigger-subject": "content",
+      "generic-trigger-spec-type": "urls",
+      "generic-trigger-spec-value": {
+        "urls": [
+          "https://www.example.com/a/b/c/1",
+          "https://www.example.com/a/b/c/2"
+        ]
+      }
+    }],
+    "extensions": [{
+      "generic-trigger-extension-type": "location-policy",
+      "generic-trigger-extension-value": {
+        "locations": [{
+          "action": "deny",
+          "footprints": [{
+              "footprint-type": "countrycode",
+              "footprint-value": [ "ca" ]
+            }]
+          }]
         }
-      ],
-      "extensions": [
-        {
-          "generic-trigger-extension-type": "location-policy",
-          "generic-trigger-extension-value": {
-            "locations": [
-              {
-                "action": "deny",
-                "footprints": [
-                  {
-                    "footprint-type": "countrycode",
-                    "footprint-value": [ "ca" ]
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      ],
-      "cdn": "AS64500:0"
-    }
-  ]
+    }],
+    "cdn": "AS64500:0"
+  }]
 }
 ]]></sourcecode>
 
@@ -3454,30 +3442,28 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
              </t>
 <sourcecode type="json" name="fci-citscope"><![CDATA[
 {
-  "capabilities": [
-    {
-      "capability-type": "FCI.CITScope",
-      "capability-value": {
-        "trigger-scope-capabilities": [
-          {
-            "trigger-action": "preposition",
-            "trigger-subject": "content",
-            "trigger-specs": [ "urls", "ccids" ],
-            "trigger-extensions": [ "time-policy" ]
-          },
-          {
-            "trigger-action": "invalidate",
-            "trigger-subject": "content",
-            "trigger-specs": [ "urls", "ccids" ]
-          }
-        ]
-      },
-      "footprints": {
-        "footprint-type": "countrycode",
-        "footprint-value": [ "us" ]
-      }
+  "capabilities": [{
+    "capability-type": "FCI.CITScope",
+    "capability-value": {
+      "trigger-scope-capabilities": [
+        {
+          "trigger-action": "preposition",
+          "trigger-subject": "content",
+          "trigger-specs": [ "urls", "ccids" ],
+          "trigger-extensions": [ "time-policy" ]
+        },
+        {
+          "trigger-action": "invalidate",
+          "trigger-subject": "content",
+          "trigger-specs": [ "urls", "ccids" ]
+        }
+      ]
+    },
+    "footprints": {
+      "footprint-type": "countrycode",
+      "footprint-value": [ "us" ]
     }
-  ]
+  }]
 }
 ]]></sourcecode>
            </section>
@@ -3512,18 +3498,16 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
              </t>
 <sourcecode type="json" name="cit-object-list-json"><![CDATA[
 {
-  "capabilities": [
-    {
-      "capability-type": "FCI.CITObjectListType",
-      "capability-value": {
-        "object-list-types": [ "hls", "dash", "json" ]
-      },
-      "footprints": {
-        "footprint-type": "countrycode",
-        "footprint-value": [ "us" ]
-      }
+  "capabilities": [{
+    "capability-type": "FCI.CITObjectListType",
+    "capability-value": {
+      "object-list-types": [ "hls", "dash", "json" ]
+    },
+    "footprints": {
+      "footprint-type": "countrycode",
+      "footprint-value": [ "us" ]
     }
-  ]
+  }]
 }
 ]]></sourcecode>
            </section>
@@ -3558,16 +3542,14 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
 
 <sourcecode type="json" name="cit-private-url-json"><![CDATA[
 {
-  "capabilities": [
-    {
-      "capability-type": "FCI.CITPrivateUrlType",
-      "capability-value": { "private-url-type-support": true },
-      "footprints": {
-        "footprint-type": "countrycode",
-        "footprint-value": [ "us" ]
-      }
+  "capabilities": [{
+    "capability-type": "FCI.CITPrivateUrlType",
+    "capability-value": { "private-url-type-support": true },
+    "footprints": {
+      "footprint-type": "countrycode",
+      "footprint-value": [ "us" ]
     }
-  ]
+  }]
 }
 ]]></sourcecode>
            </section>
@@ -3610,22 +3592,20 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
 
 <sourcecode type="json" name="fci-citextendedstatus"><![CDATA[
 {
-  "capabilities": [
-    {
-      "capability-type": "FCI.CITExtendedStatus",
-      "capability-value": {
-        "extended-status-objects": [
-          "trigger-status"      ,
-          "error-v2-description",
-          "trigger-collection"
-        ]
-      },
-      "footprints": {
-        "footprint-type": "countrycode",
-        "footprint-value": [ "us" ]
-      }
+  "capabilities": [{
+    "capability-type": "FCI.CITExtendedStatus",
+    "capability-value": {
+      "extended-status-objects": [
+        "trigger-status"      ,
+        "error-v2-description",
+        "trigger-collection"
+      ]
+    },
+    "footprints": {
+      "footprint-type": "countrycode",
+      "footprint-value": [ "us" ]
     }
-  ]
+  }]
 }
 ]]></sourcecode>
            </section>
@@ -3678,8 +3658,8 @@ REQUEST:
           "trigger-subject": "metadata",
           "generic-trigger-spec-type": "urls",
           "generic-trigger-spec-value": {
-            "urls": [ "https://metadata.example.com/a/b/c" ]
-          }
+          "urls": [ "https://metadata.example.com/a/b/c" ]
+	   }
         },
         {
           "trigger-subject": "content",
@@ -3861,18 +3841,16 @@ REQUEST:
   {
     "trigger": {
       "action": "invalidate",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "uri-regex-match",
-          "generic-trigger-spec-value": {
-            "regex": "^(https:\\/\\/video\\.example\\.com)\\/
-              ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
-            "case-sensitive": true,
-            "match-query-string": false
-          }
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "uri-regex-match",
+        "generic-trigger-spec-value": {
+          "regex": "^(https:\\/\\/video\\.example\\.com)\\/
+            ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+          "case-sensitive": true,
+          "match-query-string": false
         }
-      ]
+      }]
     },
     "cdn-path": [ "AS64496:0" ]
   }
@@ -3887,43 +3865,37 @@ RESPONSE:
   Server: example-server/0.1
 
   {
-    "errors": [
-      {
-        "specs": [
-          {
-            "trigger-subject": "content",
-            "generic-trigger-spec-type": "uri-regex-match",
-            "generic-trigger-spec-value": {
-            "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
-              \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
-              "case-sensitive": true,
-              "match-query-string": false
-            }
-          }
-        ],
-        "description": "dCDN rejected a regex due to complexity",
-        "error": "ereject",
-        "cdn": "AS64500:0"
-      }
-    ],
+    "errors": [{
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "uri-regex-match",
+        "generic-trigger-spec-value": {
+        "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
+          \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+          "case-sensitive": true,
+          "match-query-string": false
+        }
+      }],
+      "description": "dCDN rejected a regex due to complexity",
+      "error": "ereject",
+      "cdn": "AS64500:0"
+    }],
     "ctime": 1462351690,
     "etime": 1462351698,
     "mtime": 1462351690,
     "status": "failed",
     "trigger": {
       "action": "invalidate",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "uri-regex-match",
-          "generic-trigger-spec-value": {
-            "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
-              \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
-            "case-sensitive": true,
-            "match-query-string": false
-          }
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "uri-regex-match",
+        "generic-trigger-spec-value": {
+          "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
+            \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+          "case-sensitive": true,
+          "match-query-string": false
         }
-      ]
+      }]
     }
   }
          ]]></artwork>
@@ -3949,18 +3921,16 @@ REQUEST:
   {
     "trigger": {
       "action": "preposition",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "content-objectlist",
-          "generic-trigger-spec-value": {
-            "objects": [{
-              "href": "https://www.example.com/hls/title/index.m3u8",
-              "type": "hls"
-            }]  
-           }
-        }
-      ]
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
+            "type": "hls"
+          }]  
+         }
+      }]
     },
     "cdn-path": [ "AS64496:0" ]
   }
@@ -3975,42 +3945,36 @@ RESPONSE:
   Server: example-server/0.1
 
   {
-    "errors": [
-      {
-        "specs": [
-          {
-            "trigger-subject": "content",
-            "generic-trigger-spec-type": "content-objectlist",
-            "generic-trigger-spec-value": {
-              "objects": [{
-                "href": "https://www.example.com/hls/title/index.m3u8",
-                "type": "hls"
-              }}
-          }
-        ],
-        "description": "dCDN was not able to parse the object list",
-        "error": "econtent",
-        "cdn": "AS64500:0"
-      }
-    ],
+    "errors": [{
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
+            "type": "hls"
+          }}
+      }],
+      "description": "dCDN was not able to parse the object list",
+      "error": "econtent",
+      "cdn": "AS64500:0"
+    }],
     "ctime": 1462351690,
     "etime": 1462351698,
     "mtime": 1462351690,
     "status": "failed",
     "trigger": {
       "action": "preposition",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "content-objectlist",
-          "generic-trigger-spec-value": {
-            "objects": [{
-              "href": "https://www.example.com/hls/title/index.m3u8",
-              "type": "hls"
-            }]
-          }
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
+            "type": "hls"
+          }]
         }
-      ]
+      }]
     }
   }
          ]]></artwork>
@@ -4456,18 +4420,16 @@ REQUEST:
   {
     "trigger": {
       "action": "preposition",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "content-objectlist",
-          "generic-trigger-spec-value": {
-            "objects": [{
-              "href": "https://www.example.com/hls/title/index.m3u8",
-              "type": "hls"
-            }]
-          }
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
+            "type": "hls"
+          }]
         }
-      ],
+      }],
       "extensions": [
         {
           "generic-trigger-extension-type": "location-policy",
@@ -4524,53 +4486,45 @@ RESPONSE:
   {
     "errors": [
       {
-        "extensions": [
-          {
-            "generic-trigger-extension-type": "location-policy",
-            "generic-trigger-extension-value": {
-              "locations": [
-                {
-                  "action": "allow",
-                  "footprints": [
-                    {
-                      "footprint-type": "countrycode",
-                      "footprint-value": [ "us" ]
-                    }
-                  ]
-                },
-                {
-                  "action": "deny",
-                  "footprints": [
-                    {
-                      "footprint-type": "countrycode",
-                      "footprint-value": [ "ca" ]
-                    }
-                  ]
-                }
-              ]
-            },
-            "mandatory-to-enforce": true,
-            "safe-to-redistribute": true
-          }
-        ],
+        "extensions": [{
+          "generic-trigger-extension-type": "location-policy",
+          "generic-trigger-extension-value": {
+            "locations": [
+              {
+                "action": "allow",
+                "footprints": [{
+                    "footprint-type": "countrycode",
+                    "footprint-value": [ "us" ]
+                  }]
+              },
+              {
+                "action": "deny",
+                "footprints": [{
+                    "footprint-type": "countrycode",
+                    "footprint-value": [ "ca" ]
+                  }]
+              }
+            ]
+          },
+          "mandatory-to-enforce": true,
+          "safe-to-redistribute": true
+        }],
         "description": "unrecognized extension <type>",
         "error": "eextension",
         "cdn": "AS64500:0"
       },
       {
-        "extensions": [
-          {
-            "generic-trigger-extension-type": "time-policy",
-            "generic-trigger-extension-value": {
-              "unix-time-window": {
-                "start": 946717200,
-                "end": 946746000
-              }
-            },
-            "mandatory-to-enforce": true,
-            "safe-to-redistribute": true
-          }
-        ],
+        "extensions": [{
+          "generic-trigger-extension-type": "time-policy",
+          "generic-trigger-extension-value": {
+            "unix-time-window": {
+              "start": 946717200,
+              "end": 946746000
+            }
+          },
+          "mandatory-to-enforce": true,
+          "safe-to-redistribute": true
+        }],
         "description": "unrecognized extension <type>",
         "error": "eextension",
         "cdn": "AS64501:0"
@@ -4582,18 +4536,16 @@ RESPONSE:
     "status": "failed",
     "trigger": {
       "action": "preposition",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "content-objectlist",
-          "generic-trigger-spec-value": {
-            "objects": [{
-              "href": "https://www.example.com/hls/title/index.m3u8",
-              "type": "hls"
-            }]
-          }
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
+            "type": "hls"
+          }]
         }
-      ],
+      }],
       "extensions": [
         {
           "generic-trigger-extension-type": "location-policy",
