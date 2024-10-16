@@ -299,7 +299,7 @@
 	</list>
    </section>
 
-   <section title="Trigger resource" anchor="model-for-cdni-triggers-trigger">
+   <section title="Trigger Resource" anchor="model-for-cdni-triggers-trigger">
 	<t>
 		To request that an action be carried by dCDN, uCDN requests to create a trigger resource. 
 		If dCDN accepts the request, it creates a new Trigger resource and returns its unique URI to uCDN.
@@ -1217,7 +1217,7 @@
    </list>
    </t>
    
-	<section anchor="error-propagation" title="Error propagation">
+	<section anchor="error-propagation" title="Error Propagation">
 	<t>
              This subsection explains the mechanism for enabling uCDN to trace an error back to dCDN in which it occurred.
              CDNI triggers may be propagated over a chain of downstream CDNs. For example, an 
