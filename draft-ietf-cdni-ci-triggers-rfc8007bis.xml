@@ -315,7 +315,8 @@
    status of that activity. Only successful triggering is shown.
    Examples of the messages are shown in <xref target="examples"/>.</t>
 
-   <figure title="Basic CDNI Message Flow for Triggers" anchor="ure-basic-cdni-message-flow-for-triggers"><artwork><![CDATA[
+   <figure title="Basic CDNI Message Flow for Triggers" anchor="ure-basic-cdni-message-flow-for-triggers">
+   <artwork><![CDATA[
    uCDN                                                   dCDN
     |    (1) POST https://dcdn.example.com/triggers/uCDN    |
    [ ] --------------------------------------------------> [ ]--+
@@ -1324,7 +1325,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    </t>
 
    <t><list style="empty" hangIndent="3">
-   <t><list style="hanging" hangIndent="3"><t hangText="Name: trigger-spec">
+   <t><list style="hanging" hangIndent="3"><t hangText="Name: trigger">
    <vspace blankLines="1"/>
    Description: A specification of the trigger action and a set of
          targets upon which to act.
@@ -2142,20 +2143,20 @@ uCDN-A                         dCDN-B                         dCDN-C
 {
   "error": "econtent",
   "description": "Failed to parse HLS object list",
-  "specs": [
-    {
-      "trigger-subject": "content",
-      "generic-trigger-spec-type": "content-objectlist",
-      "generic-trigger-spec-value": {
+  "specs": [{
+    "trigger-subject": "content",
+    "generic-trigger-spec-type": "content-objectlist",
+    "generic-trigger-spec-value": {
+      "objects": [{
         "href": "https://www.example.com/hls/title/index.m3u8",
         "type": "hls"
-      }
-    }
-   ],
-  "objects": {
-     "href": "https://dcdn.com/triggers/2a544cd9/objects",
-     "type": "json"
-  }
+      }]
+   }}
+  ],
+  "objects": [{ 
+    "href": "https://www.example.com/hls/title/index.m3u8", 
+    "type": "hls"
+  }],
   "cdn": "AS64500:0"
 }
          ]]></sourcecode>
@@ -2163,38 +2164,37 @@ uCDN-A                         dCDN-B                         dCDN-C
           <t>Example of a JSON serialized Error.v2 Description object reporting an unsupported extension object:
           </t>
 
-          <sourcecode type="json" name="Error.v2 Description unsupported extension"><![CDATA[
+<sourcecode type="json" name="Error.v2 Description unsupported extension"><![CDATA[
 {
-  "errors": [
-    {
-      "error": "eextension",
-      "description": "unrecognized extension <type>",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "urls",
-          "generic-trigger-spec-value": {
-            "urls": [
-              "https://www.example.com/a/b/c/1",
-              "https://www.example.com/a/b/c/2"
-            ]
-          }
+  "errors": [{
+    "error": "eextension",
+    "description": "unrecognized extension <type>",
+    "specs": [{
+      "trigger-subject": "content",
+      "generic-trigger-spec-type": "urls",
+      "generic-trigger-spec-value": {
+        "urls": [
+          "https://www.example.com/a/b/c/1",
+          "https://www.example.com/a/b/c/2"
+        ]
+      }
+    }],
+    "extensions": [{
+      "generic-trigger-extension-type": "location-policy",
+      "generic-trigger-extension-value": {
+        "locations": [{
+          "action": "deny",
+          "footprints": [{
+              "footprint-type": "countrycode",
+              "footprint-value": [ "ca" ]
+            }]
+          }]
         }
-      ],
-      "extensions": [
-        {
-          "generic-trigger-extension-type":
-            <type of this erroneous trigger extension object>,
-          "generic-trigger-extension-value": {
-            <properties of this erroneous trigger extension object>
-          }
-        }
-      ],
-      "cdn": "AS64500:0"
-    }
-  ]
+    }],
+    "cdn": "AS64500:0"
+  }]
 }
-         ]]></sourcecode>
+]]></sourcecode>
 
    </section>
 
@@ -2359,87 +2359,93 @@ ObjectLists MAY combine regular objects and secondary ObjectLists in the same ob
    <t>External HLS manifest:</t>
    <sourcecode type="json" name="external-hls-manifest"><![CDATA[
 [
-  { 
+  {
     "href": "https://example.com/hls/a36f764e/index.m3u8",
-    "type": "hls" 
+    "type": "hls"
   }
 ]
 ]]></sourcecode>
 
    <t>External object list in text format:</t>
-<sourcecode type="json" name="external-object-list"><![CDATA[ 
+   <sourcecode type="json" name="external-object-list"><![CDATA[ 
 [
-  { 
+  {
     "href": "https://example.com/hls/35cdc008/assets",
-    "type": "text" 
+    "type": "text"
   }
 ]
 ]]></sourcecode>
 
 
    <t>List of external manifests and objects of mixed types:</t>
-<sourcecode type="json" name="external-manifests-and-objects"><![CDATA[
+   <sourcecode type="json" name="external-manifests-and-objects"><![CDATA[
 [
-  { 
-    "href": "https://example.com/hls/35cdc008/index.m3u8", 
-    "type": "hls" 
+  {
+    "href": "https://example.com/hls/35cdc008/index.m3u8",
+    "type": "hls"
   },
-  { 
-    "href": "https://example.com/dash/35cdc008/main.mpd", 
+  {
+    "href": "https://example.com/dash/35cdc008/main.mpd",
     "type": "dash"
   },
-  { 
-    "href": "https://example.com/dash/35cdc008/files.json", 
-    "type": "json" 
+  {
+    "href": "https://example.com/dash/35cdc008/files.json",
+    "type": "json"
   }
 ]
 ]]></sourcecode>
 
    <t>Embedded JSON-encoded object list:</t>
-<sourcecode type="json" name="embedded-json-object-list"><![CDATA[
+   <sourcecode type="json" name="embedded-json-object-list"><![CDATA[
 [
-  { 
+  {
     "data": [
-    { 
-      "href": "https://example.com/hls/35cdc008/index.m3u8", 
-      "type": "hls" 
-    },
-    { 
-      "href":"https://example.com/dash/35cdc008/main.mpd",
-      "type": "dash"
-    },
-    { 
-      "href": "https://example.com/img/35cdc008/thumb-l.jpg", 
-      "size": 10260
-    },
-    { 
-      "href": "https://example.com/img/35cdc008/thumb-s.jpg",
-      "size": 1453
-    }],
+      {
+        "href": "https://example.com/hls/35cdc008/index.m3u8",
+        "type": "hls"
+      },
+      {
+        "href": "https://example.com/dash/35cdc008/main.mpd",
+        "type": "dash"
+      },
+      {
+        "href": "https://example.com/img/35cdc008/thumb-l.jpg",
+        "size": 10260
+      },
+      {
+        "href": "https://example.com/img/35cdc008/thumb-s.jpg",
+        "size": 1453
+      }
+    ],
     "type": "json"
   }
 ]
 ]]></sourcecode>
 
    <t>Embedded HLS manifest:</t>
-<sourcecode type="json" name="embedded-hls-manifest"><![CDATA[
+   <t>Please note that some lines in the example are wrapped for clarity.</t>
+   <sourcecode type="json" name="embedded-hls-manifest"><![CDATA[
 [
-  {  
-    "data": 
-      "#EXTM3U\n
-#EXT-X-STREAM-INF:BANDWIDTH=150000,RESOLUTION=416x234\n
-http://example.com/hls/35cdc008/low/index.m3u8\n
-#EXT-X-STREAM-INF:BANDWIDTH=240000,RESOLUTION=416x234\n
-http://example.com/hls/35cdc008/lo_mid/index.m3u8\n
-#EXT-X-STREAM-INF:BANDWIDTH=440000,RESOLUTION=416x234\n
-http://example.com/hls/35cdc008/hi_mid/index.m3u8\n
-#EXT-X-STREAM-INF:BANDWIDTH=640000,RESOLUTION=640x360\n
-http://example.com/hls/35cdc008/high/index.m3u8\n
-#EXT-X-STREAM-INF:BANDWIDTH=64000\n
-http://example.com/hls/35cdc008/audio/index.m3u8\n",
-    "type": "hls"
+  {
+  "data": "#EXTM3U\n
+  #EXT-X-STREAM-INF:BANDWIDTH=150000,RESOLUTION=416x234,
+            CODECS=\"avc1.42e00a,mp4a.40.2\"\n
+  http://example.com/low/index.m3u8\n
+  #EXT-X-STREAM-INF:BANDWIDTH=240000,RESOLUTION=416x234,
+            CODECS=\"avc1.42e00a,mp4a.40.2\"\n
+  http://example.com/lo_mid/index.m3u8\n
+  #EXT-X-STREAM-INF:BANDWIDTH=440000,RESOLUTION=416x234,
+            CODECS=\"avc1.42e00a,mp4a.40.2\"\n
+  http://example.com/hi_mid/index.m3u8\n
+  #EXT-X-STREAM-INF:BANDWIDTH=640000,RESOLUTION=640x360,
+            CODECS=\"avc1.42e00a,mp4a.40.2\"\n
+  http://example.com/high/index.m3u8\n
+  #EXT-X-STREAM-INF:BANDWIDTH=64000,
+            CODECS=\"mp4a.40.5\"\n
+  http://example.com/high/index.m3u8\n",
+  "type": "hls"
   }
-}
+]
 ]]></sourcecode>
 
    <t>The ObjectList properties are as follows:</t>  
@@ -2538,24 +2544,24 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n",
    </t>
    <t>
         The following is an example of JSON serialized ObjectEntry objects:
-        <sourcecode type="json" name="objectentry-json"><![CDATA[
+<sourcecode type="json" name="objectentry-json"><![CDATA[
 [
-  { 
-    "href": "https://example.com/hls/35cdc008/index.m3u8", 
+  {
+    "href": "https://example.com/hls/35cdc008/index.m3u8",
     "type": "hls"
   },
-  { 
-    "href": "https://example.com/dash/35cdc008/main.mpd", 
+  {
+    "href": "https://example.com/dash/35cdc008/main.mpd",
     "type": "dash"
   },
-  { 
+  {
     "href": "https://example.com/img/35cdc008/thumb-l.jpg",
     "size": 102600
   },
-  { 
-    "href": "https://example.com/img/35cdc008/thumb-s.jpg", 
+  {
+    "href": "https://example.com/img/35cdc008/thumb-s.jpg",
     "size": 14535
-  },
+  }
 ]
 ]]></sourcecode>
    </t>
@@ -2648,16 +2654,14 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n",
         <t>Below is an example of a JSON serialized URLs spec object, matching the metadata at 
         metadata.example.com/a/b/c.
         </t>
-        <sourcecode type="json" name="urls-spec-json"><![CDATA[
+<sourcecode type="json" name="urls-spec-json"><![CDATA[
 {
-   "trigger-subject": "metadata",
-   "generic-trigger-spec-type": "urls",
-   "generic-trigger-spec-value": {
-      "urls": [
-         "https://metadata.example.com/a/b/c"
-      ],
-      "url-type": "published"
-   }
+  "trigger-subject": "metadata",
+  "generic-trigger-spec-type": "urls",
+  "generic-trigger-spec-value": {
+    "urls": [ "https://metadata.example.com/a/b/c" ],
+    "url-type": "published"
+  }
 }
        ]]></sourcecode>
       </section>
@@ -2756,8 +2760,8 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n",
 <sourcecode type="json" name="prefix-match">
 <![CDATA[
 {
-    "pattern": "https://www.example.com/trailers/*",
-    "case-sensitive": true
+  "pattern": "https://www.example.com/trailers/*",
+  "case-sensitive": true
 }
 ]]></sourcecode>
    </section>
@@ -2829,7 +2833,8 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n",
    </list></t> 
    </list></t>
 
-   <t>Example of a case-sensitive, no query parameters, regex match against:</t>
+   <t>Example of a case-sensitive, no query parameters, regex match against is below.</t>
+   <t>Please note that some lines in the example are wrapped for clarity.</t>
    <sourcecode type="json" name="regex-match-no-query-param">
 <![CDATA[
 "^(https:\/\/video\.example\.com)\/([a-z])\/
@@ -2848,21 +2853,36 @@ http://example.com/hls/35cdc008/audio/index.m3u8\n",
           <t>This regex matches URLs of the domain "video.example.com" where the path structure is
              /(single lower case letter)/(name-of-title)/(single digit between 1 to 7)/(index.m3u8 or a 3 digit number with ts extension).
              For example:</t>
-             <sourcecode type="json" name="regex-match-3"><![CDATA[
-https://video.example.com/d/movie1/5/index.m3u8
-or
-https://video.example.com/k/movie1/4/013.ts
-         ]]></sourcecode>
+     <sourcecode type="json" name="regex-match-3"><![CDATA[ https://video.example.com/d/movie1/5/index.m3u8 ]]></sourcecode>
+     <t>or</t>
+     <sourcecode type="json" name="regex-match-3"><![CDATA[ https://video.example.com/k/movie1/4/013.ts ]]></sourcecode>
         </section>
    </section>
 
 
       <section anchor="objectlist-spec" title="Object List Spec">
-   <t>
-      The "objectlist" spec type allows uCDN to manage content held by dCDN based on structured object lists. 
-              The Object List spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
+      <t>
+        The "objectlist" spec type allows uCDN to manage content held by dCDN based on structured object lists. 
+        The Object List spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
+      </t>
+      <t>
+        An object list is encoded as a JSON object with the following properties:
+      </t>
+        <t><list style="empty" hangIndent="3">
+        <t><list style="hanging" hangIndent="3">
+        <t hangText="Name: objects">
+        <vspace blankLines="1"/>
+        Description: An array of objects to be used in the trigger
+        <vspace blankLines="1"/>
+        Value: <xref target="object-list">ObjectList</xref> object
+        <vspace blankLines="1"/>
+        Mandatory: Yes.
         </t>
-   <t>An object list is encoded as an <xref target="object-list">ObjectList</xref> object.</t> 
+
+        </list></t>
+        </list></t>
+
+
 
    </section>
 
@@ -2941,35 +2961,30 @@ https://video.example.com/k/movie1/4/013.ts
         <t>The following is an example of a JSON serialized generic trigger extension object containing a location policy
            object that allows the trigger execution in the US but blocks its execution in Canada:
         </t>
-        <sourcecode type="json" name="trigger-extension-json"><![CDATA[
+<sourcecode type="json" name="trigger-extension-json"><![CDATA[
 {
-   "generic-trigger-extension-type": "location-policy",
-   "generic-trigger-extension-value":
-    {
-       "locations": [
-         {
-           "action": "allow",
-           "footprints": [
-             {
-               "footprint-type": "countrycode",
-               "footprint-value": ["us"]
-             }
-           ]
-         },
-         {
-           "action": "deny",
-           "footprints": [
-             {
-               "footprint-type": "countrycode",
-               "footprint-value": ["ca"]
-             }
-           ]
-         }
-       ]
-    },
-   "mandatory-to-enforce": true,
-   "safe-to-redistribute": true,
-   "incomprehensible": false
+  "generic-trigger-extension-type": "location-policy",
+  "generic-trigger-extension-value": {
+    "locations": [
+      {
+        "action": "allow",
+        "footprints": [{
+          "footprint-type": "countrycode",
+          "footprint-value": [ "us" ]
+        }]
+      },
+      {
+        "action": "deny",
+        "footprints": [{
+          "footprint-type": "countrycode",
+          "footprint-value": [ "ca" ]
+        }]
+      }
+    ]
+  },
+  "mandatory-to-enforce": true,
+  "safe-to-redistribute": true,
+  "incomprehensible": false
 }
        ]]></sourcecode>
       </section>
@@ -3231,10 +3246,10 @@ https://video.example.com/k/movie1/4/013.ts
   "generic-trigger-extension-value":
   {
     "priority": 100,
-    "depends":  { 
-      "https://dcdn.com/triggers/100",
-      "https://dcdn.com/triggers/101"
-    }, 
+    "depends":  [ 
+      "https://dcdn.example.com/triggers/100",
+      "https://dcdn.example.com/triggers/101"
+    ], 
     "urgent": true
   }
 }
@@ -3313,28 +3328,35 @@ https://video.example.com/k/movie1/4/013.ts
              The following shows an example of CI/T Endpoints Capability object serialization for dCDN that supports
              versions 2 and 2.1 of the CI/T interface.
           </t>
-          <sourcecode type="json" name="fci-endpoints"><![CDATA[
+<sourcecode type="json" name="fci-endpoints"><![CDATA[
+
 {
   "capabilities": [
     {
       "capability-type": "FCI.CITEndpoints",
-      "capability-value": {        
-       "trigger-endpoint-uri": 
-         "https://dcdn.example.com/configuration/",  
+      "capability-value": {
+        "trigger-endpoint-uri": 
+          "https://dcdn.example.com/configuration/",
         "trigger-versions": [ "1" ],
-       "trigger-subjects": "metadata"
-        },
-      "footprints": [ <Footprint objects> ]
+        "trigger-subjects": "metadata"
+      },
+      "footprints": {
+        "footprint-type": "countrycode",
+        "footprint-value": [ "us" ]
+      }
     },
     {
       "capability-type": "FCI.CITEndpoints",
-      "capability-value": { 
-     "trigger-endpoint-uri": 
-       "https://dcdn.example.com/cache-management/",
-      "trigger-versions": [ "2", "2.1" ],
-     "trigger-subjects": "content"
-   },
-      "footprints": [ <Footprint objects> ]
+      "capability-value": {
+        "trigger-endpoint-uri": 
+          "https://dcdn.example.com/cache-management/",
+        "trigger-versions": [ "2", "2.1" ],
+        "trigger-subjects": "content"
+      },
+      "footprints": {
+        "footprint-type": "countrycode",
+        "footprint-value": [ "us" ]
+      }
     }
   ]
 }
@@ -3414,31 +3436,30 @@ https://video.example.com/k/movie1/4/013.ts
                 Generic Spec types, with "time-policy" but only for the "preposition" action. Note that in this example, purge 
       is not supported, and no actions involving metadata are supported either.
              </t>
-             <sourcecode type="json" name="fci-citscope"><![CDATA[
+<sourcecode type="json" name="fci-citscope"><![CDATA[
 {
- "capabilities": [
-   {
-     "capability-type": "FCI.CITScope",
-     "capability-value": {
-       "trigger-scope-capabilities": [
-         {
-            "trigger-action": "preposition",
-            "trigger-subject": "content",
-            "trigger-specs": ["urls", "ccids"],
-            "trigger-extensions": ["time-policy"]
-         },
-         {
-            "trigger-action": "invalidate",
-            "trigger-subject": "content",
-            "trigger-specs": ["urls", "ccids"]
-         }
+  "capabilities": [{
+    "capability-type": "FCI.CITScope",
+    "capability-value": {
+      "trigger-scope-capabilities": [
+        {
+          "trigger-action": "preposition",
+          "trigger-subject": "content",
+          "trigger-specs": [ "urls", "ccids" ],
+          "trigger-extensions": [ "time-policy" ]
+        },
+        {
+          "trigger-action": "invalidate",
+          "trigger-subject": "content",
+          "trigger-specs": [ "urls", "ccids" ]
+        }
       ]
-     },
-     "footprints": [
-       <Footprint objects>
-     ]
-   }
- ]
+    },
+    "footprints": {
+      "footprint-type": "countrycode",
+      "footprint-value": [ "us" ]
+    }
+  }]
 }
 ]]></sourcecode>
            </section>
@@ -3471,17 +3492,18 @@ https://video.example.com/k/movie1/4/013.ts
                 The following shows an example of a JSON serialized CI/T Object List Type Capability object serialization
       for dCDN that supports "hls" and "dash".
              </t>
-             <sourcecode type="json" name="cit-object-list-json"><![CDATA[
+<sourcecode type="json" name="cit-object-list-json"><![CDATA[
 {
- "capabilities": [
-   {
-     "capability-type": "FCI.CITObjectListType",
-     "capability-value": {
-       "object-list-types": ["hls", "dash", "json"]
-     },
-     "footprints": [ <Footprint objects> ]
-   }
- ]
+  "capabilities": [{
+    "capability-type": "FCI.CITObjectListType",
+    "capability-value": {
+      "object-list-types": [ "hls", "dash", "json" ]
+    },
+    "footprints": {
+      "footprint-type": "countrycode",
+      "footprint-value": [ "us" ]
+    }
+  }]
 }
 ]]></sourcecode>
            </section>
@@ -3514,17 +3536,16 @@ https://video.example.com/k/movie1/4/013.ts
       for dCDN that supports the private URL type in URL-based trigger spec types.
              </t>
 
-             <sourcecode type="json" name="cit-private-url-json"><![CDATA[
+<sourcecode type="json" name="cit-private-url-json"><![CDATA[
 {
- "capabilities": [
-   {
-     "capability-type": "FCI.CITPrivateUrlType",
-     "capability-value": {
-       "private-url-type-support": true
-     },
-     "footprints": [ <Footprint objects> ]
-   }
- ]
+  "capabilities": [{
+    "capability-type": "FCI.CITPrivateUrlType",
+    "capability-value": { "private-url-type-support": true },
+    "footprints": {
+      "footprint-type": "countrycode",
+      "footprint-value": [ "us" ]
+    }
+  }]
 }
 ]]></sourcecode>
            </section>
@@ -3565,21 +3586,22 @@ https://video.example.com/k/movie1/4/013.ts
       for dCDN that supports extended status in Trigger Status, Error.v2 Description and Trigger Collections objects.
              </t>
 
-               <sourcecode type="json" name="fci-citextendedstatus"><![CDATA[
+<sourcecode type="json" name="fci-citextendedstatus"><![CDATA[
 {
- "capabilities": [
-   {
-     "capability-type": "FCI.CITExtendedStatus",
-     "capability-value": {
-       "extended-status-objects": [
-         "trigger-status",
-         "error-v2-description",
-         "trigger-collection"
-       ]
-     },
-     "footprints": [ <Footprint objects> ]
-   }
- ]
+  "capabilities": [{
+    "capability-type": "FCI.CITExtendedStatus",
+    "capability-value": {
+      "extended-status-objects": [
+        "trigger-status"      ,
+        "error-v2-description",
+        "trigger-collection"
+      ]
+    },
+    "footprints": {
+      "footprint-type": "countrycode",
+      "footprint-value": [ "us" ]
+    }
+  }]
 }
 ]]></sourcecode>
            </section>
@@ -3625,34 +3647,33 @@ REQUEST:
   Content-Length: 352
 
   {
-      "trigger": {
-         "action": "preposition",
-         "specs": [
-            {
-               "trigger-subject": "metadata",
-               "generic-trigger-spec-type": "urls",
-               "generic-trigger-spec-value": {
-                  "urls": [
-                     "https://metadata.example.com/a/b/c"
-                  ]
-               }
-            },
-            {
-               "trigger-subject": "content",
-               "generic-trigger-spec-type": "urls",
-               "generic-trigger-spec-value": {
-                  "urls": [
-                     "https://www.example.com/a/b/c/1",
-                     "https://www.example.com/a/b/c/2",
-                     "https://www.example.com/a/b/c/3",
-                     "https://www.example.com/a/b/c/4"
-                  ]
-               }
-            }
-         ],
-      },
-      "cdn-path": [ "AS64496:1" ]
+    "trigger": {
+      "action": "preposition",
+      "specs": [
+        {
+          "trigger-subject": "metadata",
+          "generic-trigger-spec-type": "urls",
+          "generic-trigger-spec-value": {
+          "urls": [ "https://metadata.example.com/a/b/c" ]
+	   }
+        },
+        {
+          "trigger-subject": "content",
+          "generic-trigger-spec-type": "urls",
+          "generic-trigger-spec-value": {
+            "urls": [
+              "https://www.example.com/a/b/c/1",
+              "https://www.example.com/a/b/c/2",
+              "https://www.example.com/a/b/c/3",
+              "https://www.example.com/a/b/c/4"
+            ]
+          }
+        }
+      ]
+    },
+    "cdn-path": [ "AS64496:1" ]
   }
+
 
 RESPONSE:
 
@@ -3664,36 +3685,34 @@ RESPONSE:
   Server: example-server/0.1
 
   {
-      "ctime": 1462351690,
-      "etime": 1462351698,
-      "mtime": 1462351690,
-      "status": "pending",
-      "trigger": {
-         "action": "preposition"
-         "specs": [
-            {
-               "trigger-subject": "metadata",
-               "generic-trigger-spec-type": "urls",
-               "generic-trigger-spec-value": {
-                  "urls": [
-                     "https://metadata.example.com/a/b/c"
-                  ]
-               }
-            },
-            {
-               "trigger-subject": "content",
-               "generic-trigger-spec-type": "urls",
-               "generic-trigger-spec-value": {
-                  "urls": [
-                     "https://www.example.com/a/b/c/1",
-                     "https://www.example.com/a/b/c/2",
-                     "https://www.example.com/a/b/c/3",
-                     "https://www.example.com/a/b/c/4"
-                  ]
-               }
-            }
-         ]
-      }
+    "ctime": 1462351690,
+    "etime": 1462351698,
+    "mtime": 1462351690,
+    "status": "pending",
+    "trigger": {
+      "action": "preposition",
+      "specs": [
+        {
+          "trigger-subject": "metadata",
+          "generic-trigger-spec-type": "urls",
+          "generic-trigger-spec-value": {
+            "urls": [ "https://metadata.example.com/a/b/c" ]
+          }
+        },
+        {
+          "trigger-subject": "content",
+          "generic-trigger-spec-type": "urls",
+          "generic-trigger-spec-value": {
+            "urls": [
+              "https://www.example.com/a/b/c/1",
+              "https://www.example.com/a/b/c/2",
+              "https://www.example.com/a/b/c/3",
+              "https://www.example.com/a/b/c/4"
+            ]
+          }
+        }
+      ]
+    }
   }
 ]]></artwork>
    </figure>
@@ -3760,39 +3779,37 @@ RESPONSE:
   Server: example-server/0.1
 
   {
-      "ctime": 1462351691,
-      "etime": 1462351699,
-      "mtime": 1462351691,
-      "status": "pending",
-      "trigger": {
-         "action": "invalidate",
-         "specs": [
-            {
-               "trigger-subject": "metadata",
-               "generic-trigger-spec-type": "uri-pattern-match",
-               "generic-trigger-spec-value": {
-                  "pattern": "https://metadata.example.com/a/b/*"
-               }
-            },
-            {
-               "trigger-subject": "content",
-               "generic-trigger-spec-type": "urls",
-               "generic-trigger-spec-value": {
-                  "urls": [
-                     "https://www.example.com/a/index.html"
-                  ]
-               }
-            },
-            {
-               "trigger-subject": "content",
-               "generic-trigger-spec-type": "uri-pattern-match",
-               "generic-trigger-spec-value": {
-                  "pattern": "https://www.example.com/a/b/*",
-                  "case-sensitive": true
-               }
-            }
-         ]
-      }
+    "ctime": 1462351691,
+    "etime": 1462351699,
+    "mtime": 1462351691,
+    "status": "pending",
+    "trigger": {
+      "action": "invalidate",
+      "specs": [
+        {
+          "trigger-subject": "metadata",
+          "generic-trigger-spec-type": "uri-pattern-match",
+          "generic-trigger-spec-value": {
+            "pattern": "https://metadata.example.com/a/b/*"
+          }
+        },
+        {
+          "trigger-subject": "content",
+          "generic-trigger-spec-type": "urls",
+          "generic-trigger-spec-value": {
+            "urls": [ "https://www.example.com/a/index.html" ]
+          }
+        },
+        {
+          "trigger-subject": "content",
+          "generic-trigger-spec-type": "uri-pattern-match",
+          "generic-trigger-spec-value": {
+            "pattern": "https://www.example.com/a/b/*",
+            "case-sensitive": true
+          }
+        }
+      ]
+    }
   }
 ]]></artwork>
    </figure>
@@ -3805,6 +3822,8 @@ RESPONSE:
             content objects for invalidation, the command is rejected by dCDN due to regex complexity, and
             an appropriate error is reflected in the status response.
           </t>
+          <t>Please note that some lines in the example are wrapped for clarity.</t>
+
           <figure>
             <artwork><![CDATA[
 REQUEST:
@@ -3814,21 +3833,20 @@ REQUEST:
   Host: triggers.dcdn.example.com
   Accept: */*
   Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
+
   {
     "trigger": {
       "action": "invalidate",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "uri-regex-match",
-          "generic-trigger-spec-value": {
-            "regex": "^(https:\\/\\/video\\.example\\.com)\\/
-              ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
-            "case-sensitive": true,
-            "match-query-string": false
-          }
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "uri-regex-match",
+        "generic-trigger-spec-value": {
+          "regex": "^(https:\\/\\/video\\.example\\.com)\\/
+            ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+          "case-sensitive": true,
+          "match-query-string": false
         }
-      ]
+      }]
     },
     "cdn-path": [ "AS64496:0" ]
   }
@@ -3843,31 +3861,38 @@ RESPONSE:
   Server: example-server/0.1
 
   {
-    "errors": [
-      {
-        "specs": [
-          {
-            "trigger-subject": "content",
-            "generic-trigger-spec-type": "uri-regex-match",
-            "generic-trigger-spec-value": {
-              "regex": "^(https:\\/\\/video\\.example\\.com)\\/
-                ([a-z])\\/movie1\\/
-                ([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
-              "case-sensitive": true,
-              "match-query-string": false
-            }
-          }
-        ],
-        "description": "dCDN rejected a regex due to complexity",
-        "error": "ereject",
-        "cdn": "AS64500:0"
-      }
-    ],
+    "errors": [{
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "uri-regex-match",
+        "generic-trigger-spec-value": {
+        "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
+          \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+          "case-sensitive": true,
+          "match-query-string": false
+        }
+      }],
+      "description": "dCDN rejected a regex due to complexity",
+      "error": "ereject",
+      "cdn": "AS64500:0"
+    }],
     "ctime": 1462351690,
     "etime": 1462351698,
     "mtime": 1462351690,
     "status": "failed",
-    "trigger": { <content of trigger.v2 object from the command> }
+    "trigger": {
+      "action": "invalidate",
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "uri-regex-match",
+        "generic-trigger-spec-value": {
+          "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
+            \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+          "case-sensitive": true,
+          "match-query-string": false
+        }
+      }]
+    }
   }
          ]]></artwork>
           </figure>
@@ -3888,20 +3913,20 @@ REQUEST:
   Host: triggers.dcdn.example.com
   Accept: */*
   Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
+
   {
     "trigger": {
       "action": "preposition",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "content-objectlist",
-          "generic-trigger-spec-value": {
-            "href":
-              "https://www.example.com/hls/title/index.m3u8",
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
             "type": "hls"
-          }
-        }
-      ]
+          }]  
+         }
+      }]
     },
     "cdn-path": [ "AS64496:0" ]
   }
@@ -3916,30 +3941,37 @@ RESPONSE:
   Server: example-server/0.1
 
   {
-    "errors": [
-      {
-        "specs": [
-          {
-            "trigger-subject": "content",
-            "generic-trigger-spec-type": "content-objectlist",
-            "generic-trigger-spec-value": {
-              "href":
-                "https://www.example.com/hls/title/index.m3u8",
-              "type": "hls"
-            }
-          }
-        ],
-   "description": 
-       "dCDN was not able to parse the object list",
-        "error": "econtent",
-        "cdn": "AS64500:0"
-      }
-    ],
+    "errors": [{
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
+            "type": "hls"
+          }}
+      }],
+      "description": "dCDN was not able to parse the object list",
+      "error": "econtent",
+      "cdn": "AS64500:0"
+    }],
     "ctime": 1462351690,
     "etime": 1462351698,
     "mtime": 1462351690,
     "status": "failed",
-    "trigger": { <content of trigger.v2 object from the command> }
+    "trigger": {
+      "action": "preposition",
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
+            "type": "hls"
+          }]
+        }
+      }]
+    }
   }
          ]]></artwork>
           </figure>
@@ -3978,28 +4010,54 @@ RESPONSE:
   Date: Wed, 04 May 2016 08:48:11 GMT
   Content-Type: application/cdni; ptype=ci-trigger-collection
 
-  {
-    "cdn-id": "AS64496:0",
-    "coll-status": [ 
-      { "status": "pending", "collection": "/triggers/pending" },
-      { "status": "active", "collection": "/triggers/active" },
-      { "status": "complete", "collection": "/triggers/complete" },
-      { "status": "processed", "collection": "/triggers/processed" },
-      { "status": "failed", "collection": "/triggers/failed" },
-      { "status": "cancelling",
-        "collection":"/triggers/cancelling" },
-      { "status": "cancelled", "collection": "/triggers/cancelled" }
-    ],
-    "coll-label": [ 
-      { "label": "1b1bad0c", "collection": "/triggers/1b1bad0c" },
-      { "label": "fafa9a97", "collection": "/triggers/fafa9a97" }
-    ],
-    "staleresourcetime": 86400,
-    triggers": [
-          "https://dcdn.example.com/triggers/0",
-          "https://dcdn.example.com/triggers/1"
-      ]
-  }
+{
+  "cdn-id": "AS64496:0",
+  "coll-status": [
+    {
+      "status"    : "pending",
+      "collection": "/triggers/pending"
+    },
+    {
+      "status"    : "active",
+      "collection": "/triggers/active"
+    },
+    {
+      "status"    : "complete",
+      "collection": "/triggers/complete"
+    },
+    {
+      "status"    : "processed",
+      "collection": "/triggers/processed"
+    },
+    {
+      "status"    : "failed",
+      "collection": "/triggers/failed"
+    },
+    {
+      "status"    : "cancelling",
+      "collection": "/triggers/cancelling"
+    },
+    {
+      "status"    : "cancelled",
+      "collection": "/triggers/cancelled"
+    }
+  ],
+  "coll-label": [
+    {
+      "label"     : "1b1bad0c", 
+      "collection": "/triggers/1b1bad0c"
+    },
+    {
+      "label"     : "fafa9a97",
+      "collection": "/triggers/fafa9a97"
+    }
+  ],
+  "staleresourcetime": 86400,
+  "triggers": [
+    "https://dcdn.example.com/triggers/0",
+    "https://dcdn.example.com/triggers/1"
+  ]
+}
 ]]></artwork>
    </figure>
    </section>
@@ -4029,11 +4087,11 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-collection
 
   {
-      "staleresourcetime": 86400,
-      "triggers": [
-          "https://dcdn.example.com/triggers/0",
-          "https://dcdn.example.com/triggers/1"
-      ]
+    "staleresourcetime": 86400,
+    "triggers": [
+      "https://dcdn.example.com/triggers/0",
+      "https://dcdn.example.com/triggers/1"
+    ]
   }
 ]]></artwork>
    </figure>
@@ -4061,8 +4119,8 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-collection
 
   {
-      "staleresourcetime": 86400,
-      "triggers": []
+    "staleresourcetime": 86400,
+    "triggers": []
   }
 ]]></artwork>
    </figure>
@@ -4094,36 +4152,34 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-status.v2
 
   {
-      "ctime": 1462351690,
-      "etime": 1462351698,
-      "mtime": 1462351690,
-      "status": "pending",
-      "trigger": {
-          "action": "preposition",
-          "specs": [
-            {
-               "trigger-subject": "metadata",
-               "generic-trigger-spec-type": "urls",
-               "generic-trigger-spec-value": {
-                  "urls": [
-                     "https://metadata.example.com/a/b/c"
-                  ]
-               }
-            },
-            {
-               "trigger-subject": "content",
-               "generic-trigger-spec-type": "urls",
-               "generic-trigger-spec-value": {
-                  "urls": [
-                     "https://www.example.com/a/b/c/1",
-                     "https://www.example.com/a/b/c/2",
-                     "https://www.example.com/a/b/c/3",
-                     "https://www.example.com/a/b/c/4"
-                  ]
-               }
-            }
-         ]
-      }
+    "ctime": 1462351690,
+    "etime": 1462351698,
+    "mtime": 1462351690,
+    "status": "pending",
+    "trigger": {
+      "action": "preposition",
+      "specs": [
+        {
+          "trigger-subject": "metadata",
+          "generic-trigger-spec-type": "urls",
+          "generic-trigger-spec-value": {
+            "urls": [ "https://metadata.example.com/a/b/c" ]
+          }
+        },
+        {
+          "trigger-subject": "content",
+          "generic-trigger-spec-type": "urls",
+          "generic-trigger-spec-value": {
+            "urls": [
+              "https://www.example.com/a/b/c/1",
+              "https://www.example.com/a/b/c/2",
+              "https://www.example.com/a/b/c/3",
+              "https://www.example.com/a/b/c/4"
+            ]
+          }
+        }
+      ]
+    }
   }
 
 REQUEST:
@@ -4143,40 +4199,39 @@ RESPONSE:
   Cache-Control: max-age=60
   Date: Wed, 04 May 2016 08:48:11 GMT
   Content-Type: application/cdni; ptype=ci-trigger-status.v2
-  {
-      "ctime": 1462351691,
-      "etime": 1462351699,
-      "mtime": 1462351691,
-      "status": "pending",
-      "trigger": {
-          "action": "invalidate",
-          "specs": [
-            {
-               "trigger-subject": "metadata",
-               "generic-trigger-spec-type": "uri-pattern-match",
-               "generic-trigger-spec-value": { 
-                  "pattern": "https://metadata.example.com/a/b/*"
-               }
-            },
-            {
-               "trigger-subject": "content",
-               "generic-trigger-spec-type": "urls",
-               "generic-trigger-spec-value": {
-                  "urls": [
-                     "https://www.example.com/a/index.html"
-                  ]
-               }
-            },
-            {
-               "trigger-subject": "content",
-               "generic-trigger-spec-type": "uri-pattern-match",
-               "generic-trigger-spec-value": {
-                   "pattern": "https://www.example.com/a/b/*",
-                   "case-sensitive": true
-               }
-            }
-         ]
-      }
+  
+  {  
+    "ctime": 1462351691,
+    "etime": 1462351699,
+    "mtime": 1462351691,
+    "status": "pending",
+    "trigger": {
+      "action": "invalidate",
+      "specs": [
+        {
+          "trigger-subject": "metadata",
+          "generic-trigger-spec-type": "uri-pattern-match",
+          "generic-trigger-spec-value": {
+            "pattern": "https://metadata.example.com/a/b/*"
+          }
+        },
+        {
+          "trigger-subject": "content",
+          "generic-trigger-spec-type": "urls",
+          "generic-trigger-spec-value": {
+            "urls": [ "https://www.example.com/a/index.html" ]
+          }
+        },
+        {
+          "trigger-subject": "content",
+          "generic-trigger-spec-type": "uri-pattern-match",
+          "generic-trigger-spec-value": {
+            "pattern": "https://www.example.com/a/b/*",
+            "case-sensitive": true
+          }
+        }
+      ]
+    }
   }
 ]]></artwork>
    </figure>
@@ -4253,8 +4308,8 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-collection
 
   {
-      "staleresourcetime": 86400,
-      "triggers": []
+    "staleresourcetime": 86400,
+    "triggers": []
   }
 
 REQUEST:
@@ -4276,11 +4331,11 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-collection
 
   {
-      "staleresourcetime": 86400,
-      "triggers": [
-          "https://dcdn.example.com/triggers/0",
-          "https://dcdn.example.com/triggers/1"
-      ]
+    "staleresourcetime": 86400,
+    "triggers": [
+       "https://dcdn.example.com/triggers/0",
+       "https://dcdn.example.com/triggers/1"
+    ]
   }
 ]]></artwork>
    </figure>
@@ -4332,10 +4387,8 @@ RESPONSE:
   Content-Type: application/cdni; ptype=ci-trigger-collection
 
   {
-      "staleresourcetime": 86400,
-      "triggers": [
-          "https://dcdn.example.com/triggers/1"
-      ]
+    "staleresourcetime": 86400,
+    "triggers": [ "https://dcdn.example.com/triggers/1" ]
   }
 ]]></artwork>
    </figure>
@@ -4343,36 +4396,36 @@ RESPONSE:
 
         <section anchor="trigger-with-extensions" title="Extensions with Error Propagation">
           <t>
-            In the following example, a CI/T "preposition" command is using two extensions to control the
-            way the trigger is executed. In this example, the receiving dCDN, identified as "AS64500:0",
-            does not support the first extension in the extensions array. dCDN "AS64500:0" further
-            distributes this trigger to another downstream CDN that is identified as "AS64501:0", which
-            does not support the second extension in the extensions array. The error is propagated from
-            "AS64501:0" to "AS64500:0" and the errors.v2 array reflects both errors.
-          </t>
-          <figure>
-            <artwork><![CDATA[
+              In the following example, a CI/T "preposition" command is using two extensions to control the
+              way the trigger is executed. In this example, the receiving dCDN, identified as "AS64500:0",
+              does not support the first extension in the extensions array. dCDN "AS64500:0" further
+              distributes this trigger to another downstream CDN that is identified as "AS64501:0", which
+              does not support the second extension in the extensions array. The error is propagated from
+              "AS64501:0" to "AS64500:0" and the errors.v2 array reflects both errors.
+            </t>
+            <figure>
+              <artwork><![CDATA[
 REQUEST:
-
+  
   POST /triggers HTTP/1.1
   User-Agent: example-user-agent/0.1
   Host: triggers.dcdn.example.com
   Accept: */*
   Content-Type: application/cdni; ptype=ci-trigger-command.create.v2
+  
   {
     "trigger": {
       "action": "preposition",
-      "specs": [
-        {
-          "trigger-subject": "content",
-          "generic-trigger-spec-type": "content-objectlist",
-          "generic-trigger-spec-value": {
-            "href":
-              "https://www.example.com/hls/title/index.m3u8",
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
             "type": "hls"
-          }
+          }]
         }
-      ],
+      }],
       "extensions": [
         {
           "generic-trigger-extension-type": "location-policy",
@@ -4383,9 +4436,7 @@ REQUEST:
                 "footprints": [
                   {
                     "footprint-type": "countrycode",
-                    "footprint-value": [
-                      "us"
-                    ]
+                    "footprint-value": [ "us" ]
                   }
                 ]
               },
@@ -4394,9 +4445,123 @@ REQUEST:
                 "footprints": [
                   {
                     "footprint-type": "countrycode",
-                    "footprint-value": [
-                      "ca"
-                    ]
+                    "footprint-value": [ "ca" ]
+                  }
+                ]
+              }
+            ]
+          },
+          "mandatory-to-enforce": true,
+          "safe-to-redistribute": true
+        },
+        {
+          "generic-trigger-extension-type": "time-policy",
+          "generic-trigger-extension-value": {
+            "unix-time-window": { 
+              "start": 946717200, 
+              "end": 946746000 
+            }   
+          },
+          "mandatory-to-enforce": true,
+          "safe-to-redistribute": true
+        }
+      ]
+    },
+    "cdn-path": [ "AS64496:0" ]
+  }
+  
+RESPONSE:
+  
+  HTTP/1.1 201 Created
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Length: 467
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  Location: https://triggers.dcdn.example.com/triggers/0
+  Server: example-server/0.1
+
+  {
+    "errors": [
+      {
+        "extensions": [{
+          "generic-trigger-extension-type": "location-policy",
+          "generic-trigger-extension-value": {
+            "locations": [
+              {
+                "action": "allow",
+                "footprints": [{
+                    "footprint-type": "countrycode",
+                    "footprint-value": [ "us" ]
+                  }]
+              },
+              {
+                "action": "deny",
+                "footprints": [{
+                    "footprint-type": "countrycode",
+                    "footprint-value": [ "ca" ]
+                  }]
+              }
+            ]
+          },
+          "mandatory-to-enforce": true,
+          "safe-to-redistribute": true
+        }],
+        "description": "unrecognized extension <type>",
+        "error": "eextension",
+        "cdn": "AS64500:0"
+      },
+      {
+        "extensions": [{
+          "generic-trigger-extension-type": "time-policy",
+          "generic-trigger-extension-value": {
+            "unix-time-window": {
+              "start": 946717200,
+              "end": 946746000
+            }
+          },
+          "mandatory-to-enforce": true,
+          "safe-to-redistribute": true
+        }],
+        "description": "unrecognized extension <type>",
+        "error": "eextension",
+        "cdn": "AS64501:0"
+      }
+    ],
+    "ctime": 1462351690,
+    "etime": 1462351698,
+    "mtime": 1462351690,
+    "status": "failed",
+    "trigger": {
+      "action": "preposition",
+      "specs": [{
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "content-objectlist",
+        "generic-trigger-spec-value": {
+          "objects": [{
+            "href": "https://www.example.com/hls/title/index.m3u8",
+            "type": "hls"
+          }]
+        }
+      }],
+      "extensions": [
+        {
+          "generic-trigger-extension-type": "location-policy",
+          "generic-trigger-extension-value": {
+            "locations": [
+              {
+                "action": "allow",
+                "footprints": [
+                  {
+                    "footprint-type": "countrycode",
+                    "footprint-value": [ "us" ]
+                  }
+                ]
+              },
+              {
+                "action": "deny",
+                "footprints": [
+                  {
+                    "footprint-type": "countrycode",
+                    "footprint-value": [ "ca" ]
                   }
                 ]
               }
@@ -4417,83 +4582,7 @@ REQUEST:
           "safe-to-redistribute": true
         }
       ]
-    },
-    "cdn-path": [ "AS64496:0" ]
-  }
-
-RESPONSE:
-
-  HTTP/1.1 201 Created
-  Date: Wed, 04 May 2016 08:48:10 GMT
-  Content-Length: 467
-  Content-Type: application/cdni; ptype=ci-trigger-status.v2
-  Location: https://triggers.dcdn.example.com/triggers/0
-  Server: example-server/0.1
-
-  {
-    "errors": [
-      {
-        "extensions": [
-          {
-            "generic-trigger-extension-type": "location-policy",
-            "generic-trigger-extension-value": {
-              "locations": [
-                {
-                  "action": "allow",
-                  "footprints": [
-                    {
-                      "footprint-type": "countrycode",
-                      "footprint-value": [
-                        "us"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "action": "deny",
-                  "footprints": [
-                    {
-                      "footprint-type": "countrycode",
-                      "footprint-value": [
-                        "ca"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            "mandatory-to-enforce": true,
-            "safe-to-redistribute": true
-          }
-        ],
-        "description": "unrecognized extension <type>",
-        "error": "eextension",
-        "cdn": "AS64500:0"
-      },
-      {
-        "extensions": [
-          {
-            "generic-trigger-extension-type": "time-policy",
-            "generic-trigger-extension-value": {
-              "unix-time-window": {
-                "start": 946717200,
-                "end": 946746000
-              }
-            },
-            "mandatory-to-enforce": true,
-            "safe-to-redistribute": true
-          }
-        ],
-        "description": "unrecognized extension <type>",
-        "error": "eextension",
-        "cdn": "AS64501:0"
-      }
-    ],
-    "ctime": 1462351690,
-    "etime": 1462351698,
-    "mtime": 1462351690,
-    "status": "failed",
-    "trigger": { <content of trigger.v2 object from the command> }
+    }
   }
          ]]></artwork>
           </figure>
