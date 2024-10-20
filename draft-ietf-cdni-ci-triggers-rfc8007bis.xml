@@ -692,8 +692,8 @@
    </t>
 
    <t>
-	dCDN SHOULD provide continuous update of the trigger processing progress, by responding with updated trigger resource representation 
-	to subsequent uCDN requests sent to the created trigger URL. 
+	dCDN SHOULD provide continuous updates of the trigger processing progress, by responding with updated trigger resource representations 
+	to subsequent uCDN requests sent to the created trigger URL.
 	If the dCDN is unable to do that, it MUST indicate that it has accepted the request but will not be providing further status updates. 
 	To do this, it MUST set the trigger state to "processed" at creation time. 
 	In this case, CI/T processing should continue as for a "complete" request.
