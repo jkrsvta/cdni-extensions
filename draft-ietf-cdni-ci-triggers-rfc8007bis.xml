@@ -395,7 +395,7 @@
 	<t>	
 		uCDN requests to create a new Trigger resource by POSTing its representation to
 		the trigger collection resource with a well-known URI "https://dcdn.example.com/triggers/uCDN".
-       .</t>
+       </t>
    	<t>
 		dCDN authenticates the request, validates the Trigger resource in it, and if the request is accepted,
 		creates a new Trigger resource.
