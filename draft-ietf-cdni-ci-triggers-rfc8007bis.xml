@@ -200,12 +200,9 @@
    <t><list style="symbols"><t><xref target="model-for-cdni-triggers"/> outlines the model for the CI/T interface at a high
       level.</t>
       
+   <t><xref target="cdni-trigger-interface"/> defines the CI/T interface offered by the downstream CDN.</t>
 
-   <t><xref target="cdni-trigger-interface"/> defines the web service provided by the downstream CDN.</t>
-
-   <t><xref target="cit-objects-properties-and-encoding"/> lists properties of CI/T Resources.</t>
-
-   <t><xref target="trigger-extension-objects"/> describes the Trigger's Extensions object.</t>
+   <t><xref target="cit-objects-properties-and-encoding"/> defines encoding of the standard CI/T objects, and introduces trigger spec and trigger extension types.</t>
 
    <t><xref target="footprint-and-capabilities"/> describes the FCI capabilities objects used to inform on the supported
 	   CI/T-related capabilities.</t>
