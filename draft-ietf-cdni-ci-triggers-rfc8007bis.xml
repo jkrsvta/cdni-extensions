@@ -798,7 +798,7 @@
    <t>
 	To allow uCDN to use client-side caching of all triggers and trigger collections,  dCDN SHOULD include an ETag response header 
 	with every resource representation it sends. dCDN SHOULD also respond with the HTTP code 304 ("Not Modified") without a response 
-	body in response to conditional resource requests that use "If-None-Match" and/ir "If-Not-Modified-Since" request headers 
+	body in response to conditional resource requests that use "If-None-Match" and/or "If-Modified-Since" request headers 
 	as described in Section 13 of
 	<xref target="RFC9110"/> , in case dCDN doesn't have a more recent resource representation. 
    </t>
