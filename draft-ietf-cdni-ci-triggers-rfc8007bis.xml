@@ -440,6 +440,8 @@
    <t>
 	The CI/T "invalidate" and "purge" trigger actions MUST be applied to all data acquired before dCDN begins the trigger 
 	processing (i.e. enters "active" state).
+	dCDN implementation SHOULD apply "invalidate" and "purge" triggers to content acquisition that is in progress 
+	when the trigger becomes active, to avoid placing purged or invalidated content into cache upon completion of the content acquisition.
 	dCDN SHOULD NOT apply CI/T "invalidate" and "purge" actions to data acquired after the trigger processing started, 
 	but this may not always be achievable, so uCDN cannot count on that.
    </t>
@@ -452,11 +454,6 @@
 	
 	uCDN MAY use the <xref target="execution-policy">Execution Policy</xref> extension to condition the start of preposition 
 	trigger processing on completion of the earlier invalidate/purge trigger(s).
-   </t>
-
-   <t>
-	dCDN implementation can choose whether to apply "invalidate" and "purge" triggers to content acquisition that has 
-	already started when the trigger becomes active.
    </t>
 
    </section>
@@ -650,7 +647,7 @@
    <t>
 	uCDN requests to create a new Trigger resource by POSTing its representation to the root interface URL, discovered at the
 	time of interface bootstrapping, e.g. "https://dcdn.example.com/triggers/uCDN".
-   	If the request is accepted by dCDN, it a new Trigger resource and returns its URI to uCDN in an HTTP 201 response. 
+   	If the request is accepted by dCDN, it creates a new Trigger resource and returns its URI to uCDN in an HTTP 201 response. 
    </t>
    <t>
 	Once created, the new trigger URI also becomes available via the trigger collection resource described in 
