@@ -696,8 +696,8 @@
 	to subsequent uCDN requests sent to the created trigger URL.
 	If the dCDN is unable to do that, it MUST indicate that it has accepted the request but will not be providing further status updates. 
 	To do this, it MUST set the trigger state to "processed" at creation time. 
-	In this case, CI/T processing should continue as for a "complete" request.
-	In this case dCDN SHOULD also provide an estimated completion time for the request by using the trigger "etime" property of the trigger.
+	In this case, CI/T processing should continue as it were a request in the "complete" state.
+	In this case dCDN SHOULD also provide an estimated completion time for the request by using the trigger "etime" property.
    </t>
 
    <t>
