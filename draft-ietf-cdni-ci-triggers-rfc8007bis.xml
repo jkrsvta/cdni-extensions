@@ -929,7 +929,7 @@
    <t>
    	dCDN MAY reject CI/T interface requests, by responding to those requests with 4xx or 5xx HTTP status codes.
   	For example, uCDN MAY respond with 400 ("Bad Request") if the request is malformed, or 403 ("Forbidden") 
-	or 404 ("Not Found") if the request could not be properly authenticated or if uCDN is trying to act on another CDN's resources
+	or 404 ("Not Found") if the request could not be properly authenticated or if uCDN is trying to act on another CDN's resources.
    </t>
 
    <t>
