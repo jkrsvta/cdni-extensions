@@ -3963,7 +3963,6 @@ Server: example-server/0.1
          ]]></artwork>
           </figure>
     </section>
-
   </section>
   <section title="Changing, Cancelling and Deleting Triggers" anchor="examples-changing-triggers">
     <section title="Modifying Triggers" anchor="examples-modifying-triggers">
@@ -4018,6 +4017,7 @@ Server: example-server/0.1
   "state": "pending",
   "action": "preposition",
 
+{
   "specs": [
     {
       "trigger-subject": "content",
@@ -4642,7 +4642,6 @@ Content-Type: application/cdni; ptype=ci-trigger.v2
     "generic-trigger-extension-value": { "priority": 100 }
    ]   
 }
-            
 RESPONSE:
 
 HTTP/1.1 201 Created
