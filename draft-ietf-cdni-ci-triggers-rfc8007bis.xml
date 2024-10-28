@@ -4142,7 +4142,7 @@ Content-Type: application/cdni; ptype=ci-trigger.v2
    </figure>
    <t>
    When the trigger processing is complete, the contents of the filtered collections will be updated.
-   dCDN SHOULD also update the "ETag" and/or "Last-Modified" response headers — whichever was previously sent — 
+   dCDN SHOULD also update the "ETag" and/or "Last-Modified" response headers - whichever was previously sent - 
    when delivering the updated collection representations.
    dCDN SHOULD also use cache control headers, like "Expires" and "Cache-Control", to indicate how caching of
    the resource representation should happen by uCDN and intermediate proxies. 
