@@ -185,7 +185,7 @@
    </t>
    <list style="symbols">
 	   <t>The "ci-trigger-command" object and its matching "ci-trigger-status" object are replaced 
-		   with "ci-trigger.v2" object representing trigger resource</t>
+		   with "ci-trigger.v2" object representing a trigger resource</t>
 	   <t>The "ci-trigger-collection" object is replaced with "ci-trigger-collection.v2" that is 
 		   expanded to support filtering by trigger state and trigger labels</t>
    </list>
@@ -316,7 +316,7 @@
 		of CI/T Trigger objects reported as supported by dCDN. 
    	</t>
 
-	<t>	The CI/T interface supports the following types of trigger action::</t>
+	<t>	The CI/T interface supports the following types of trigger action:</t>
 
 	<t>
 		<list style="symbols">
@@ -369,25 +369,25 @@
    	<figure title="Basic CDNI Message Flow for Triggers" anchor="ure-basic-cdni-message-flow-for-triggers">
    <artwork><![CDATA[
    uCDN                                                   dCDN
-    |  (1) POST https://dcdn.example.com/triggers/uCDN      |
+    |  (1) POST https://dcdn.com/cit/uCDN                   |
    [ ] --------------------------------------------------> [ ]--+
     |                                                      [ ]  | (2)
     |  (3) HTTP 201 Response                               [ ]<-+
    [ ] <-------------------------------------------------- [ ]
-    |     Loc: https://dcdn.example.com/triggers/uCDN/123   |
+    |     Loc: https://dcdn.com/cit/uCDN/123                |
     |                                                       |
     .                           .                           .
     .                           .                           .
     .                           .                           .
     |                                                       |
-    | (4) GET https://dcdn.example.com/triggers/uCDN/123    |
+    | (4) GET https://dcdn.com/cit/uCDN/123                 |
    [ ] --------------------------------------------------> [ ]
     |                                                      [ ]
     | (5) HTTP 200 Trigger resource representation         [ ]
    [ ] <-------------------------------------------------- [ ]
     |                                                       |
     |                                                       |
-    | (6) DELETE https://dcdn.example.com/triggers/uCDN/123 |
+    | (6) DELETE https://dcdn.com/cit/uCDN/123              |
    [ ] --------------------------------------------------> [ ]--+
     |                                                      [ ]  | (7)
     | (8) HTTP 200 OK                                      [ ]<--
@@ -401,7 +401,7 @@
    <list style="numbers">
 	<t>	
 		uCDN requests to create a new Trigger resource by POSTing its representation to
-		the trigger collection resource with a well-known URI "https://dcdn.example.com/triggers/uCDN".
+		the trigger collection resource with a well-known URI "https://dcdn.com/cit/uCDN".
        </t>
    	<t>
 		dCDN authenticates the request, validates the Trigger resource in it, and if the request is accepted,
@@ -652,7 +652,7 @@
    </t>
    <t>
 	uCDN requests to create a new Trigger resource by POSTing its representation to the root interface URL, discovered at the
-	time of interface bootstrapping, e.g., "https://dcdn.example.com/triggers/uCDN".
+	time of interface bootstrapping, e.g., "https://dcdn.com/cit/uCDN".
    	If the request is accepted by dCDN, it creates a new Trigger resource and returns its URI to uCDN in an HTTP 201 response. 
    </t>
    <t>
@@ -1003,25 +1003,25 @@
 uCDN-A                         dCDN-B                         dCDN-C
  |                              |                              |    
  | (1) POST                     |                              |    
- | https://dcdn-b.example.com   |                              |    
- | /triggers/uCDN-A             |                              |    
+ | https://dcdn-b.com           |                              |    
+ | /cit/uCDN-A                  |                              |    
 [ ]--------------------------->[ ]--+                          |    
  |                             [ ]  | (2)                      |    
  |                             [ ]<-+                          |    
  | (3) HTTP 201 Response.      [ ]                             |    
  |<----------------------------[ ]                             |    
  | Loc:                        [ ]                             |    
- | https://dcdn-b.example.com  [ ] (4) POST                    |    
- | /triggers/uCDN-A/123        [ ] https://dcdn-c.example.com  |    
- |                             [ ] /triggers/dCDN-B            | (5)
+ | https://dcdn-b.com          [ ] (4) POST                    |    
+ | /cit/ucdn-a/123             [ ] https://dcdn-c.com          |    
+ |                             [ ] /cit/dcdn-b                 | (5)
  |                             [ ]--------------------------->[ ]--+
  |                              |                             [ ]  |
  |                              |                             [ ]<-+
  |                              | (6) HTTP 201 Response.      [ ]   
  |                             [ ]<---------------------------[ ]   
  |                              |  Loc:                        |    
- |                              |  https://dcdn-c.example.com  |    
- |                              |  /triggers/dCDN-B/456        |    
+ |                              |  https://dcdn-c.com          |    
+ |                              |  /cit/dcdn-b/456             |    
  |                              |                              |    
  |                             [ ]--+                          |
  |                             [ ]  | (7.1)                    |
@@ -1033,8 +1033,8 @@ uCDN-A                         dCDN-B                         dCDN-C
  .                              .                              .   
  .                              .                              .   
  |                              | (8) GET                      |    
- |                              | https://dcdn-c.example.com   |    
- |                              | /triggers/dCDN-B/456         |    
+ |                              | https://dcdn-c.com           |    
+ |                              | /cit/dcdn-b/456              |    
  |                             [ ]--------------------------->[ ]   
  |                              |                             [ ]   
  |                              | (9) HTTP 200                [ ]   
@@ -1045,8 +1045,8 @@ uCDN-A                         dCDN-B                         dCDN-C
  .                              .                              .   
  .                              .                              .   
  | (10) GET                     |                              |    
- | https://dcdn-b.example.com   |                              |    
- | /triggers/uCDN-A/123         |                              |    
+ | https://dcdn-b.com           |                              |    
+ | /cit/ucdn-a/123              |                              |    
 [ ]--------------------------->[ ]                             |    
  |                             [ ]                             |    
  | (11) HTTP 200               [ ]                             |    
@@ -1060,7 +1060,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 	<t><list style="numbers">
 		<t>
                        	uCDN-A triggers an action in dCDN-B by POSTing a trigger representation to a triggers collection URI 
-			"https://dcdn-b.example.com/triggers/uCDN-A". This URL was given to
+			"https://dcdn-b.com/cit/ucdn-a". This URL was given to
 			uCDN-A when the CI/T interface was established.
 		</t>
 		<t>
@@ -1073,7 +1073,7 @@ uCDN-A                         dCDN-B                         dCDN-C
                	</t>
                	<t>
 		       	dCDN-B triggers the action in dCDN-C by POSTing a trigger representation to
-		       	a triggers collection URI "https://dcdn-c.example.com/triggers/dCDN-B". This URL was given to
+		       	a triggers collection URI "https://dcdn-c.com/cit/dcdn-b". This URL was given to
                         dCDN-B when the CI/T interface was established.
 		</t>
                 <t>
@@ -1183,7 +1183,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    <vspace blankLines="1"/>
    Description: Array of trigger labels.
    <vspace blankLines="1"/>
-   Value: Array of Trigger labels. Each label is encoded as a JSON string and SHOULD be unique per trigger.
+   Value: Array of Trigger labels. Each label is encoded as a JSON string and should be unique within the array of trigger labels.
    <vspace blankLines="1"/>
    Mandatory: No. The default is no labels. 
    </t>
@@ -1252,7 +1252,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    Value: An array of Error.v2 Descriptions, as defined in <xref target="error-v2-description"/>. 
    An empty array is allowed and is equivalent to omitting "errors" from the object.
    <vspace blankLines="1"/>
-   Mandatory: No. dCDN SHOULD include this attribute in the trigger resource representations it sends, when the trigger is in "failed" state.
+   Mandatory: No. dCDN SHOULD include this attribute in the trigger resource representations it sends when the trigger is in "failed" state.
    Mandatory: No.
    </t>
 
@@ -1372,7 +1372,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    <t>
 	A trigger resource, as defined in <xref target="ci-trigger-resource"/>, includes an array of trigger spec objects. 
 	Each trigger spec object contains properties that are used as trigger target selection directives for dCDN when 
-	processing the trigger.  e.g., content URLs or metadata URI patterns. Each such trigger spec is a specialization 
+	processing the trigger, e.g., content URLs or metadata URI patterns. Each such trigger spec is a specialization 
 	of a CDNI GenericTriggerSpec object. 
 	The GenericTriggerSpec object abstracts the basic information required for trigger distribution from the 
 	specifics of any given property (i.e., property semantics, enforcement options, etc.). 
@@ -2108,7 +2108,7 @@ uCDN-A                         dCDN-B                         dCDN-C
            is released for viewing. A scheduled operation enables uCDN to direct dCDN in what
            time frame to execute the trigger.
         </t>
-	<t>We also support regional scheduling, so when used in conjunction with the Location Policy defined
+	<t>This specification supports regional scheduling, so when used in conjunction with the Location Policy defined
               in <xref target="location-policy"/>, uCDN can trigger separate commands for
               different geographical regions, for each region using a different schedule. This allows
               uCDN to control the execution time per region.
@@ -2345,8 +2345,8 @@ uCDN-A                         dCDN-B                         dCDN-C
   {
     "priority": 100,
     "depends":  [ 
-      "https://dcdn.example.com/triggers/100",
-      "https://dcdn.example.com/triggers/101"
+      "https://dcdn.com/cit/b1467469-3cf3-4613-8629-814cd938f30b",
+      "https://dcdn.com/cit/c73a9911-298b-4ee3-bbab-03bce07b7d5c"
     ], 
     "urgent": true
   }
@@ -2788,7 +2788,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
    <section title="Other CI/T Objects and Properties" anchor="other-cit-objects-and-properties">
    <t>
-	   This section describes common CI/T objects and their encodings, that are used by multiple CI/T objects.
+	   This section describes common CI/T objects, which are used as part of the specification of several other CI/T objects, and their encodings.
    </t>
    <section title="URL Type" anchor="url-types">
    <t>
@@ -3199,7 +3199,7 @@ http://example.com/high/index.m3u8\n",
       "capability-type": "FCI.CITEndpoints",
       "capability-value": {
         "trigger-endpoint-uri": 
-          "https://dcdn.example.com/configuration/",
+          "https://dcdn.com/configuration/",
         "trigger-versions": [ "1" ],
         "trigger-subjects": "metadata"
       },
@@ -3212,7 +3212,7 @@ http://example.com/high/index.m3u8\n",
       "capability-type": "FCI.CITEndpoints",
       "capability-value": {
         "trigger-endpoint-uri": 
-          "https://dcdn.example.com/cache-management/",
+          "https://dcdn.com/cache-management/",
         "trigger-versions": [ "2", "2.1" ],
         "trigger-subjects": "content"
       },
@@ -3485,7 +3485,8 @@ http://example.com/high/index.m3u8\n",
    elements of the path.</t>
 
    <t>
-   In examples in this section, the URL "https://dcdn.example.com/triggers" is used as the location of the collection of all Trigger
+   In examples in this section, the URL "https://dcdn.com/cit/" 
+   is used as the location of the collection of all Trigger
    Status Resources, and the CDN PID of uCDN is "AS64496:1".</t>
 
    <section title="Creating Triggers" anchor="examples-creating-triggers"><t>
@@ -3504,9 +3505,9 @@ http://example.com/high/index.m3u8\n",
    <figure><artwork><![CDATA[
 REQUEST:
 
-  POST /triggers HTTP/1.1
+  POST /cit HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
   Content-Type: application/cdni; ptype=ci-trigger.v2
   Content-Length: 352
@@ -3541,16 +3542,16 @@ REQUEST:
 RESPONSE:
 
   HTTP/1.1 201 Created
-  Date: Wed, 04 May 2016 08:48:10 GMT
+  Date: Sun, 27 Oct 2024 08:48:10 GMT
   Content-Length: 467
   Content-Type: application/cdni; ptype=ci-trigger.v2
-  Location: https://dcdn.example.com/triggers/0
+  Location: https://dcdn.com/cit/3f2d259d-a980-4742-beeb-9392a58129f5
   Server: example-server/0.1
 
   {
-    "ctime": 1462351690,
-    "etime": 1462351698,
-    "mtime": 1462351690,
+    "ctime": 1730119690,
+    "etime": 1730119750,
+    "mtime": 1730119690,
     "state": "pending",
     "action": "preposition",
     "specs": [
@@ -3591,9 +3592,9 @@ RESPONSE:
    <figure><artwork><![CDATA[
 REQUEST:
 
-  POST /triggers HTTP/1.1
+  POST /cit HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
   Content-Type: application/cdni; ptype=ci-trigger.v2
   Content-Length: 387
@@ -3632,16 +3633,16 @@ REQUEST:
 RESPONSE:
 
   HTTP/1.1 201 Created
-  Date: Wed, 04 May 2016 08:48:11 GMT
+  Date: Sun, 27 Oct 2024 08:48:11 GMT
   Content-Length: 545
   Content-Type: application/cdni; ptype=ci-trigger.v2
-  Location: https://dcdn.example.com/triggers/1
+  Location: https://dcdn.com/cit/327df5b8-1df8-4cff-92f8-fda27774c171
   Server: example-server/0.1
 
   {
-    "ctime": 1462351691,
-    "etime": 1462351699,
-    "mtime": 1462351691,
+    "ctime": 1730119691,
+    "etime": 1730119751,
+    "mtime": 1730119691,
     "state": "pending",
     "action": "invalidate",
     "specs": [
@@ -3687,9 +3688,9 @@ RESPONSE:
             <artwork><![CDATA[
 REQUEST:
 
-  POST /triggers HTTP/1.1
+  POST /cit HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: triggers.dcdn.example.com
+  Host: dcdn.com
   Accept: */*
   Content-Type: application/cdni; ptype=ci-trigger.v2
 
@@ -3711,10 +3712,10 @@ REQUEST:
 RESPONSE:
 
   HTTP/1.1 201 Created
-  Date: Wed, 04 May 2016 08:48:10 GMT
+  Date: Sun, 27 Oct 2024 08:48:12 GMT
   Content-Length: 467
   Content-Type: application/cdni; ptype=ci-trigger.v2
-  Location: https://triggers.dcdn.example.com/triggers/2
+  Location: https://dcdn.com/cit/991b9fb9-d0be-4d05-be06-64c0e5c5a5f9
   Server: example-server/0.1
 
   {
@@ -3733,9 +3734,9 @@ RESPONSE:
       "error": "ereject",
       "cdn": "AS64500:0"
     }],
-    "ctime": 1462351690,
-    "etime": 1462351698,
-    "mtime": 1462351690,
+    "ctime": 1730119692,
+    "etime": 1730119692,
+    "mtime": 1730119692,
     "state": "failed",
     "action": "invalidate",
     "specs": [{
@@ -3758,15 +3759,15 @@ RESPONSE:
           <t>
             In the following example, a CI/T "preposition" trigger uses the ObjectList property to specify the full
             media library of a specific content. The command fails due to object list parse error and an appropriate
-            error is reflected in the status response.
+            error is reflected in the response.
           </t>
           <figure>
             <artwork><![CDATA[
 REQUEST:
 
-  POST /triggers HTTP/1.1
+  POST /cit HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: triggers.dcdn.example.com
+  Host: dcdn.com
   Accept: */*
   Content-Type: application/cdni; ptype=ci-trigger.v2
 
@@ -3788,10 +3789,10 @@ REQUEST:
 RESPONSE:
 
   HTTP/1.1 201 Created
-  Date: Wed, 04 May 2016 08:48:10 GMT
+  Date: Sun, 27 Oct 2024 08:48:13 GMT
   Content-Length: 467
   Content-Type: application/cdni; ptype=ci-trigger.v2
-  Location: https://triggers.dcdn.example.com/triggers/3
+  Location: https://dcdn.com/cit/86633e6e-d2da-4185-a285-b3d087a5d711
   Server: example-server/0.1
 
   {
@@ -3809,9 +3810,9 @@ RESPONSE:
       "error": "econtent",
       "cdn": "AS64500:0"
     }],
-    "ctime": 1462351690,
-    "etime": 1462351698,
-    "mtime": 1462351690,
+    "ctime": 1730119693,
+    "etime": 1730119693,
+    "mtime": 1730119693,
     "state": "failed",
     "action": "preposition",
     "specs": [{
@@ -3846,68 +3847,69 @@ RESPONSE:
    <figure><artwork><![CDATA[
 REQUEST:
 
-  GET /triggers HTTP/1.1
+  GET /cit HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
 
 RESPONSE:
 
   HTTP/1.1 200 OK
   Content-Length: 341
-  Expires: Wed, 04 May 2016 08:49:11 GMT
+  Expires: Sun, 27 Oct 2024 08:49:14 GMT
   Server: example-server/0.1
-  ETag: "-936094426920308378"
+  ETag: "936094426920308378"
+  Last-Modified: Sun, 27 Oct 2024 08:40:23 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:11 GMT
+  Date: Sun, 27 Oct 2024 08:48:14 GMT
   Content-Type: application/cdni; ptype=ci-trigger-collection.v2
 
 {
   "cdn-id": "AS64496:0",
   "coll-state": [
     {
-      "status"    : "pending",
-      "collection": "/triggers/pending"
+      "state"     : "pending",
+      "collection": "/cit/pending"
     },
     {
-      "status"    : "active",
-      "collection": "/triggers/active"
+      "state"     : "active",
+      "collection": "/cit/active"
     },
     {
-      "status"    : "complete",
-      "collection": "/triggers/complete"
+      "state"     : "complete",
+      "collection": "/cit/complete"
     },
     {
-      "status"    : "processed",
-      "collection": "/triggers/processed"
+      "state"     : "processed",
+      "collection": "/cit/processed"
     },
     {
-      "status"    : "failed",
-      "collection": "/triggers/failed"
+      "state"     : "failed",
+      "collection": "/cit/failed"
     },
     {
-      "status"    : "cancelling",
-      "collection": "/triggers/cancelling"
+      "state"     : "cancelling",
+      "collection": "/cit/cancelling"
     },
     {
-      "status"    : "cancelled",
-      "collection": "/triggers/cancelled"
+      "state"     : "cancelled",
+      "collection": "/cit/cancelled"
     }
   ],
   "coll-label": [
     {
       "label"     : "1b1bad0c", 
-      "collection": "/triggers/1b1bad0c"
+      "collection": "/cit/1b1bad0c"
     },
     {
       "label"     : "fafa9a97",
-      "collection": "/triggers/fafa9a97"
+      "collection": "/cit/fafa9a97"
     }
   ],
   "staleresourcetime": 86400,
   "triggers": [
-    "https://dcdn.example.com/triggers/0",
-    "https://dcdn.example.com/triggers/1"
+    "https://dcdn.com/cit/991b9fb9-d0be-4d05-be06-64c0e5c5a5f9",
+    "https://dcdn.com/cit/86633e6e-d2da-4185-a285-b3d087a5d711"
   ]
 }
 ]]></artwork>
@@ -3922,27 +3924,28 @@ RESPONSE:
    <figure><artwork><![CDATA[
 REQUEST:
 
-  GET /triggers/pending HTTP/1.1
+  GET /cit/pending HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
 
 RESPONSE:
 
   HTTP/1.1 200 OK
   Content-Length: 152
-  Expires: Wed, 04 May 2016 08:49:11 GMT
+  Expires: Sun, 27 Oct 2024 08:49:15 GMT
   Server: example-server/0.1
   ETag: "4331492443626270781"
+  Last-Modified: Sun, 27 Oct 2024 08:40:23 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:11 GMT
+  Date: Sun, 27 Oct 2024 08:48:16 GMT
   Content-Type: application/cdni; ptype=ci-trigger-collection.v2
 
   {
     "staleresourcetime": 86400,
     "triggers": [
-      "https://dcdn.example.com/triggers/0",
-      "https://dcdn.example.com/triggers/1"
+      "https://dcdn.com/cit/3f2d259d-a980-4742-beeb-9392a58129f5",
+      "https://dcdn.com/cit/327df5b8-1df8-4cff-92f8-fda27774c171"
     ]
   }
 ]]></artwork>
@@ -3954,20 +3957,21 @@ RESPONSE:
    <figure><artwork><![CDATA[
 REQUEST:
 
-  GET /triggers/complete HTTP/1.1
+  GET /cit/complete HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
 
 RESPONSE:
 
   HTTP/1.1 200 OK
   Content-Length: 54
-  Expires: Wed, 04 May 2016 08:49:11 GMT
+  Expires: Sun, 27 Oct 2024 08:49:16 GMT
   Server: example-server/0.1
   ETag: "7958041393922269003"
+  Last-Modified: Sun, 27 Oct 2024 08:30:56 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:11 GMT
+  Date: Sun, 27 Oct 2024 08:48:16 GMT
   Content-Type: application/cdni; ptype=ci-trigger-collection.v2
 
   {
@@ -3986,27 +3990,28 @@ RESPONSE:
    <figure><artwork><![CDATA[
 REQUEST:
 
-  GET /triggers/0 HTTP/1.1
+  GET /cit/3f2d259d-a980-4742-beeb-9392a58129f5 HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
 
 RESPONSE:
 
   HTTP/1.1 200 OK
   Content-Length: 467
-  Expires: Wed, 04 May 2016 08:49:10 GMT
+  Expires: Sun, 27 Oct 2024 08:49:17 GMT
   Server: example-server/0.1
   ETag: "6990548174277557683"
+  Last-Modified: Sun, 27 Oct 2024 08:49:10 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:10 GMT
+  Date: Sun, 27 Oct 2024 08:48:17 GMT
   Content-Type: application/cdni; ptype=ci-trigger.v2
 
   {
-    "ctime": 1462351690,
-    "etime": 1462351698,
-    "mtime": 1462351690,
-    "status": "pending",
+    "ctime": 1730119690,
+    "etime": 1730119758,
+    "mtime": 1730119690,
+    "state": "pending",
     "action": "preposition",
     "specs": [
       {
@@ -4033,27 +4038,28 @@ RESPONSE:
 
 REQUEST:
 
-  GET /triggers/1 HTTP/1.1
+  GET /cit/327df5b8-1df8-4cff-92f8-fda27774c171 HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
 
 RESPONSE:
 
   HTTP/1.1 200 OK
   Content-Length: 545
-  Expires: Wed, 04 May 2016 08:49:11 GMT
+  Expires: Sun, 27 Oct 2024 08:49:18 GMT
   Server: example-server/0.1
   ETag: "-554385204989405469"
+  Last-Modified: Sun, 27 Oct 2024 08:40:23 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:11 GMT
+  Date: Sun, 27 Oct 2024 08:48:18 GMT
   Content-Type: application/cdni; ptype=ci-trigger.v2
   
   {  
-    "ctime": 1462351691,
-    "etime": 1462351699,
-    "mtime": 1462351691,
-    "status": "pending",
+    "ctime": 1730119691,
+    "etime": 1730119751,
+    "mtime": 1730119691,
+    "state": "pending",
     "action": "invalidate",
     "specs": [
       {
@@ -4084,73 +4090,83 @@ RESPONSE:
    </figure>
    </section>
 
-   <section title="Polling for Changes in Status" anchor="examples-polling-status-changes"><t>
-   uCDN SHOULD use the ETags of collections or triggers
-   when polling for changes in status, as shown in the
-   following examples:</t>
+   <section title="Polling for Changes in Status" anchor="examples-polling-status-changes">
+   <t>
+	uCDN SHOULD use the ETags and/or Last-Modified headers, when polling for changes in trigger collections or status of individual triggers,
+	as shown in the following examples:
+   </t>
 
    <figure><artwork><![CDATA[
 REQUEST:
 
-  GET /triggers/pending HTTP/1.1
+  GET /cit/pending HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
   If-None-Match: "4331492443626270781"
+  If-Modified-Since: Sun, 27 Oct 2024 08:40:23 GMT
 
 RESPONSE:
   HTTP/1.1 304 Not Modified
   Content-Length: 0
-  Expires: Wed, 04 May 2016 08:49:11 GMT
+  Expires: Sun, 27 Oct 2024 08:49:19 GMT
   Server: example-server/0.1
   ETag: "4331492443626270781"
+  Last-Modified: Sun, 27 Oct 2024 08:49:11 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:11 GMT
+  Date: Sun, 27 Oct 2024 08:48:19 GMT
   Content-Type: application/cdni; ptype=ci-trigger-collection.v2
 
 REQUEST:
 
-  GET /triggers/0 HTTP/1.1
+  GET /cit/3f2d259d-a980-4742-beeb-9392a58129f5 HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
   If-None-Match: "6990548174277557683"
+  If-Modified-Since: Sun, 27 Oct 2024 08:49:10 GMT
 
 RESPONSE:
 
   HTTP/1.1 304 Not Modified
   Content-Length: 0
-  Expires: Wed, 04 May 2016 08:49:10 GMT
+  Expires: Sun, 27 Oct 2024 08:49:20 GMT
   Server: example-server/0.1
   ETag: "6990548174277557683"
+  Last-Modified: Sun, 27 Oct 2024 08:49:10 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:10 GMT
+  Date: Sun, 27 Oct 2024 08:48:20 GMT
   Content-Type: application/cdni; ptype=ci-trigger.v2
+
 ]]></artwork>
    </figure>
    <t>
-   When the trigger processing is complete, the contents of the
-   filtered collections will be updated along with their ETags. For
-   example, when the two example triggers are complete, the
+   When the trigger processing is complete, the contents of the filtered collections will be updated.
+   dCDN SHOULD also update "ETag" and "Last-Modified" response headers when sending the collection representations.
+   dCDN SHOULD also use cache control headers, like "Expires" and "Cache-Control", to indicate how caching of
+   the resource representation should happen by uCDN and intermediate proxies. 
+
+   For example, when the two example triggers are complete, the
    collections of pending and complete triggers look as follows:</t>
 
    <figure><artwork><![CDATA[
 REQUEST:
 
-  GET /triggers/pending HTTP/1.1
+  GET /cit/pending HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
 
 RESPONSE:
 
   HTTP/1.1 200 OK
   Content-Length: 54
-  Expires: Wed, 04 May 2016 08:49:15 GMT
+  Expires: Sun, 27 Oct 2024 08:49:21 GMT
   Server: example-server/0.1
   ETag: "1337503181677633762"
+  Last-Modified: Sun, 27 Oct 2024 08:48:21 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:15 GMT
+  Date: Sun, 27 Oct 2024 08:48:21 GMT
   Content-Type: application/cdni; ptype=ci-trigger-collection.v2
 
   {
@@ -4160,27 +4176,28 @@ RESPONSE:
 
 REQUEST:
 
-  GET /triggers/complete HTTP/1.1
+  GET /cit/complete HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
 
 RESPONSE:
 
   HTTP/1.1 200 OK
   Content-Length: 152
-  Expires: Wed, 04 May 2016 08:49:22 GMT
+  Expires: Sun, 27 Oct 2024 08:49:22 GMT
   Server: example-server/0.1
   ETag: "4481489539378529796"
+  Last-Modified: Sun, 27 Oct 2024 08:48:21 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:22 GMT
+  Date: Sun, 27 Oct 2024 08:48:22 GMT
   Content-Type: application/cdni; ptype=ci-trigger-collection.v2
 
   {
     "staleresourcetime": 86400,
     "triggers": [
-       "https://dcdn.example.com/triggers/0",
-       "https://dcdn.example.com/triggers/1"
+       "https://dcdn.com/cit/3f2d259d-a980-4742-beeb-9392a58129f5",
+       "https://dcdn.com/cit/327df5b8-1df8-4cff-92f8-fda27774c171"
     ]
   }
 ]]></artwork>
@@ -4195,15 +4212,15 @@ RESPONSE:
    <figure><artwork><![CDATA[
 REQUEST:
 
-  DELETE /triggers/0 HTTP/1.1
+  DELETE /cit/3f2d259d-a980-4742-beeb-9392a58129f5 HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
 
 RESPONSE:
 
   HTTP/1.1 204 No Content
-  Date: Wed, 04 May 2016 08:48:22 GMT
+  Date: Sun, 27 Oct 2024 08:48:23 GMT
   Content-Length: 0
   Content-Type: text/html; charset=UTF-8
   Server: example-server/0.1
@@ -4216,25 +4233,28 @@ RESPONSE:
    <figure><artwork><![CDATA[
 REQUEST:
 
-  GET /triggers/complete HTTP/1.1
+  GET /cit/complete HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: dcdn.example.com
+  Host: dcdn.com
   Accept: */*
 
 RESPONSE:
 
   HTTP/1.1 200 OK
   Content-Length: 105
-  Expires: Wed, 04 May 2016 08:49:22 GMT
+  Expires: Sun, 27 Oct 2024 08:49:24 GMT
   Server: example-server/0.1
-  ETag: "-6938620031669085677"
+  ETag: "6938620031669085677"
+  Last-Modified: Sun, 27 Oct 2024 08:48:23 GMT
   Cache-Control: max-age=60
-  Date: Wed, 04 May 2016 08:48:22 GMT
+  Date: Sun, 27 Oct 2024 08:48:24 GMT
   Content-Type: application/cdni; ptype=ci-trigger-collection.v2
 
   {
     "staleresourcetime": 86400,
-    "triggers": [ "https://dcdn.example.com/triggers/1" ]
+    "triggers": [ 
+      "https://dcdn.com/cit/327df5b8-1df8-4cff-92f8-fda27774c171"
+    ]
   }
 ]]></artwork>
    </figure>
@@ -4253,9 +4273,9 @@ RESPONSE:
               <artwork><![CDATA[
 REQUEST:
   
-  POST /triggers HTTP/1.1
+  POST /cit HTTP/1.1
   User-Agent: example-user-agent/0.1
-  Host: triggers.dcdn.example.com
+  Host: dcdn.com
   Accept: */*
   Content-Type: application/cdni; ptype=ci-trigger.v2
   
@@ -4299,8 +4319,8 @@ REQUEST:
         "generic-trigger-extension-type": "time-policy",
         "generic-trigger-extension-value": {
           "unix-time-window": { 
-            "start": 946717200, 
-            "end": 946746000 
+            "start": 1730174400, 
+            "end": 1730260800 
           }   
         },
         "mandatory-to-enforce": true,
@@ -4313,10 +4333,10 @@ REQUEST:
 RESPONSE:
   
   HTTP/1.1 201 Created
-  Date: Wed, 04 May 2016 08:48:10 GMT
+  Date: Sun, 27 Oct 2024 08:48:25 GMT
   Content-Length: 467
   Content-Type: application/cdni; ptype=ci-trigger.v2
-  Location: https://triggers.dcdn.example.com/triggers/0
+  Location: https://dcdn.com/cit/3f2d259d-a980-4742-beeb-9392a58129f5
   Server: example-server/0.1
 
   {
@@ -4354,8 +4374,8 @@ RESPONSE:
           "generic-trigger-extension-type": "time-policy",
           "generic-trigger-extension-value": {
             "unix-time-window": {
-              "start": 946717200,
-              "end": 946746000
+              "start": 1730174400, 
+              "end": 1730260800 
             }
           },
           "mandatory-to-enforce": true,
@@ -4366,10 +4386,10 @@ RESPONSE:
         "cdn": "AS64501:0"
       }
     ],
-    "ctime": 1462351690,
-    "etime": 1462351698,
-    "mtime": 1462351690,
-    "status": "failed",
+    "ctime": 1730119690,
+    "etime": 1730119698,
+    "mtime": 1730119690,
+    "state": "failed",
     "action": "preposition",
     "specs": [{
       "trigger-subject": "content",
@@ -4409,8 +4429,8 @@ RESPONSE:
         "generic-trigger-extension-type": "time-policy",
         "generic-trigger-extension-value": {
           "unix-time-window": {
-            "start": 946717200,
-            "end": 946746000
+            "start": 1730174400, 
+            "end": 1730260800 
           }
         },
         "mandatory-to-enforce": true,
@@ -4590,7 +4610,7 @@ RESPONSE:
    interoperability of CDNI implementations.</t>
 
   
-   <t> In this second edition of the interface, we list and repeat the definition of the Error Codes from <xref target="RFC8007"/> - acting as the entities specification with no modification compared to <xref target="RFC8007"/>. Additionally, the IANA is requested to register three additional error codes, "espec", "esubject" and "eextension", with specification as defined in <xref target="error-code"/>.
+   <t> In this second edition of the interface, the definitions of the Error Codes from <xref target="RFC8007"/>  are without change. Additionally, the IANA is requested to register three additional error codes, "espec", "esubject" and "eextension", with specification as defined in <xref target="error-code"/>.
    </t>
 
    </section>
@@ -4807,22 +4827,6 @@ RESPONSE:
 		</front>
 		<seriesInfo name="Protocol Revision" value="8.0"/>
 	</reference>
-
-	<reference anchor="ISO8601" target="https://www.iso.org/standard/40874.html">
-		<front>
-			<title>
-				Data elements and interchange formats -- Information interchange --
-				Representation of dates and times
-			</title>
-			<author>
-				<organization>ISO</organization>
-			</author>
-			<date month="12" year="2004"/>
-		</front>
-		<seriesInfo name="ISO" value="8601:2004"/>
-		<seriesInfo name="Edition" value="3"/>
-	</reference>
-
 
 	<reference anchor="ECMA404" target="https://ecma-international.org/publications-and-standards/standards/ecma-404/">
 		<front>
