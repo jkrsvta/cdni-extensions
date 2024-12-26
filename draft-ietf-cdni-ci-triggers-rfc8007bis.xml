@@ -147,8 +147,8 @@
    This document obsoletes RFC8007. The document describes the part of Content Delivery Network
    Interconnection (CDNI) Control interface that allows a CDN to trigger activity in an interconnected CDN 
    that is configured to deliver content on its behalf. 
-   The upstream CDN MAY use this mechanism to request that the downstream CDN preposition metadata or content 
-   and that it invalidate or purge metadata or content. 
+   The upstream CDN MAY use this mechanism to request that the downstream CDN preposition, invalidate and/or purge 
+   metadata and/or content. 
    The upstream CDN MAY monitor the status of activity that it has triggered in the downstream CDN.</t>
 
    </abstract>
@@ -266,7 +266,7 @@
         The CI/T interface supports the representation of trigger resources using JSON <xref target="RFC8259"/>.
         </t>
         <t>
-        This RESTful data model is built around a common "trigger" resource replaces the command-oriented model 
+        This RESTful data model built around a common "trigger" resource replaces the command-oriented model 
         of <xref target="RFC8007"/>, wherein uCDN passed commands to dCDN using "ci-trigger-command" objects, 
         and dCDN generated "ci-trigger-status" objects in response.  
         </t>
@@ -347,7 +347,7 @@
         <t>
         A trigger collection is a resource that represents all trigger resources, belonging to a particular uCDN.
         dCDN maintains one trigger collection resource for each uCDN. 
-        Each uCDN only has access to its collection resource.
+        Each uCDN only has access to its own collection resource.
 
         dCDN supports retrieval of multiple representations of the trigger collection resource.
         The supported trigger collection representations are listed in 
@@ -589,7 +589,7 @@
                 distributed by another directly connected uCDN. But, that content
                 can be reacquired by dCDN from the remaining uCDN.</t>
 
-                <t>When uCDN originates an item of content issues a purge
+                <t>When uCDN originating an item of content issues a purge
                 followed by a preposition, two directly connected uCDNs will pass
                 those triggers to a dCDN. That dCDN implementation need not merge
                 those operations or notice the repetition, in which case the purge
@@ -630,7 +630,7 @@
    <t>
    The CI/T interface builds on top of HTTP, so dCDNs may make use of any HTTP feature when implementing the CI/T interface. 
    For example, dCDN SHOULD make use of HTTP's caching mechanisms to indicate that a requested resource representation 
-   has not been modified, reducing uCDN's processing is needed to determine whether the status of a trigger has changed.
+   has not been modified, to reduce uCDN's overhead of polling of the trigger status.
    </t>
 
    <t>
@@ -649,7 +649,7 @@
    It MUST be supported by uCDN and by dCDN.
    </t>
    <t>
-   The CI/T interface uses a root URI for retrieval of the trigger collection resource and the creation of new triggers.
+   The CI/T interface uses a root URI for the retrieval of the trigger collection resource and creation of new triggers.
    The mechanism for discovery of that URL is part of the CI/T interface bootstrapping and is outside the scope of this
    document.
    </t>
@@ -920,7 +920,7 @@
    <section title="Expiry of Triggers" anchor="expiry-of-triggers">
    <t>
    dCDN MAY automatically delete trigger resources sometime after they reach a terminal state (one of "complete", 
-   "processed", "failed", or "cancelled"). In this case, after dCDN removed such a trigger, it MUST respond 
+   "processed", "failed", or "cancelled"). In this case, after dCDN has removed such a trigger, it MUST respond 
    to subsequent requests for it with the HTTP error 404 ("Not Found") and remove it from the trigger collection 
    resource.
    </t>
@@ -956,9 +956,9 @@
    </t>
    <t>
    dCDN that receives a trigger creation request that contains "cdn-path" attribute SHOULD check it for its own CDN PID.
-   If dCDN's PID is already present and dCDN is not the CDN initiating the trigger, this condition likely indicates a loop,
-   In such case, dCDN MUST reject the trigger, resulting in trigger being rejected back to its originating uCDN.
-   If dCDN receives a trigger that it itself originated, dCDN MAY process the trigger as required.
+   If dCDN's PID is already present and dCDN is not the CDN initiating the trigger, this condition likely indicates a loop.
+   In such case, dCDN MUST reject the trigger, which would result in a trigger rejection being returned to the 
+   originating uCDN. If dCDN receives a trigger that it itself originated, dCDN MAY process the trigger as required.
    </t>
    <t>
    dCDN that cascades trigger requests to additional dCDNs (so-called "transit CDN"), SHOULD NOT reject
@@ -1029,7 +1029,7 @@
              upstream CDN A (uCDN-A) that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
              to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed 
              from dCDN-B to dCDN-C, and errors can occur anywhere along the path. Therefore, it might be essential for 
-             uCDN-A which sets the trigger, to be able to trace back an error to the downstream CDN where it occurred. 
+             uCDN-A which sets the trigger to be able to trace back an error to the downstream CDN where it occurred. 
              This document adds a mechanism to propagate the PID of dCDN where the fault occurred, back to the 
              uCDN by adding the PID
              to the error.v2 description. When dCDN-B propagates a trigger further to the downstream dCDN-C, 
@@ -1134,7 +1134,7 @@ uCDN-A                         dCDN-B                         dCDN-C
                 <t>
                 dCDN-C acts upon the trigger. However, the command fails at dCDN-C as,
                 for example, the trigger definition contains an "action" type that is not supported by dCDN-C.
-                dCDN-C's action is depicted by 7.2 in the diagram, while 7.1 shows dCDN-B acting on its trigger.
+                dCDN-C's action is depicted by 7.2 in the diagram, while 7.1 shows dCDN-B acting on its own trigger.
                 </t>
                 <t>
                 dCDN-B queries, possibly repeatedly, the trigger resource in dCDN-C.
@@ -1164,7 +1164,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 <section title="CI/T Object Properties and Encoding" anchor="cit-objects-properties-and-encoding">
    <t>
-   Trigger and trigger collection resources as well as their properties, are encoded using JSON, as defined in
+   Trigger, trigger collection and their properties are encoded using JSON, as defined in
    <xref target="ci-trigger-resource"/>, and <xref target="ci-trigger-collection-resource"/>, respectively. 
    When sending the JSON-based representation of these resources, the MIME media type 
    "application/cdni" MUST be used, with parameter "ptype" values as defined below and 
@@ -1310,11 +1310,11 @@ uCDN-A                         dCDN-B                         dCDN-C
 
    <t hangText="Name: total-objects-count">
    <vspace blankLines="1"/>
-   Description: Total aggregate number of objects affected by the trigger, for example, number of objects purged, 
+   Description: Total aggregate number of objects affected by the trigger, e.g., number of objects purged, 
    invalidated or prepositioned as a result of trigger processing.  It is RECOMMENDED that dCDN maintains this 
    attribute as a cumulative counter across all of its nodes, without de-duplicating the same objects processed 
    in multiple nodes. 
-   The primary purpose of this attribute is to help uCDN identify abnormal trigger processing results, e.g. a purge or
+   The primary purpose of this attribute is to help uCDN identify abnormal trigger processing results, e.g., a purge or
    preposition trigger that impacted a lower number of objects than expected. 
    dCDN MAY provide an updated object count as the trigger processing progresses in an "active" trigger state.
    <vspace blankLines="1"/>
@@ -1447,7 +1447,7 @@ uCDN-A                         dCDN-B                         dCDN-C
         that intermediate CDN MUST similarly transform URLs in triggers it passes to its dCDNs.</t>
    <t>
         When processing a trigger, CDNs MUST ignore the URL scheme (HTTP or HTTPS) in comparing URLs.
-        For example, for a CI/T "invalidate" or "purge" action, content MUST be invalidated, or
+        For example, for a CI/T "invalidate" or "purge" action, content MUST be invalidated or
         purged regardless of the protocol clients used to request it.
    </t>
 
@@ -1684,7 +1684,7 @@ uCDN-A                         dCDN-B                         dCDN-C
       Description: Flag indicating whether to include the query part
          of the URI when compared against the pattern.
       <vspace blankLines="1"/>
-      Value: One of the JSON values "true" (the full URI, including
+      Value: One of the JSON values "true" (the full URI including
          the query part should be compared against the given pattern)
          or "false" (the query part of the URI should be dropped before
          comparison with the given pattern).
@@ -2184,57 +2184,59 @@ uCDN-A                         dCDN-B                         dCDN-C
        ]]></sourcecode>
       </section>
 
-      <section anchor="time-policy" title="TimePolicy Extension">
-        <t>uCDN may wish to perform content management operations on dCDN on a specific schedule.
-           The TimePolicy extension allows uCDN to instruct dCDN to execute the trigger command
-           in a desired time window. For example, a content provider wishes to pre-populate a new
-           episode at off-peak time so that it would be ready on caches at prime time when the episode
-           is released for viewing. A scheduled operation enables uCDN to direct dCDN in what
-           time frame to execute the trigger.
-        </t>
-        <t>This specification supports regional scheduling, so when used in conjunction with the Location Policy defined
-              in <xref target="location-policy"/>, uCDN can trigger separate commands for
-              different geographical regions, for each region, using a different schedule. This allows
-              uCDN to control the execution time per region.
-        </t>
+    <section anchor="time-policy" title="TimePolicy Extension">
+    <t>
+    uCDN may wish to perform content management operations on dCDN on a specific schedule.
+    The TimePolicy extension allows uCDN to instruct dCDN to execute the trigger command
+    in a desired time window. For example, a content provider may wish to pre-populate a new
+    episode at off-peak time so that it would be ready on caches at prime time when the episode
+    is released for viewing. A scheduled operation enables uCDN to direct dCDN in what
+    time frame to execute the trigger.
+    </t>
+    <t>
+    This specification supports region-by-region time scheduling when used in conjunction with the Location Policy 
+    defined in <xref target="location-policy"/>. uCDN can trigger separate commands for different geographical regions 
+    using a different schedule for each region. This allows uCDN to control the execution time per region.
+    </t>
 
-   <t>Object specification:</t>
+    <t>Object specification:</t>
 
-   <t><list style="empty" hangIndent="3">
-        <t><list style="hanging" hangIndent="3"><t hangText="Name: unix-time-window">
-        <vspace blankLines="1"/>
-   Description: A UNIX epoch time window in which the trigger SHOULD be executed.
-        <vspace blankLines="1"/>
-        Value: TimeWindow object using UNIX epoch timestamps (see Section 4.2.3.2 of <xref target="RFC8006"/>).
-        <vspace blankLines="1"/>
-        Mandatory: No, but exactly one of the "unixEpochWindow" or "utcWindow" MUST be present.
-        </t>
-        </list></t>
-        </list></t>
+    <t><list style="empty" hangIndent="3">
+    <t><list style="hanging" hangIndent="3"><t hangText="Name: unix-time-window">
+    <vspace blankLines="1"/>
+    Description: A UNIX epoch time window in which the trigger SHOULD be executed.
+    <vspace blankLines="1"/>
+    Value: TimeWindow object using UNIX epoch timestamps (see Section 4.2.3.2 of <xref target="RFC8006"/>).
+    <vspace blankLines="1"/>
+    Mandatory: No, but exactly one of either "unixEpochWindow" or "utcWindow" MUST be present.
+    </t>
+    </list></t>
+    </list></t>
 
 
-   <t><list style="empty" hangIndent="3">
-        <t><list style="hanging" hangIndent="3"><t hangText="Name: utc-window">
-        <vspace blankLines="1"/>
-   Description: A UTC time window in which the trigger SHOULD be executed.
-        <vspace blankLines="1"/>
-        Value: UTCWindow object as defined in <xref target="utc-window"/>.
-        <vspace blankLines="1"/>
-        Mandatory: No, but exactly one of the "unixEpochWindow" or "utcWindow" MUST be present.
-        </t>
-        </list></t>
-        </list></t>
+    <t><list style="empty" hangIndent="3">
+    <t><list style="hanging" hangIndent="3"><t hangText="Name: utc-window">
+    <vspace blankLines="1"/>
+    Description: A UTC time window in which the trigger SHOULD be executed.
+    <vspace blankLines="1"/>
+    Value: UTCWindow object as defined in <xref target="utc-window"/>.
+    <vspace blankLines="1"/>
+    Mandatory: No, but exactly one of either "unixEpochWindow" or "utcWindow" MUST be present.
+    </t>
+    </list></t>
+    </list></t>
 
-          <t>
-             If a time policy object is not listed within the trigger command, the default behavior
-             is to execute the trigger in a time frame most suitable to dCDN taking under consideration
-             other constraints and / or obligations.
-          </t>
+    <t>
+    If a time policy object is not listed within the trigger command, the default behavior
+    is to execute the trigger in a time frame most suitable to dCDN taking under consideration
+    other constraints and / or obligations.
+    </t>
 
-        <t>Example of a JSON-serialized generic trigger extension object containing a time policy object that schedules the
-           trigger execution to a window between 09:00 01/01/2000 UTC and 17:00 01/01/2000 UTC, using
-           the "unix-time-window" property:
-        </t>
+    <t>
+    Example of a JSON-serialized generic trigger extension object containing a time policy object that schedules the
+    trigger execution to a window between 09:00 01/01/2000 UTC and 17:00 01/01/2000 UTC, using
+    the "unix-time-window" property:
+    </t>
 
         <sourcecode type="json" name="genric-trigger-extension-time-policy"><![CDATA[
 {
@@ -2267,7 +2269,7 @@ uCDN-A                         dCDN-B                         dCDN-C
         <vspace blankLines="1"/>
    Value: Internet date and time as defined in <xref target="RFC3339"/>.
         <vspace blankLines="1"/>
-        Mandatory: No. but at least one of the "start" or "end" MUST be present and non-empty.
+        Mandatory: No. but at least one of either "start" or "end" MUST be present and non-empty.
         </t>
 
         <t hangText="Name: end">
@@ -2276,7 +2278,7 @@ uCDN-A                         dCDN-B                         dCDN-C
         <vspace blankLines="1"/>
         Value: Internet date and time as defined in <xref target="RFC3339"/>.
         <vspace blankLines="1"/>
-        Mandatory: No. but at least one of the "start" or "end" MUST be present and non-empty.
+        Mandatory: No. but at least one of either "start" or "end" MUST be present and non-empty.
         </t>
 
           </list></t>
@@ -2739,10 +2741,10 @@ uCDN-A                         dCDN-B                         dCDN-C
    represent an action ("trigger") uCDN requests dCDN to carry out.</t>
 
    <t>
-   A collection of trigger resources is a resource that represents all triggers created by the dCDN at the request 
-   of a uCDN.
+   A collection of trigger resources represents all triggers created by the dCDN at the request of a uCDN, and is 
+   by itself a RESTful resource.
    dCDN MUST make the trigger collection resource available to each uCDN, and MUST maintain it, adding and removing 
-   triggers from the collection, as the triggers are <xref target="creating-triggers">created</xref> by uCDN and are either 
+   triggers from the collection as the triggers are <xref target="creating-triggers">created</xref> by uCDN and are either 
    <xref target="deleting-triggers">deleted</xref> by uCDN or <xref target="expiry-of-triggers">expire</xref>. 
    When dCDN first instantiates the CI/T interface for a uCDN, the trigger collection resource is empty.
    </t>
@@ -3730,7 +3732,7 @@ Server: example-server/0.1
    </t>
    <list style="symbols">
    <t>the metadata objects with URLs prefixed by "https://metadata.example.com/a/b/" using case-insensitive matching</t>
-   <t>a single content object identified by the URL "https://www.example.com/a/index.html" URL</t>
+   <t>a single content object identified by the URL "https://www.example.com/a/index.html"</t>
    <t>the content objects with URLs prefixed by "https://www.example.com/a/b/" using case-sensitive matching</t>
    </list>
 
