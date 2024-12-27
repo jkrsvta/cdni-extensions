@@ -3257,7 +3257,7 @@ http://example.com/high/index.m3u8\n",
 
    <t>  
    If the CDNI Request Routing Redirection interface (RI) described in <xref target="RFC7975"/> is implemented by dCDN, 
-   the CI/T Interface, and the RI SHOULD use the same CDN PID.
+   the CI/T Interface and the RI SHOULD use the same CDN PID.
    </t>
 
 
