@@ -168,11 +168,11 @@
 
    <t>
    The CDNI Control Interface / Triggers 1st edition <xref target="RFC8007"/>, deprecated by this document, 
-   describes the "CI/T" interface -- "CDNI Control interface / Triggers". It does not consider those parts of the
+   describes the "CI/T" interface -- "CDNI Control Interface / Triggers". It does not consider those parts of the
    Control interface that relate to the configuration, bootstrapping, or
    authentication of CDN Interconnect interfaces. Section 4 of
-   <xref target="RFC7337"/> identifies the requirements specific to the CI/T interface;
-   requirements applicable to the CI/T interface are CI-1 to CI-6.</t>
+   <xref target="RFC7337"/> identifies the requirements specific to the CI/T Interface;
+   requirements applicable to the CI/T Interface are CI-1 to CI-6.</t>
    
    <t>
            This document is a second edition of the CDNI Control Interface / Triggers, 
@@ -189,7 +189,7 @@
            expanded to support filtering by trigger state and trigger labels</t>
    </list>
    <t>
-           The second edition of the CI/T interface further allows the use of separate Control interface endpoints for 
+           The second edition of the CI/T Interface further allows the use of separate Control interface endpoints for 
            content and metadata.
    </t>
    <t>
@@ -203,10 +203,10 @@
    </t>
 
 
-   <t><list style="symbols"><t><xref target="model-for-cdni-triggers"/> outlines the model for the CI/T interface at a high
+   <t><list style="symbols"><t><xref target="model-for-cdni-triggers"/> outlines the model for the CI/T Interface at a high
       level.</t>
       
-   <t><xref target="cdni-trigger-interface"/> defines the CI/T interface offered by the downstream CDN.</t>
+   <t><xref target="cdni-trigger-interface"/> defines the CI/T Interface offered by the downstream CDN.</t>
 
    <t><xref target="cit-objects-properties-and-encoding"/> defines the encoding of the standard CI/T objects and 
 	   introduces trigger spec and trigger extension types.</t>
@@ -248,13 +248,13 @@
    <section title="REST Architecture" anchor="model-for-cdni-triggers-rest">
 
         <t>
-        The CI/T interface utilizes HTTP/1.1 protocol <xref target="RFC9112"/> and follows the principles 
+        The CI/T Interface utilizes HTTP/1.1 protocol <xref target="RFC9112"/> and follows the principles 
         of the Representational State Transfer (REST) architectural style.
-        uCDN, in its capacity of a CI/T interface client requests dCDN to carry out an action ("trigger")
+        uCDN, in its capacity of a CI/T Interface client requests dCDN to carry out an action ("trigger")
         related to metadata or content stored by dCDN on behalf of uCDN.  
         </t>
         <t>
-        dCDN, as a CI/T interface server,  governs the triggers as a set of resources, which can be dynamically created 
+        dCDN, as a CI/T Interface server,  governs the triggers as a set of resources, which can be dynamically created 
         and deleted, and whose state can be retrieved and/or modified by uCDN.  
         Each such trigger is identified by a unique Uniform Resource Identifier (URI) 
         is defined in Section 4.2 of <xref target="RFC9110"/>.
@@ -263,7 +263,7 @@
         <t>
         Once a trigger is created, uCDN can retrieve its trigger state from dCDN or request its state to be modified by 
         transferring an updated representation of the trigger state to dCDN.
-        The CI/T interface supports the representation of trigger resources using JSON <xref target="RFC8259"/>.
+        The CI/T Interface supports the representation of trigger resources using JSON <xref target="RFC8259"/>.
         </t>
         <t>
         This RESTful data model built around a common "trigger" resource replaces the command-oriented model 
@@ -277,9 +277,9 @@
    <section title="HTTP Methods" anchor="model-for-cdni-triggers-http-methods">
         <t>
         Section 9.3 of <xref target="RFC9110"/> defines the set of methods in HTTP. 
-        The CI/T interface uses some of these methods for resource creation, retrieval of resource state, modification 
+        The CI/T Interface uses some of these methods for resource creation, retrieval of resource state, modification 
         of resources, and deletion of resources. 
-        The HTTP methods not listed here are not supported by the CI/T interface.
+        The HTTP methods not listed here are not supported by the CI/T Interface.
         </t>
 
         <list style="symbols">
@@ -316,7 +316,7 @@
                 of CI/T trigger objects reported as supported by dCDN. 
         </t>
 
-        <t>     The CI/T interface supports the following types of trigger action:</t>
+        <t>     The CI/T Interface supports the following types of trigger action:</t>
 
         <t>
                 <list style="symbols">
@@ -359,7 +359,7 @@
    <section title="Session Overview" anchor="model-for-cdni-triggers-session-overview">
 
            <t>
-                   Figure 1 is an example showing the basic message flow in a CI/T interface session used by the
+                   Figure 1 is an example showing the basic message flow in a CI/T Interface session used by the
                 uCDN to trigger activity in dCDN and for uCDN to discover the status of that activity. 
                 Only successful triggering is shown.
                 Examples of the messages are shown in <xref target="examples"/>.
@@ -628,14 +628,14 @@
    </t>
 
    <t>
-   The CI/T interface builds on top of HTTP, so dCDNs may make use of any HTTP feature when implementing the CI/T interface. 
-   For example, dCDN SHOULD make use of HTTP's caching mechanisms to indicate that a requested resource representation 
-   has not been modified, to reduce uCDN's overhead of polling of the trigger status.
+   The CI/T Interface builds on top of HTTP, so dCDNs may make use of any HTTP feature when implementing the CI/T Interface. 
+   For example, dCDN SHOULD make use of HTTP's caching mechanisms to reduce uCDN's trigger status polling overhead by 
+   indicating the modification status of a requested resource representation.
    </t>
 
    <t>
-   dCDNs MAY implement separate CI/T interfaces per <xref target="trigger-subject"/>,
-   i.e., one CI/T interface for trigger operations on metadata and another for operations on content.
+   dCDNs MAY implement separate CI/T Interfaces per <xref target="trigger-subject"/>,
+   i.e., one CI/T Interface for trigger operations on metadata and another for operations on content.
    In this case, dCDN MUST advertise separate interface endpoints via 
    <xref target="cit-trigger-endpoints-capability-object"/>.
    </t>
@@ -649,8 +649,8 @@
    It MUST be supported by uCDN and by dCDN.
    </t>
    <t>
-   The CI/T interface uses a root URI for the retrieval of the trigger collection resource and creation of new triggers.
-   The mechanism for discovery of that URL is part of the CI/T interface bootstrapping and is outside the scope of this
+   The CI/T Interface uses a root URI for the retrieval of the trigger collection resource and creation of new triggers.
+   The mechanism for discovery of that URL is part of the CI/T Interface bootstrapping and is outside the scope of this
    document.
    </t>
    <t>
@@ -669,7 +669,7 @@
    so dCDNs are free to assign whatever structure they desire to the URIs for CI/T resources. 
    Therefore, uCDNs MUST NOT make any assumptions regarding the structure of CI/T URIs or the mapping between CI/T
    objects and their associated URIs. The URIs used in the examples in this document are purely illustrative and are not 
-   intended to impose a definitive structure on CI/T interface implementations.
+   intended to impose a definitive structure on CI/T Interface implementations.
    </t>
 
    <section title="Creating Triggers" anchor="creating-triggers">
@@ -980,7 +980,7 @@
 
    <section title="Error Handling" anchor="error-handling">
    <t>
-   dCDN MAY reject CI/T interface requests by responding with 4xx or 5xx HTTP status codes.
+   dCDN MAY reject CI/T Interface requests by responding with 4xx or 5xx HTTP status codes.
    For example, uCDN MAY respond with 400 ("Bad Request") if the request is malformed, 
    or 403 ("Forbidden") or 404 ("Not Found") if the request could not be properly authenticated 
    or if uCDN is trying to act on another CDN's resources.
@@ -1108,7 +1108,7 @@ uCDN-A                         dCDN-B                         dCDN-C
                 <t>
                 uCDN-A triggers an action in dCDN-B by POSTing a trigger representation to a triggers 
                 collection URI "https://dcdn-b.com/cit/ucdn-a". This URI was given to
-                uCDN-A when the CI/T interface was established.
+                uCDN-A when the CI/T Interface was established.
                 </t>
                 <t>
                 dCDN-B authenticates the request, validates the trigger creation request, and, 
@@ -1121,7 +1121,7 @@ uCDN-A                         dCDN-B                         dCDN-C
                 <t>
                 dCDN-B triggers the action in dCDN-C by POSTing a trigger representation to
                 a triggers collection URI "https://dcdn-c.com/cit/dcdn-b". This URI was given to
-                dCDN-B when the CI/T interface was established.
+                dCDN-B when the CI/T Interface was established.
                 </t>
                 <t>
                 dCDN-C authenticates the request, validates the trigger creation request, 
@@ -2746,7 +2746,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    dCDN MUST make the trigger collection resource available to each uCDN, and MUST maintain it, adding and removing 
    triggers from the collection as the triggers are <xref target="creating-triggers">created</xref> by uCDN and are either 
    <xref target="deleting-triggers">deleted</xref> by uCDN or <xref target="expiry-of-triggers">expire</xref>. 
-   When dCDN first instantiates the CI/T interface for a uCDN, the trigger collection resource is empty.
+   When dCDN first instantiates the CI/T Interface for a uCDN, the trigger collection resource is empty.
    </t>
    <t>
    Trigger resources in a collection are usually represented using their unique URIs. 
@@ -2946,7 +2946,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    </t>
    <t>
    The following URL types are defined by this document and MUST be supported by the implementation 
-   of the CI/T interface:
+   of the CI/T Interface:
    </t>
 
         <texttable style="full">
@@ -2982,7 +2982,7 @@ uCDN-A                         dCDN-B                         dCDN-C
 
    <t>
    In the case of uCDN accessing ObjectList objects referencing external URLs published by dCDN, both parties SHOULD 
-   comply with the CI/T interface security requirements (see <xref target="authentication-authorization"/> for details). 
+   comply with the CI/T Interface security requirements (see <xref target="authentication-authorization"/> for details). 
    When dCDN accesses external URLs referenced by ObjectLists supplied by uCDN, for example as part of trigger spec, 
    dCDN MUST match these URLs with source metadata objects, published by uCDN, such as SourceMetadata objects specified 
    in Section 4.2.1 of <xref target="RFC8006"/>, and use these metadata objects for content acquisition if a match 
@@ -3257,7 +3257,7 @@ http://example.com/high/index.m3u8\n",
 
    <t>  
    If the CDNI Request Routing Redirection interface (RI) described in <xref target="RFC7975"/> is implemented by dCDN, 
-   the CI/T interface, and the RI SHOULD use the same CDN PID.
+   the CI/T Interface, and the RI SHOULD use the same CDN PID.
    </t>
 
 
@@ -3274,8 +3274,8 @@ http://example.com/high/index.m3u8\n",
 
      <section title="CI/T Endpoint Capability Object" anchor="cit-trigger-endpoints-capability-object">
         <t>
-      The CI/T trigger endpoint capability object is used to advertise one or more CI/T interface endpoints 
-      along with CI/T interface versions supported by these endpoints. 
+      The CI/T trigger endpoint capability object is used to advertise one or more CI/T Interface endpoints 
+      along with CI/T Interface versions supported by these endpoints. 
       The capability type is "FCI.CITEndpoints".
       Version 1, as originally defined in <xref target="RFC8007"/>, is the default if this capability is not explicitly declared.
         </t>
@@ -3315,10 +3315,10 @@ http://example.com/high/index.m3u8\n",
       <vspace blankLines="1"/>
       Mandatory: No. A missing or empty "trigger-subject" list means that all trigger subjects 
       are supported by the endpoint.
-      dCDN SHOULD advertise only one endpoint for every trigger subject and CI/T interface version pair. 
-      If more than one interface endpoint supports the same trigger subject and CI/T interface version 
+      dCDN SHOULD advertise only one endpoint for every trigger subject and CI/T Interface version pair. 
+      If more than one interface endpoint supports the same trigger subject and CI/T Interface version 
       (e.g., CI/T version 2 interface for content objects), uCDN SHOULD be able to use any of the advertised 
-      CI/T interface endpoints interchangeably.
+      CI/T Interface endpoints interchangeably.
       </t>
 
         </list></t>
@@ -3327,7 +3327,7 @@ http://example.com/high/index.m3u8\n",
       <section anchor="cit-endpoints-capability-object-serialization" title="CI/T Endpoints Capability Object Serialization">
       <t>
       The following shows an example of the CI/T Endpoints Capability object serialization for dCDN that supports
-      versions 2 and 2.1 of the CI/T interface.
+      versions 2 and 2.1 of the CI/T Interface.
       </t>
 <sourcecode type="json" name="fci-endpoints"><![CDATA[
 
@@ -3411,7 +3411,7 @@ http://example.com/high/index.m3u8\n",
     <xref target="IANA.CDNI.TriggerSpecReg"/>, which correspond to CDNI CI/T GenericSpecObject objects.
     <vspace blankLines="1"/>
     Mandatory: No.
-    The default, in case of a missing or an empty list MUST be interpreted as "no GenericExtensionObject types 
+    The default in case of a missing or an empty list MUST be interpreted as "no GenericExtensionObject types 
     supported". A non-empty list MUST be interpreted as containing "the only GenericExtensionObject types 
     that are supported".
     </t>   
@@ -3424,7 +3424,7 @@ http://example.com/high/index.m3u8\n",
     <xref target="IANA.CDNI.TriggerExtensionReg"/>, which corresponds to a CDNI CI/T GenericExtensionObject object.
     <vspace blankLines="1"/>
     Mandatory: No.
-    The default, in case of a missing or an empty list MUST be interpreted as "no GenericExtensionObject types 
+    The default in case of a missing or an empty list MUST be interpreted as "no GenericExtensionObject types 
     are supported".  A non-empty list MUST be interpreted as containing "the only GenericExtensionObject types 
     that are supported".
     </t>   
@@ -3618,11 +3618,11 @@ http://example.com/high/index.m3u8\n",
 
    <section title="Examples" anchor="examples">
    <t>
-   This section provides examples of using the CI/T interface and its features.
+   This section provides examples of using the CI/T Interface and its features.
    </t>
 
    <t>
-   The discovery of the CI/T interface is out of the scope of this document.  
+   The discovery of the CI/T Interface is out of the scope of this document.  
    In an implementation, all CI/T URLs are under the control of the dCDN. 
    uCDN MUST NOT attempt to ascribe any meaning to individual elements of the path.
    </t>
@@ -5093,9 +5093,9 @@ Server: example-server/0.1
    </section>
 
    <section title="Security Considerations" anchor="security-considerations"><t>
-   The CI/T interface provides a mechanism to allow uCDN to generate
+   The CI/T Interface provides a mechanism to allow uCDN to generate
    requests into dCDN and to inspect its own CI/T requests and their
-   current states. The CI/T interface does not allow access to, or
+   current states. The CI/T Interface does not allow access to, or
    modification of, uCDN or dCDN metadata relating to content
    delivery or to the content itself. It can only control the presence
    of that metadata in dCDN, and the processing work and network
@@ -5128,7 +5128,7 @@ Server: example-server/0.1
    CDNs is an extension of that trust to dCDNs. That trust relationship
    is a commercial arrangement, outside the scope of the CDNI protocols.
    So, while a malicious CDN could deliberately generate load on dCDN
-   using the CI/T interface, the protocol does not otherwise attempt to
+   using the CI/T Interface, the protocol does not otherwise attempt to
    address malicious behavior between interconnected CDNs.</t>
 
    <section title="Authentication, Authorization, Confidentiality, Integrity Protection" anchor="authentication-authorization">
@@ -5138,15 +5138,15 @@ Server: example-server/0.1
 
    <t>
    TLS MUST be used by the server side (dCDN) and the client side (uCDN)
-   of the CI/T interface, including the authentication of the remote end,
+   of the CI/T Interface, including the authentication of the remote end,
    unless alternate methods are used to ensure the security of the
-   information in the CI/T interface requests and responses (such as
+   information in the CI/T Interface requests and responses (such as
    setting up an IPsec tunnel between the two CDNs or using a physically
    secured internal network between two CDNs that are owned by the same
    corporate entity).</t>
 
    <t>
-   The use of TLS for transport of the CI/T interface allows dCDN
+   The use of TLS for transport of the CI/T Interface allows dCDN
    and uCDN to authenticate each other using the TLS client
    authentication and TLS server authentication.</t>
 
@@ -5191,7 +5191,7 @@ Server: example-server/0.1
 
    <section title="Denial of Service" anchor="denial-of-service"><t>
    This document does not define a specific mechanism to protect against
-   Denial-of-Service (DoS) attacks on the CI/T interface. However, CI/T
+   Denial-of-Service (DoS) attacks on the CI/T Interface. However, CI/T
    endpoints can be protected against DoS attacks through the use of TLS
    transport and/or via mechanisms outside the scope of the CI/T
    interface, such as firewalling or the use of Virtual Private Networks
