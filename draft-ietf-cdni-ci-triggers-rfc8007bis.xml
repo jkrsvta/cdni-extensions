@@ -593,7 +593,7 @@
            <t>
                 If dCDN is also acting as uCDN in a cascade, it MUST forward trigger requests to any dCDNs 
                 that may be affected. 
-                The trigger state MUST NOT be reported as "complete" by an transit CDN until it is "complete" 
+                The trigger state MUST NOT be reported as "complete" by a transit CDN until it is "complete" 
                 in all of its dCDNs and in the transit CDN itself.
                 If a trigger is reported as "processed" in the transit CDN or any one of its dCDNs, transit CDNs 
                 MUST report the trigger as "processed" as well. 
@@ -613,7 +613,7 @@
    </t>
 
    <t>
-   When such CDN topologies become possible, it is RECOMMENDED that CDNs participating in it utilize 
+   When such CDN topologies become possible, it is RECOMMENDED that CDNs participating in it utilize a
    <xref target="cdn-pid">CDN Provider ID (PID)</xref> to detect and prevent loops as follows:
    <list style="symbols">
    <t>
@@ -621,20 +621,20 @@
    trigger "cdn-path" attribute (see <xref target="ci-trigger-resource"/> for details).
    </t>
    <t>
-   dCDN that receives a trigger creation request that contains "cdn-path" attribute SHOULD check it for its own CDN PID.
+   A dCDN that receives a trigger creation request that contains a "cdn-path" attribute SHOULD check it for its own CDN PID.
    If dCDN's PID is already present and dCDN is not the CDN initiating the trigger, this condition likely indicates a loop.
    In such case, dCDN MUST reject the trigger, which would result in a trigger rejection being returned to the 
    originating uCDN. If dCDN receives a trigger that it itself originated, dCDN MAY process the trigger as required.
    </t>
    <t>
-   dCDN that cascades trigger requests to additional dCDNs (so-called "transit CDN"), SHOULD NOT reject
+   A dCDN that cascades trigger requests to additional dCDNs (so-called "transit CDN") SHOULD NOT reject
    triggers that have CDN PID of its downstream CDNs in their CDN path, allowing each CDN to do their own loop detection.
    </t>
    <t>
-   Transit CDNs MUST append their CDN PID to the CDN path of a trigger before sending it its downstream CDNs.
+   Transit CDNs MUST append their CDN PID to the CDN path of a trigger before sending it to its downstream CDNs.
    </t>
    <t>
-   dCDNs SHOULD advertise their CDN provider ID to uCDNs using "cdn-id" attribute of the 
+   dCDNs SHOULD advertise their CDN provider ID to uCDNs using the "cdn-id" attribute of the 
    <xref target="ci-trigger-collection-resource">trigger collection</xref> resource.
    </t>
 
@@ -1425,7 +1425,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    <t>
         Each trigger usually refers to the targets by the target URLs, using a "urls" trigger spec object or
         some aggregating spec such as the "url-regex-match".
-        If content URLs are transformed by an transit CDN in a cascade,
+        If content URLs are transformed by a transit CDN in a cascade,
         that transit CDN MUST similarly transform URLs in triggers it passes to its dCDNs.</t>
    <t>
         When processing a trigger, CDNs MUST ignore the URL scheme (HTTP or HTTPS) in comparing URLs.
@@ -4017,20 +4017,19 @@ Server: example-server/0.1
   "state": "pending",
   "action": "preposition",
 
-{
   "specs": [
-    {
-      "trigger-subject": "content",
-      "generic-trigger-spec-type": "urls",
-      "generic-trigger-spec-value": {
-        "urls": [
-          "https://www.example.com/d/e/f/1",
-          "https://www.example.com/d/e/f/2",
-          "https://www.example.com/d/e/f/3",
-          "https://www.example.com/d/e/f/4"
-        ]
+      {
+        "trigger-subject": "content",
+        "generic-trigger-spec-type": "urls",
+        "generic-trigger-spec-value": {
+          "urls": [
+            "https://www.example.com/d/e/f/1",
+            "https://www.example.com/d/e/f/2",
+            "https://www.example.com/d/e/f/3",
+            "https://www.example.com/d/e/f/4"
+          ]
+        }
       }
-    }
   ],
   "labels": [
     "type=video"
