@@ -4018,18 +4018,18 @@ Server: example-server/0.1
   "action": "preposition",
 
   "specs": [
-      {
-        "trigger-subject": "content",
-        "generic-trigger-spec-type": "urls",
-        "generic-trigger-spec-value": {
-          "urls": [
-            "https://www.example.com/d/e/f/1",
-            "https://www.example.com/d/e/f/2",
-            "https://www.example.com/d/e/f/3",
-            "https://www.example.com/d/e/f/4"
-          ]
-        }
+    {
+      "trigger-subject": "content",
+      "generic-trigger-spec-type": "urls",
+      "generic-trigger-spec-value": {
+        "urls": [
+          "https://www.example.com/d/e/f/1",
+          "https://www.example.com/d/e/f/2",
+          "https://www.example.com/d/e/f/3",
+          "https://www.example.com/d/e/f/4"
+        ]
       }
+    }
   ],
   "labels": [
     "type=video"
