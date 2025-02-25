@@ -210,7 +210,7 @@
    <t><xref target="cdni-trigger-interface"/> defines the CI/T interface offered by the downstream CDN.</t>
 
    <t><xref target="cit-objects-properties-and-encoding"/> defines the encoding of the standard CI/T objects and 
-	   introduces trigger spec and trigger extension types.</t>
+           introduces trigger spec and trigger extension types.</t>
 
    <t><xref target="footprint-and-capabilities"/> describes the FCI capabilities objects used to inform on the supported
            CI/T-related capabilities.</t>
@@ -345,19 +345,19 @@
    </section>
    <section title="Trigger Access Control and Multi-Tenancy" anchor="model-for-cdni-triggers-trigger-access-control">
         <t>     dCDN MUST only allow uCDN access to the trigger resources it created. </t>
-	<t>     
-	        dCDN MUST be able to associate content objects referenced in a trigger created by uCDN with 
-	        the delivery CDNI metadata objects in its possession that are associated with the same uCDN.
+        <t>     
+                dCDN MUST be able to associate content objects referenced in a trigger created by uCDN with 
+                the delivery CDNI metadata objects in its possession that are associated with the same uCDN.
                 These CDNI metadata objects include HostIndex, HostMatch, HostMetadata, PathMatch, PatternMatch, and
-		PathMetadata, as described in Section 3.1 of <xref target="RFC8006"/>.
-	</t>
-	<t>
-		If such association between a trigger and pre-existing delivery metadata cannot be established, 
-		dCDN MUST reject it.
-	</t>
-	<t>
-		Furthermore, dCDN SHOULD reject trigger from uCDN A that seeks to preposition the delivery metadata objects,
-		that are in conflict with the pre-existing metadata objects belonging to another uCDN B.
+                PathMetadata, as described in Section 3.1 of <xref target="RFC8006"/>.
+        </t>
+        <t>
+                If such association between a trigger and pre-existing delivery metadata cannot be established, 
+                dCDN MUST reject it.
+        </t>
+        <t>
+                Furthermore, dCDN SHOULD reject trigger from uCDN A that seeks to preposition the delivery metadata objects,
+                that are in conflict with the pre-existing metadata objects belonging to another uCDN B.
         </t>
    </section>
    <section title="Trigger Collection" anchor="model-for-cdni-triggers-trigger-collection-resource">
@@ -378,10 +378,10 @@
            <t>
                 Figure 1 is an example showing the basic message flow in a CI/T interface session used by the
                 uCDN to trigger activity in dCDN and for uCDN to discover the status of that activity. 
-		Only successful triggering is shown.
+                Only successful triggering is shown.
                 Please note that the example below uses simplified trigger identifiers for brevity. 
-	        It is recommended that the actual implementation utilies unique UUID identifiers as specified 
-	        in <xref target="RFC9562"/>.
+                It is recommended that the actual implementation utilies unique UUID identifiers as specified 
+                in <xref target="RFC9562"/>.
                 Examples of the messages are shown in <xref target="examples"/>.
         </t>
 
@@ -468,8 +468,8 @@
         The CI/T "invalidate" and "purge" trigger actions MUST be applied to all data acquired before dCDN begins 
         the trigger processing (i.e., enters "active" state).
         dCDN implementation SHOULD apply "invalidate" and "purge" triggers to content acquisition that is in progress 
-	when the trigger becomes active, to avoid placing purged or invalidated content into the cache upon completion 
-	of the content acquisition.
+        when the trigger becomes active, to avoid placing purged or invalidated content into the cache upon completion 
+        of the content acquisition.
         dCDN SHOULD NOT apply CI/T "invalidate" and "purge" actions to data acquired after the trigger processing started, 
         but this may not always be achievable, so uCDN cannot count on that.
    </t>
@@ -480,8 +480,8 @@
         Otherwise, there is a risk that the dCDN prepositions the new content, then immediately invalidates or
         purges it (as a result of the two uCDN requests running in parallel).
         
-	 uCDN MAY use the <xref target="execution-policy">Execution Policy</xref> extension to condition the start 
-	of preposition trigger processing on completion of the earlier invalidate/purge trigger(s).
+         uCDN MAY use the <xref target="execution-policy">Execution Policy</xref> extension to condition the start 
+        of preposition trigger processing on completion of the earlier invalidate/purge trigger(s).
    </t>
 
    </section>
@@ -518,8 +518,8 @@
         and objects used by the trigger commands. This 2nd edition defines an extension mechanism
         to the triggers interface that enables applications to add instructions for 
         finer control over the trigger execution, for example indicating a time window in which to execute the trigger. 
-	This document specifies a generic trigger extension object wrapper for managing individual CDNI trigger 
-	extensions in an opaque manner.
+        This document specifies a generic trigger extension object wrapper for managing individual CDNI trigger 
+        extensions in an opaque manner.
    </t>
    <t>
            All trigger extensions are optional, and it is thus the responsibility of the extension specification to 
@@ -562,30 +562,30 @@
            <t>
                    A transit CDN is a dCDN that passes on CDNI Metadata and
                 content to dCDNs located further downstream.
-	   </t>
-	   <t>
-		   dCDN that creates trigger resources at the request of such transit CDN
-		   MUST associate the triggers with the transit CDN from which it receives the request,
-		   regardless of where the trigger request may heve originated.
+           </t>
+           <t>
+                   dCDN that creates trigger resources at the request of such transit CDN
+                   MUST associate the triggers with the transit CDN from which it receives the request,
+                   regardless of where the trigger request may heve originated.
            </t>
 
            <t>
                    A "diamond" configuration is one where dCDN can potentially acquire metadata
                    and content originated in one uCDN from that uCDN itself and an
                    transit CDN, or via more than one transit CDN.
-	   </t>
-	   <t>
-		   The "diamond" configuration may create configuration consistency problems, where
-		   dCDN may end up in posession of multiple, potentially conflicting metadata obhects belonging 
-		   to multiple uCDNs, that match the same content request.
-		   The conflict may arise due to the differences in trigger processing by the transit CDNs 
-		   and/or variances in trigger propagation time across different path in the "diamond" topology.
-	   </t>
-	   <t>
-		   Because of that the "diamond" configuration is considered to be a configuration error.
-		   A dCDN that receives identical trigger creation requests from multiple uCDNs 
-		   SHOULD reject duplicate trigger requests, as described in <xref target="model-for-cdni-triggers-trigger-access-control"/>.
-	   </t>
+           </t>
+           <t>
+                   The "diamond" configuration may create configuration consistency problems, where
+                   dCDN may end up in posession of multiple, potentially conflicting metadata obhects belonging 
+                   to multiple uCDNs, that match the same content request.
+                   The conflict may arise due to the differences in trigger processing by the transit CDNs 
+                   and/or variances in trigger propagation time across different path in the "diamond" topology.
+           </t>
+           <t>
+                   Because of that the "diamond" configuration is considered to be a configuration error.
+                   A dCDN that receives identical trigger creation requests from multiple uCDNs 
+                   SHOULD reject duplicate trigger requests, as described in <xref target="model-for-cdni-triggers-trigger-access-control"/>.
+           </t>
 
 
            <t>         Security considerations are discussed further in <xref target="security-considerations"/>.</t>
@@ -601,8 +601,8 @@
                 CDN must report the trigger as "failed" only after its processing is finished in it and  all of its dCDNs.
                 A cancelled trigger MUST be reported as "cancelling" until it has been reported as "cancelled",
                 "complete", or "failed" by all dCDNs in a cascade.
-	   </t>
-	   <t>
+           </t>
+           <t>
            </t>
    </section>
    <section title="Loop Detection and Prevention" anchor="loop-detection-and-prevention">
@@ -1090,8 +1090,8 @@ uCDN-A                         dCDN-B                         dCDN-C
         </t>
         <t><list style="numbers">
                 <t>
-		uCDN-A creates a trigger in dCDN-B by POSTing a new trigger representation to 
-		"https://dcdn-b.com/cit/ucdn-a". 
+                uCDN-A creates a trigger in dCDN-B by POSTing a new trigger representation to 
+                "https://dcdn-b.com/cit/ucdn-a". 
                 </t>
                 <t>
                 dCDN-B authenticates the request, validates the trigger creation request, and, 
@@ -1103,7 +1103,7 @@ uCDN-A                         dCDN-B                         dCDN-C
                 </t>
                 <t>
                 dCDN-B creates a trigger in dCDN-C by POSTing the newly received trigger representation to
-		"https://dcdn-c.com/cit/dcdn-b". 
+                "https://dcdn-c.com/cit/dcdn-b". 
                 </t>
                 <t>
                 dCDN-C authenticates the request, validates the trigger creation request, 
@@ -1845,10 +1845,10 @@ uCDN-A                         dCDN-B                         dCDN-C
              Although a CDN MUST NOT execute a trigger command if a
              mandatory-to-enforce extension cannot be enforced, it could still be
              safe for a transit CDN (tCDN) to redistribute that trigger (the "safe-to-redistribute"
-	     property) to another CDN without modification, provided the tCDN does not needs to
-	     do trigger processing of its own and only pass the trigger to one or more dCDNs.
+             property) to another CDN without modification, provided the tCDN does not needs to
+             do trigger processing of its own and only pass the trigger to one or more dCDNs.
 
-	     For example, in the cascaded CDN case, a transit CDN (tCDN) could convey
+             For example, in the cascaded CDN case, a transit CDN (tCDN) could convey
              mandatory-to-enforce trigger extension to dCDN. For a trigger extension
              that does not require customization or translation (i.e., trigger extension
              that is safe-to-redistribute), the data representation received off the wire
@@ -4296,7 +4296,7 @@ Content-Type: application/cdni; ptype=ci-trigger-collection.v2
   ]
 }
 
-	   ]]></artwork></figure>
+           ]]></artwork></figure>
 
      </section>
 
@@ -4642,7 +4642,7 @@ Content-Type: application/cdni; ptype=ci-trigger.v2
     "generic-trigger-extension-value": { "priority": 100 }
    ]   
 }
-	    
+            
 RESPONSE:
 
 HTTP/1.1 201 Created
