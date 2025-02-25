@@ -4641,7 +4641,7 @@ Content-Type: application/cdni; ptype=ci-trigger.v2
     "generic-trigger-extension-value": { "priority": 100 }
    ]   
 }
-	    
+    
 RESPONSE:
 
 HTTP/1.1 201 Created
