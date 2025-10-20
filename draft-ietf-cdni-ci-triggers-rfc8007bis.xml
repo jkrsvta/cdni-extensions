@@ -349,6 +349,7 @@
    </section>
    <section title="Trigger Access Control and Multi-Tenancy" anchor="model-for-cdni-triggers-trigger-access-control">
         <t>     The dCDN MUST only allow the uCDN access to the trigger resources it created. </t>
+        <t>     The dCDN MUST ensure that triggers created in response to a uCDN request apply only to content and metadata objects associated with that uCDN.</t>
         <t>     
                 In case of content prepositioning, the dCDN MUST be able to associate content objects referenced in a trigger 
                 created by the uCDN with delivery CDNI metadata objects in its possession that are associated with the same uCDN.
@@ -453,7 +454,7 @@
         </t>
         <t>
                 Once the trigger reaches a terminal state ("complete", "processed", "failed" or "cancelled"), 
-                the uCDN MAY request to delete the trigger resource. 
+                the uCDN MAY request deletion of the trigger resource. 
         </t>
         <t>
                 The dCDN validates the request and the trigger resource state. 
@@ -528,7 +529,7 @@
         completed successfully. In case of CDN cascading, the completion of operations includes processing of the trigger
         in downstream CDNs. For detailed discussion of the cascading use case, see <xref target="multiple-interconnected-cdns"/>.
         The reasons for failure, and URLs or patterns affected, SHOULD be made available 
-        in the trigger state representation.  For more details about the error handling, see <xref target="error-handling"/>.
+        in the trigger state representation.  For more details about error handling, see <xref target="error-handling"/>.
    </t>
    </section>
    </section>
@@ -603,7 +604,7 @@
            </t>
            <t>
                    Because of this, the "diamond" configuration is considered a configuration error.
-                   A dCDN that receives identical trigger creation requests from the different uCDNs 
+                   A dCDN that receives identical trigger creation requests from different uCDNs 
                    SHOULD reject duplicate trigger requests, as described in <xref target="model-for-cdni-triggers-trigger-access-control"/>.
            </t>
 
@@ -689,7 +690,7 @@
 
    <t>
    The only resource representation specified in this document is JSON <xref target="RFC8259"/>.
-   It MUST be supported by both uCDN and dCDN.
+   It MUST be supported by both the uCDN and the dCDN.
    </t>
    <t>
    The CI/T interface uses a root URI for the retrieval of the trigger index resource and creation of new triggers.
@@ -760,7 +761,7 @@
    </t>
 
    <t>
-   the uCDN MAY request that the new trigger is created in the "active" state and its processing be started immediately.
+   The uCDN MAY request the new trigger to be created in the "active" state so that its processing begins immediately.
    If agreed to by the dCDN, the dCDN MUST start the new trigger processing immediately.
    </t>
    <t>
@@ -824,14 +825,14 @@
    </t>
 
    <t>
-   The dCDN MUST respond to the trigger cancellation request appropriately.
-   For the HTTP response status codes, see <xref target="modifying-triggers"/>.
+   The dCDN MUST respond to the trigger cancellation request with an appropriate HTTP response status code as documented 
+   in <xref target="modifying-triggers"/>
    </t>
 
    <t>
    If cancellation of a "pending" trigger is accepted by the dCDN, the dCDN SHOULD NOT start the processing of that activity.
    Requesting a cancellation of a "pending" trigger does not, however, guarantee that the corresponding activity 
-   will not be started, because the uCDN cannot control the timing of that activity. 
+   will not be started because the uCDN cannot control the timing of that activity. 
    Processing could, for example, start after the POST is sent by the uCDN but before that request is processed by the dCDN.
    </t>
 
@@ -861,7 +862,7 @@
    </t>
 
    <t>
-   To enable the uCDN to use client-side caching of the Trigger Index resource, as well as all trigger and trigger 
+   To enable the uCDN to use client-side caching of the trigger index resource, as well as all trigger and trigger 
    collection resources,  each resource representation sent by the dCDN SHOULD include at least one of the following 
    HTTP response headers: "ETag" or "Last-Modified".
 
@@ -906,7 +907,7 @@
    <section title="Polling Triggers" anchor="polling-trigger-resources">
    <t>
    The uCDN has a URI provided by the dCDN at the trigger creation time. 
-   Alternatively, the uCDN MAY discover trigger resource URI by retrieving the trigger index resource, and then the appropriate
+   Alternatively, the uCDN MAY discover a trigger resource URI by retrieving the trigger index resource, and then the appropriate
    trigger collection referenced in the index.
    It may fetch an up-to-date representation of the trigger resource at any time using an HTTP GET request, 
    including changes in the trigger state, as well as the outcome of the trigger processing.
@@ -1026,22 +1027,22 @@
         <t>
              This subsection explains the mechanism for enabling the uCDN to trace an error back to the dCDN in which it occurred.
              CDNI triggers may be propagated over a chain of downstream CDNs. For example, an 
-             upstream CDN A (uCDN-A) that is delegating to a downstream CDN B (dCDN-B) and the dCDN-B is delegating 
-             to a downstream CDN C (dCDN-C). Triggers sent from the uCDN-A to the dCDN-B may be redistributed 
-             from the dCDN-B to the dCDN-C, and errors can occur anywhere along the path. Therefore, it might be essential for 
-             the uCDN-A which sets the trigger to be able to trace back an error to the downstream CDN where it occurred. 
+             upstream CDN A (uCDN-A) that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
+             to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed 
+             from dCDN-B to dCDN-C, and errors can occur anywhere along the path. Therefore, it might be essential for 
+             uCDN-A which sets the trigger to be able to trace back an error to the downstream CDN where it occurred. 
              This document adds a mechanism to propagate the PID of the dCDN where the fault occurred, back to the 
              uCDN by adding the PID
-             to the error.v2 description. When the dCDN-B propagates a trigger further to the dCDN-C, 
-             it MUST also propagate back the errors received in the trigger status resource from the dCDN-C by adding
+             to the error.v2 description. When dCDN-B propagates a trigger further to dCDN-C, 
+             it MUST also propagate back the errors received in the trigger status resource from dCDN-C by adding
              them to the errors array in its status resource to be sent back to the originating uCDN-A.
-             While propagating back the errors the dCDN-B MAY also specify the dCDN-C PID, indicating to which CDN the error specifically relates.
+             While propagating back the errors dCDN-B MAY also specify the dCDN-C PID, indicating to which CDN the error specifically relates.
              The trigger-originating upstream uCDN-A then receives an array containing the errors that occurred across
              all the downstream CDNs along the execution path, where each error MAY include its own CDN identifier.
           </t>
           <t>
             <xref target="error-propagation-seq"/> below is an example showing the message flow used by
-            the uCDN-A to trigger activity in the dCDN-B, followed by the dCDN-C, as well as the discovery of the
+            uCDN-A to trigger activity in dCDN-B, followed by dCDN-C, as well as the discovery of the
             status of that activity, including the Error Propagation.
           </t>
           <figure anchor="error-propagation-seq" title="CDNI Message Flow for Triggers, Including Error Propagation">
@@ -1105,47 +1106,47 @@ uCDN-A                         dCDN-B                         dCDN-C
         </t>
         <t><list style="numbers">
                 <t>
-                The uCDN-A creates a trigger in the dCDN-B by POSTing a new trigger representation to 
+                uCDN-A creates a trigger in dCDN-B by POSTing a new trigger representation to 
                 "https://dcdn-b.com/cit/ucdn-a". 
                 </t>
                 <t>
-                The dCDN-B authenticates the request, validates the trigger creation request, and, 
+                dCDN-B authenticates the request, validates the trigger creation request, and, 
                 if it accepts the request, creates a new trigger resource.
                 </t>
                 <t>
-                The dCDN-B responds to the uCDN-A with an HTTP 201 ("Created") response status
+                dCDN-B responds to uCDN-A with an HTTP 201 ("Created") response status
                 and the location of the newly created trigger.
                 </t>
                 <t>
-                The dCDN-B creates a trigger in the dCDN-C by POSTing the newly received trigger representation to
+                dCDN-B creates a trigger in dCDN-C by POSTing the newly received trigger representation to
                 "https://dcdn-c.com/cit/dcdn-b". 
                 </t>
                 <t>
-                The dCDN-C authenticates the request, validates the trigger creation request, 
+                dCDN-C authenticates the request, validates the trigger creation request, 
                 and, if it accepts the request, creates a new trigger resource.
                 </t>
                 <t>
-                The dCDN-C responds to the dCDN-B with an HTTP 201 ("Created") response status and
+                dCDN-C responds to dCDN-B with an HTTP 201 ("Created") response status and
                 the location of the newly created trigger resource.
                 </t>
                 <t>
-                The dCDN-C acts upon the trigger. However, the command fails at the dCDN-C as,
-                for example, the trigger definition contains an "action" type that is not supported by the dCDN-C.
+                dCDN-C acts upon the trigger. However, the command fails at dCDN-C as,
+                for example, the trigger definition contains an "action" type that is not supported by dCDN-C.
                 The dCDN-C's action is depicted by 7.2 in the diagram, while 7.1 shows dCDN-B acting on its own trigger.
                 </t>
                 <t>
-                The dCDN-B queries, possibly repeatedly, the trigger resource in the dCDN-C.
+                dCDN-B queries, possibly repeatedly, the trigger resource in dCDN-C.
                 </t>
                 <t>
-                The dCDN-C responds with the trigger resource representation, describing the progress or results
+                dCDN-C responds with the trigger resource representation, describing the progress or results
                 of the trigger processing. In the described flow, the trigger state is "failed",
                 with an Error.v2 Description object holding "eunsupported" Error Code reflecting the reason.
                 </t>
                 <t>
-                The uCDN-A queries, possibly repeatedly, the trigger status in the dCDN-B.
+                uCDN-A queries, possibly repeatedly, the trigger status in dCDN-B.
                 </t>
                 <t>
-                The dCDN-B responds with the updated trigger resource representation, describing the progress or results of
+                dCDN-B responds with the updated trigger resource representation, describing the progress or results of
                 trigger processing. 
                 In the flow described above, the trigger state is "failed", and the "eunsupported" error received in the trigger 
                 status from dCDN-C is propagated-along with dCDN-C's PID-by adding it to the errors array in dCDN-B's status resource, 
@@ -1162,8 +1163,8 @@ uCDN-A                         dCDN-B                         dCDN-C
 
 <section title="CI/T Object Properties and Encoding" anchor="cit-objects-properties-and-encoding">
    <t>
-   <xref target="ci-trigger-resource">Trigger</xref>,<xref target="ci-trigger-index-resource">trigger index</xref>,
-   <xref target="ci-trigger-collection-resource">trigger collection</xref> and their properties are encoded using JSON.
+   The Trigger (<xref target="ci-trigger-resource"/>)>, Trigger Index (<xref target="ci-trigger-index-resource"/>), 
+   and Trigger Collection (<xref target="ci-trigger-collection-resource"/>) resources and their respective properties are encoded in JSON format.
    When sending the JSON-based representation of these resources, the MIME media type 
    "application/cdni" MUST be used, with parameter "ptype" values as defined below and 
    in <xref target="cdni-payload-type"/>.
@@ -1339,7 +1340,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    <vspace blankLines="1"/>
    Description: List of objects derived by the dCDN when processing the trigger.
    When the "content-objectlist" trigger specification is used, the trigger MAY include one or more manifest files that 
-   form a hierarchical structure (for example, media HLS playlists referenced by master HLS playlists, or JSON object lists 
+   form a hierarchical structure (e.g., media HLS playlists referenced by master HLS playlists, or JSON object lists 
    referenced by other JSON object lists). 
    The purpose of this optional attribute is to provide a single, flattened list of content objects derived from the input trigger.
    <vspace blankLines="1"/>
@@ -1421,8 +1422,8 @@ uCDN-A                         dCDN-B                         dCDN-C
 
    <t>
    A dCDN receiving a trigger creation request that contains a trigger spec it does not recognize or 
-   support MUST reject the request by creating a trigger resource with "failed" state and 
-   the "errors" array containing an Error.v2 Description with error "espec" (see <xref target="error-code"/>).
+   support MUST reject the request by creating a trigger resource with a "failed" state and 
+   the "errors" array containing an Error.v2 Description with the error "espec" (see <xref target="error-code"/>).
    </t>
 
    <t>
@@ -1556,7 +1557,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    </texttable>
    <t>
    The dCDN MUST support at least one of the trigger subjects. 
-   The dCDN MAY advertise separate endpoints for each one of the two trigger subjects, using 
+   The dCDN MAY advertise separate endpoints for each one of the two trigger subjects, using the
    <xref target="cit-trigger-endpoints-capability-object">CI/T Endpoint Capability Object</xref>.
    </t>
    </section>
@@ -1570,7 +1571,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    <texttable anchor="spec-constraints-table" title="Summary of trigger spec constraints">
            <ttcol align="left">Trigger spec types</ttcol>
            <ttcol align="left">Trigger subject ("content" and "metadata") </ttcol>
-           <ttcol align="left">Trigger action ("preposition", "purge" and "invalidate") </ttcol>
+           <ttcol align="left">Trigger action ("preposition", "purge", and "invalidate") </ttcol>
            <c>urls</c><c>Any</c><c>Any</c>
            <c>ccids</c><c>"content" only</c><c>"purge" or "invalidate"</c>
            <c>uri-pattern-match</c><c>Any</c><c>"purge" or "invalidate"</c>
@@ -1684,7 +1685,7 @@ uCDN-A                         dCDN-B                         dCDN-C
       <vspace blankLines="1"/>
       Description: Flag indicating whether or not case-sensitive matching should be used.
       <vspace blankLines="1"/>
-      Value: A JSON boolean. A JSON boolean. When set to true, matching is case-sensitive; when set to false, matching is case-insensitive.
+      Value: A JSON boolean. When set to "true", matching is case-sensitive; when set to "false", matching is case-insensitive.
       <vspace blankLines="1"/>
       Mandatory-to-Specify: No; default is "false", i.e., a case-insensitive match.
       </t>
@@ -1821,7 +1822,7 @@ uCDN-A                         dCDN-B                         dCDN-C
       <section anchor="objectlist-spec" title="Object List Spec">
       <t>
         The "objectlist" spec type allows the uCDN to manage content or metadata held by the dCDN based on structured object lists. 
-        The Object List spec type is valid only for the content spec subject (see <xref target="trigger-subject"/>).
+        The Object List spec type is valid only for the "content" spec subject (see <xref target="trigger-subject"/>).
       </t>
       <t>
         An object list is encoded as a JSON object with the following properties:
@@ -2137,8 +2138,8 @@ uCDN-A                         dCDN-B                         dCDN-C
         <vspace blankLines="1"/>
         Value: Array of LocationRule objects (see Section 4.2.2.1 of <xref target="RFC8006"/>). 
         The LocationRule utilizes Footprint objects to define footprints in which the rule is to be applied, 
-        as defined in Section 4.2.2.2 <xref target="RFC8006"/> and extended by <xref target="RFC9388"/> to support 
-        "subdivisioncode" footprint type.
+        as defined in Section 4.2.2.2 of <xref target="RFC8006"/> and extended by <xref target="RFC9388"/> to support 
+        the "subdivisioncode" footprint type.
         <vspace blankLines="1"/>
         Mandatory-to-Specify: Yes. 
    </t>
@@ -2348,7 +2349,7 @@ uCDN-A                         dCDN-B                         dCDN-C
    <list style="symbols">
    <t> The uCDN needs to introduce an urgent "purge" or "invalidate" trigger into an existing queue of trigger commands 
    to correct wrong versions of content objects published by it</t>
-   <t> The uCDN needs to indicate which triggers content objects should be prepositioned, purged, or invalidated first, 
+   <t> The uCDN needs to indicate which content objects should be prepositioned, purged, or invalidated first, 
    for example prepositioning newer released content before prepositioning updates to an existing catalog
    </t>
    </list>
@@ -2454,14 +2455,14 @@ uCDN-A                         dCDN-B                         dCDN-C
 
    <t>
    When the dCDN receives a request to create a trigger, it MUST reject the request
-   if the trigger depends on other pending triggers with lower priority, in order to prevent deadlocks.
+   if the trigger depends on other pending triggers with lower priority in order to prevent deadlocks.
    </t>
 
    <t>
-   therwise if the request for new trigger resource creation sets its state to "active":
+   Otherwise, if the request for new trigger resource creation sets its state to "active":
    <list style="symbols">
 <t>
-If the trigger has a TimePolicy extension, that has a "start" attribute set in the future,
+If the trigger has a TimePolicy extension that has a "start" attribute set in the future,
 the dCDN MUST reject the request.
 </t>
 <t>
@@ -2470,8 +2471,8 @@ are not finished at the time of the request, the dCDN MUST reject the request.
 </t>
 <t>
 Otherwise, if the trigger has a lower priority than pre-existing triggers in "pending" state, 
-the dCDN MUST reject the request. Please note that trigger has 
-an implicit priority of zero, when not specified explicitly. 
+the dCDN MUST reject the request. Please note that the trigger has 
+an implicit priority of zero if no priority is explicitly specified.
 </t>
 
 <t>
@@ -2490,14 +2491,14 @@ Otherwise, the dCDN SHOULD create the trigger in "active" state and begin its pr
 </t>
 
 <t>
-In all of the above cases, the dCDN rejects the request by creating a trigger in state 
-"failed", setting the error to "ereject" and optionally providing an error description.
+In all of the above cases, the dCDN rejects the request by creating a trigger in a "failed" state,
+setting the error to "ereject" and optionally providing an error description.
 </t>
 </list>	
 </t>
 
 <t>
-Otherwise, the dCDN SHOULD create the new trigger resource as requested and set it state to "pending". 
+Otherwise, the dCDN SHOULD create the new trigger resource as requested and set its state to "pending". 
 </t>
 
 <t>
@@ -2507,16 +2508,16 @@ no other pending triggers with higher priority, and there are no incomplete prer
 </t>
 
 <t>
-The dCDN SHOULD periodically re-evaluate the pending trigger queue for triggers that have a TimePolicy set, i
+The dCDN SHOULD periodically re-evaluate the pending trigger queue for triggers that have a TimePolicy set,
 to ensure that processing of such triggers completes before the corresponding TimePolicy window expires.
-If during such evaluation, a pending trigger is deemed to have expired, the dCDN MUST set the trigger
+If during such evaluation a pending trigger is deemed to have expired, the dCDN MUST set the trigger
 state to "failed" and the error to "ereject", optionally providing the error description.
 </t>
 
 <t>
 Whenever a trigger reaches a terminal state (i.e., "complete", "processed", "failed", or "cancelled"),  
 the dCDN SHOULD re-evaluate the queue of pending triggers.
-If during such evaluation, a pending trigger is deemed to have expired, the dCDN MUST set the trigger
+If during such evaluation a pending trigger is deemed to have expired, the dCDN MUST set the trigger
 state to "failed" and the error to "ereject", optionally providing the error description.
 Otherwise, the dCDN MAY start processing triggers that were previously dependent on the completed trigger.
 </t>
@@ -2524,7 +2525,7 @@ Otherwise, the dCDN MAY start processing triggers that were previously dependent
 <t>
 Whenever a pending trigger becomes eligible for processing, the dCDN SHOULD re-evaluate the pending 
 trigger queue.
-If during such evaluation, a pending trigger is deemed to have expired, the dCDN MUST set the trigger
+If during such evaluation a pending trigger is deemed to have expired, the dCDN MUST set the trigger
 state to "failed" and the error to "ereject", optionally providing the error description.
 Otherwise, the dCDN MAY start processing additional triggers that could not be processed earlier due to 
 their lower priority relative to the active trigger.
@@ -2550,7 +2551,7 @@ status code 409 (Conflict) if the modification would set the "end" time to a val
 </t>
 
 <t>
-Otherwise, the dCND SHOULD accept the requeest and evaluate whether the modified trigger becomes
+Otherwise, the dCDN SHOULD accept the request and evaluate whether the modified trigger becomes
 eligible for processing as a result of the change.
 If at this time, the modified trigger has a TimePolicy "end" time set in the past, the dCDN MUST set the trigger
 state to "failed" and the error to "ereject", optionally providing the error description. 
@@ -2564,7 +2565,7 @@ or have a TimeWindow start time in the future, or set a new TimeWindow end time 
 </t>
 
 <t>
-Otherwise, the dCDN MAY still reject the request with status code 409 (Conflict), if the processing of the trigger
+Otherwise, the dCDN MAY still reject the request with status code 409 (Conflict) if the processing of the trigger
 could not be started immediately due to the dCDN business logic. 
 </t>
 
@@ -2585,7 +2586,7 @@ Otherwise, the dCDN MUST set the trigger state to "active" and start its process
 
    <t>
    The labels may be used to simplify the management of a large number of triggers by grouping related triggers
-   and tracking their status using trigger collection resource associated with the label value
+   and tracking their status using the trigger collection resource associated with the label value
    (see <xref target="ci-trigger-collection-resource"/> for more details).
    In this case, the label values remain fully opaque to the dCDN and serve for trigger grouping purposes only.
    </t>
@@ -2702,7 +2703,7 @@ Otherwise, the dCDN MUST set the trigger state to "active" and start its process
    <vspace blankLines="1"/>
    Value:  A non-empty JSON string, where the string is a CDN PID as defined in <xref target="cdn-pid"/>
    <vspace blankLines="1"/>
-   Mandatory-to-Specify: Yes. the dCDN may use its own CDN PID if it does not want to expose the PIDs of its dCDNs.
+   Mandatory-to-Specify: Yes. The dCDN may use its own CDN PID if it does not want to expose the PIDs of its dCDNs.
    </t>
 
    </list></t>
@@ -2839,16 +2840,16 @@ Otherwise, the dCDN MUST set the trigger state to "active" and start its process
    The dCDN MUST also create the unfiltered trigger collection containing all triggers, as well as trigger collections for 
    each trigger state, and include references to these collections in the top-level trigger index resource.
    The dCDN MUST NOT remove the trigger index resource, the unfiltered trigger collection, or the state-based trigger 
-   collections once they have been created.
+   collections once they have been created, as long as it continues to offer CI/T services to the uCDN.
    </t>
 
    <t>
    The dCDN MUST update both the unfiltered trigger collection and the state-based trigger collections when triggers are created,
-   deleted, or when their state changes.
+   deleted, or their state changes.
    </t>
 
    <t>
-   If triggers include labels, the dCDN MUST create and maintain a trigger collection resource for each label value that used in 
+   If triggers include labels, the dCDN MUST create and maintain a trigger collection resource for each label value used in 
    any trigger resources, and update the trigger index to keep references to label-based trigger collections current.
    The dCDN MUST remove a label-based trigger collection when no triggers remain that use the corresponding label value.
    </t>
@@ -2933,7 +2934,7 @@ Otherwise, the dCDN MUST set the trigger state to "active" and start its process
 
    <t hangText="Name: trigger-urls">
    <vspace blankLines="1"/>
-   Description: Links to trigger reosurces in the collection.
+   Description: Links to trigger resources in the collection.
    <vspace blankLines="1"/>
    Value: A JSON array of zero or more URLs, represented as JSON strings.
    <vspace blankLines="1"/>
@@ -2978,7 +2979,7 @@ Otherwise, the dCDN MUST set the trigger state to "active" and start its process
 
       <section title="Trigger Collection View" anchor="trigger-collection-view">
       <t>
-      The Trigger Colleciton View is used to provide an abbreviate description of trigger collection resource within trigger index.
+      The Trigger Collection View is used to provide a brief description of the trigger collection resource within the trigger index.
       It is encoded as a JSON object containing the following name/value pairs:
       </t>
    
@@ -3033,7 +3034,7 @@ Otherwise, the dCDN MUST set the trigger state to "active" and start its process
    </t>
    <t>
    One option is for the uCDN to use "published" URLs. Published URLs are the URLs used by end users.
-   When processing a trigger that uses this URL type, dCDN MUST be able to match the URLs with metadata objects provided by uCDN.
+   When processing a trigger that uses this URL type, the dCDN MUST be able to match the URLs with metadata objects provided by the uCDN.
    When this is not the case, the dCDN MUST return the error code "emeta".
    </t>
    <t> 
@@ -3122,7 +3123,7 @@ Otherwise, the dCDN MUST set the trigger state to "active" and start its process
    <vspace blankLines="1"/>
    Description: URL pointing to an external object list or object in one of the recognized formats.
    <vspace blankLines="1"/>
-   Value: A URL represented as a JSON string
+   Value: A URL represented as a JSON string.
    <vspace blankLines="1"/>
    Mandatory-to-Specify: No. Either "data" or "href" MUST be set.
    </t>
@@ -3269,10 +3270,9 @@ http://example.com/high/index.m3u8\n",
       <c><xref target="object-list-type-text">Text</xref></c>
         </texttable>
    <t>
-   If the support for <xref target="objectlist-spec">ObjectList Spec</xref> is implemented,
+   If the support for the <xref target="objectlist-spec">ObjectList Spec</xref> is implemented,
    the dCDN MUST support at least one of the ObjectList types.
    </t>
-   <t>[RFC Editor: Please replace RFCthis with the published RFC number for this document.]</t>
    </section>
    <section title="JSON Serialized Object List" anchor="object-list-type-json">
    <t>
@@ -3627,7 +3627,7 @@ http://example.com/high/index.m3u8\n",
            <section title="CI/T Object List Type Capability Object Serialization">
       <t>
                 The following shows an example of a JSON-serialized CI/T Object List Type Capability object serialization
-      for the dCDN that supports "hls","dash", and "json", in the US only.
+      for the dCDN that supports "hls", "dash", and "json", in the US only.
              </t>
 <sourcecode type="json" name="cit-object-list-json"><![CDATA[
 {
@@ -4118,7 +4118,7 @@ Server: example-server/0.1
     The uCDN can modify triggers while they are in a "pending" state. One example of this might be to adjust a trigger's 
     "specs" and/or "labels" attributes.
     In the below example, the uCDN updates a trigger created earlier by removing the metadata portion of the trigger spec and
-    adding trigger labels. the dCDN responds with a 200 ("OK") response containing the updated trigger representation.
+    adding trigger labels. The dCDN responds with a 200 ("OK") response containing the updated trigger representation.
     </t>
     <figure><artwork><![CDATA[
 REQUEST: 
@@ -4342,7 +4342,7 @@ Content-Type: application/cdni; ptype=ci-trigger-index.v2
     },
     {
       "filter-type": "label",
-      "filter-value":"type=video", 
+      "filter-value": "type=video", 
       "uri": "/cit/labels/type=video"
     }
   ]
@@ -5074,7 +5074,6 @@ Server: example-server/0.1
                 <t>Purpose: The purpose of this payload type is to define a new CI/T trigger index object 
                         (and any associated capability advertisement)</t>
           <t>Interface: CI/T</t>
-          <t>Value: "FCI.CITEndpoints"</t>
           <t>Encoding: see <xref target="ci-trigger-index-resource"/></t>
         </section>
         <section anchor="IANA.CDNI.payload.ci-trigger-collection.v2" title="CDNI ci-trigger-collection.v2 Payload Type">
@@ -5319,7 +5318,7 @@ Server: example-server/0.1
    Once the dCDN and the uCDN have mutually authenticated each other,
    TLS allows:</t>
 
-   <t><list style="symbols"><t>the dCDN and the uCDN to authorize each other (to ensure that they
+   <t><list style="symbols"><t>The dCDN and the uCDN to authorize each other (to ensure that they
       are receiving trigger requests from, or responding to, an
       authorized CDN).</t>
 
@@ -5365,7 +5364,7 @@ Server: example-server/0.1
    <t>
    Depending on the implementation, triggered activity may consume
    significant processing and bandwidth in the dCDN. A malicious or
-   faulty the uCDN could use this to generate unnecessary load in the dCDN.
+   faulty uCDN could use this to generate unnecessary load in the dCDN.
    The dCDN should consider mechanisms to avoid overload -- for example,
    by rate-limiting acceptance or processing of triggers, or by
    performing batch processing.</t>
