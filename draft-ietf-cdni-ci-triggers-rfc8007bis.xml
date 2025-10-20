@@ -2575,7 +2575,7 @@ state to "failed" and the error to "ereject", optionally providing the error des
 When the dCDN receives a request to change the state of a pending trigger to "active",  
 it MUST reject the request with status code 409 (Conflict) if, as a result of the change,  
 the trigger would depend on incomplete triggers, have lower priority than other pending triggers,  
-or have a TimeWindow start time in the future, or set a new TimeWindow end time in the past.
+have a TimeWindow start time in the future, or set a new TimeWindow end time in the past.
 </t>
 
 <t>
