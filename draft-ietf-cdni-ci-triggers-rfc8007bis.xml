@@ -1322,6 +1322,20 @@ uCDN-A                         dCDN-B                         dCDN-C
    in the trigger resource representations requested by the uCDN.
    </t>
 
+
+   <t hangText="Name: total-nodes-count">
+   <vspace blankLines="1"/>
+   Description: The total number of unique dCDN nodes affected by the trigger.
+   The primary purpose of this attribute is to help the uCDN validate trigger processing results in combination with 
+   the cumulative counters "total-objects-count" and "total-objects-size".
+   The dCDN MAY provide an updated nodes count as the trigger processing progresses in an "active" trigger state.
+   <vspace blankLines="1"/>
+   Value: Integer.
+   <vspace blankLines="1"/>
+   Mandatory-to-Specify: No. This attribute is "optional-to-implement". When supported, the dCDN SHOULD include this attribute 
+   in the trigger resource representations requested by the uCDN.
+   </t>
+
    <t hangText="Name: total-objects-size">
    <vspace blankLines="1"/>
    Description: Total aggregate size of objects affected by the trigger, in bytes.
