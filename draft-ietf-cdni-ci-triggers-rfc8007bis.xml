@@ -22,7 +22,7 @@
 <!ENTITY RFC9388 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9388.xml">
 <!ENTITY RFC9562 SYSTEM "https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9562.xml">
 ]>
-<rfc category="std" submissionType="IETF" docName="draft-ietf-cdni-ci-triggers-rfc8007bis-17" obsoletes='8007' ipr="trust200902">
+<rfc category="std" submissionType="IETF" docName="draft-ietf-cdni-ci-triggers-rfc8007bis-18" obsoletes='8007' ipr="trust200902">
    <?rfc strict="yes"?>
    <?rfc compact="yes"?>
    <?rfc subcompact="no"?>
